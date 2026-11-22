@@ -1,0 +1,46 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 410 139" width="410" height="139" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">U-Boot</title>
+
+  <g id="heckruder-fern">
+    <path d="M54 94 27 70 39 66 71 87 72 93Z" fill="#59696e" stroke="#303b3f" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M29 70 39 67 65 85" fill="none" stroke="#849497" stroke-width="1" stroke-linecap="round"/>
+    <path d="M42 103 25 115 29 122 62 106Z" fill="#3a494f" stroke="#29363a" stroke-width="1.25" stroke-linejoin="round"/>
+  </g>
+
+  <g id="rumpf">
+    <path d="M21 100 47 90Q83 79 135 77L309 75Q351 75 376 82 390 86 393 94 395 102 382 109 363 120 321 123L132 122Q79 120 49 112L22 106Q16 104 21 100Z" fill="#283438" stroke="#293539" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M22 100 48 90Q82 79 135 77L309 75Q351 75 376 82 390 86 393 94 395 101 382 106 363 114 321 115H132Q80 115 49 108L22 104Z" fill="#526267"/>
+    <path d="M22 100 48 90Q82 79 135 77L309 75Q351 75 376 82 388 85 392 92 382 96 366 98 345 101 315 101H129Q79 101 48 105L23 103Z" fill="#657378"/>
+    <path d="M34 98 65 88Q92 81 137 80L308 78Q350 78 374 85" fill="none" stroke="#8a9899" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M30 106Q81 118 132 119H321Q356 117 373 112" fill="none" stroke="#313f44" stroke-width="1.25" stroke-linecap="round"/>
+    <path d="M77 96Q109 91 152 91H313Q349 91 370 87" fill="none" stroke="#536166" stroke-width="1" stroke-linecap="round"/>
+    <path d="M113 86h52m95-2h46m9 0h8m8 .4h8" fill="none" stroke="#9caaaa" stroke-width="1" stroke-linecap="round" opacity=".7"/>
+    <path d="M105 103h20m-17 2h11m174 1h28m-25 2h19" fill="none" stroke="#3d4c51" stroke-width="1" stroke-linecap="round"/>
+    <path d="M146 103h4m7 0h4m7 0h4m7 0h4m70 1h4m7 0h4m7 0h4" stroke="#334348" stroke-width="1.45" stroke-linecap="round"/>
+    <path d="M326 76.5Q321 88 325 101m34-22q-7 10-4 21" fill="none" stroke="#3e4e55" stroke-width=".85" opacity=".85"/>
+    <path d="M343 86h12l-3 3h-12z" fill="#768588" stroke="#495a60" stroke-width=".8" stroke-linejoin="round"/>
+  </g>
+
+  <g id="heckruder-nah">
+    <path d="M56 102 51 110 29 125 20 121 39 103 48 100Z" fill="#53656b" stroke="#2d3a3f" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M22 121 29 124 47 110" fill="none" stroke="#394b52" stroke-width="1" stroke-linecap="round"/>
+    <path d="M45 93 57 77 68 78 64 89 55 98 46 98Z" fill="#5b6a70" stroke="#334146" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M47 94 57 78 67 79" fill="none" stroke="#879598" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <g id="turm">
+    <path d="M189 69 164 61 163 58 193 60 203 66Z" fill="#687a80" stroke="#38484e" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M179 89Q187 81 190 64L193 49Q194 45 202 44L230 43Q239 44 241 50L248 75Q250 83 259 88 244 95 220 96 198 96 179 89Z" fill="#647377" stroke="#354348" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M195 51Q203 54 229 51L234 53 237 72Q240 87 250 90 235 95 219 95 196 95 181 89 189 81 192 65Z" fill="#4d5c62"/>
+    <path d="M193 49Q194 45 202 44L230 43Q237 43 241 50 234 53 218 54 200 54 193 49Z" fill="#819094" stroke="#4e5d61" stroke-width=".9"/>
+    <path d="M198 48 208 46H223L225 49 215 51H204Z" fill="#37474d"/>
+    <path d="M202 47h15" stroke="#a9b3b3" stroke-width=".9" stroke-linecap="round"/>
+    <path d="M227 56Q232 67 232 79" fill="none" stroke="#78888a" stroke-width="1" stroke-linecap="round"/>
+    <path d="M204 72 209 65H217L218 77H203Z" fill="#53646a" stroke="#687a80" stroke-width=".75" stroke-linejoin="round"/>
+    <path d="M232 66 249 64 263 66 263 69 251 72 234 72Z" fill="#7e8e91" stroke="#3a4a50" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M236 67 250 65 259 67" fill="none" stroke="#a6b2b1" stroke-width=".88" stroke-linecap="round"/>
+    <path d="M211 45V26h3v19m6-1V16h3v28m4 0V32h2v12" fill="#819195" stroke="#35474e" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M221 16v-3h4m-12 13v-4m16 10h3" fill="none" stroke="#879b9d" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M202 45v-9" fill="none" stroke="#677a80" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+</svg>

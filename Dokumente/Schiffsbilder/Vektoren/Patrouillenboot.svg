@@ -1,0 +1,59 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 146" width="340" height="146" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">Patrouillenboot</title>
+
+  <g id="rumpf">
+    <path d="M17 91 57 73 271 73 324 83Q312 98 296 111L270 126Q244 133 208 133H70Q43 132 28 123 18 117 17 103Z" fill="#263236" stroke="#27363b" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M19 91 58 75 271 74 324 83Q312 98 296 111L269 124Q244 129 209 129H70Q46 129 29 119 20 113 19 102Z" fill="#7c8b8e"/>
+    <path d="M20 102 45 110 71 114H221Q268 114 291 103L312 92 303 104 282 117Q258 124 222 124H70Q43 125 29 115 22 111 20 102Z" fill="#627479"/>
+    <path d="M33 120Q49 129 71 129H208Q247 129 267 124L260 128Q238 132 209 132H69Q46 131 33 123Z" fill="#794d46"/>
+    <path d="M44 111Q57 115 75 115H221Q256 115 278 109" fill="none" stroke="#a5b0af" stroke-width="1.05" stroke-linecap="round"/>
+    <path d="M71 108h10m6 0h5m120 0h8m6 0h8m6-1h4" fill="none" stroke="#3e5057" stroke-width="1.8" stroke-linecap="round"/>
+    <ellipse cx="285" cy="105" rx="3.5" ry="2" transform="rotate(-26 285 105)" fill="#394a4f" stroke="#99a6a6" stroke-width=".8"/>
+  </g>
+
+  <g id="deck">
+    <path d="M18 90 47 76Q56 71 71 71H263Q277 71 293 75L325 82Q313 92 294 100 273 110 243 111H71Q47 111 30 104L19 98Z" fill="#455459" stroke="#323e43" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M19 98 30 104Q47 111 71 111H243Q273 110 294 100 313 92 325 82L322 89Q311 98 296 104 269 115 243 116H71Q46 115 28 108L19 102Z" fill="#6e7e81" stroke="#39484d" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M22 92 51 77Q59 74 71 74H263Q280 74 291 78L318 83M25 99Q43 108 71 108H243Q269 107 293 97" fill="none" stroke="#a3adac" stroke-width="1.05" stroke-linecap="round"/>
+    <path d="M42 88H89L88 100H56Q48 99 40 95Z" fill="#4f5d60" stroke="#8b999a" stroke-width="1"/>
+    <path d="M45 93H82m-24-4-3 8m11-8-3 8m11-8-3 8" stroke="#718287" fill="none" stroke-width=".8" stroke-linecap="round"/>
+    <path d="M27 92 51 80H88M31 91v-4m12-2v-4m13-3v-3m15 3v-4m15 4v-4M281 78l27 6m-22-5v-4m12 7v-4m10 6v-3" fill="none" stroke="#97a5a5" stroke-width="1.05" stroke-linecap="round"/>
+    <path d="M251 98 271 94m-17 6 20-4" stroke="#c7a360" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <g id="arbeitsdeck">
+    <path d="M68 90V83L75 79H88L94 83V90L86 94H75Z" fill="#758689" stroke="#3d4d50" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M68 83 75 79H88L94 83 86 87H75Z" fill="#aab4b3" stroke="#526466" stroke-width=".85"/>
+    <path d="M71 84V77h8v5" fill="#7b8b8d" stroke="#415255" stroke-width="1" stroke-linejoin="round"/>
+  </g>
+
+  <g id="bruecke">
+    <path d="M93 95 110 83H223L249 91 240 100H119Z" fill="#303e44" opacity=".7"/>
+    <path d="M94 92V73L114 62H213L229 69V89L212 100H112Z" fill="#8a9899" stroke="#3c4c51" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M112 83H212V100H112Z" fill="#75858a"/>
+    <path d="M212 83 229 69V89L212 100Z" fill="#5a6d73"/>
+    <path d="M94 73 114 62H213L229 69 212 83H112Z" fill="#a1acab" stroke="#536367" stroke-width="1"/>
+    <path d="M121 86h10v6h-10zM136 86h10v6h-10zM151 86h10v6h-10zM166 86h10v6h-10zM194 85h10v7h-10z" fill="#405963"/>
+    <ellipse cx="184" cy="89" rx="4" ry="3.4" fill="none" stroke="#d38e59" stroke-width="1.5"/>
+    <path d="M134 72V59L149 48H204L217 55 222 69 205 80H151Z" fill="#85979a" stroke="#3c4d52" stroke-width="1.3" stroke-linejoin="round"/>
+    <path d="M134 59 149 48H204L217 55 201 65H151Z" fill="#aeb8b6" stroke="#526469" stroke-width="1"/>
+    <path d="M151 66H201L205 76H151L138 70V62Z" fill="#3f5966" stroke="#3e5259" stroke-width=".85" stroke-linejoin="round"/>
+    <path d="M202 65 217 56 221 68 205 76Z" fill="#5b7982" stroke="#40565f" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M141 66l8 3m13-3v9m12-9v9m12-9v9m12-9 3 9m9-14 4 10" fill="none" stroke="#9cacaf" stroke-width="1" stroke-linecap="round"/>
+    <path d="M110 70v-9l8-7h9l5 4v11l-6 4h-12Z" fill="#76878a" stroke="#49595f" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M117 55h10l4 3-5 3h-12z" fill="#3a4a50"/>
+    <path d="M153 50v-5a4 4 0 0 1 8 0v5Z" fill="#b4bdbc" stroke="#627479" stroke-width=".9"/>
+    <path d="M173 52 176 36H182L185 51Z" fill="#839295" stroke="#485c61" stroke-width="1.1"/>
+    <path d="M179 38V18m-10 11h21m-16-5h11m-5 13 11-3" fill="none" stroke="#86999c" stroke-width="1.35" stroke-linecap="round"/>
+    <path d="M168 28h21v2h-21z" fill="#b4bcbb" stroke="#5c7077" stroke-width=".7"/>
+    <circle cx="179" cy="17.5" r="1.5" fill="#c8a467"/>
+  </g>
+
+  <g id="bug">
+    <path d="M247 90V84L253 79H263L270 83V89L263 94H253Z" fill="#889799" stroke="#46565b" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M247 84 253 79H263L270 83 263 87H253Z" fill="#a8b4b3" stroke="#53666a" stroke-width=".9"/>
+    <path d="M266 85 281 82" stroke="#455961" stroke-width="2.65" stroke-linecap="round"/>
+    <path d="M266 84.5 281 81.5" stroke="#a2b0b1" stroke-width=".9" stroke-linecap="round"/>
+    <path d="M308 87V74" stroke="#849799" stroke-width="1.15" stroke-linecap="round"/>
+  </g>
+</svg>

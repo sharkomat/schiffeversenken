@@ -1,0 +1,75 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 182" width="500" height="182" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">Hubschrauberträger</title>
+
+  <defs>
+    <g id="landeplatz" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse rx="25" ry="10.5" transform="skewX(-19)" stroke="#d0af69" stroke-width="1.5"/>
+      <path d="M-6-5V5M6-5V5M-6 0H6" stroke="#bfc1b7" stroke-width="1.15"/>
+      <path d="M-30 0h-4M30 0h4" stroke="#8e9999" stroke-width="1"/>
+    </g>
+    <g id="hubschrauber">
+      <path d="M-28 5H-19L-5 3 3 1H14Q24 2 26 6 20 10 10 10L-3 7-21 8Z" fill="#2a3031" opacity=".65"/>
+      <path d="M-25 0-19-1-9 0-1-4Q12-9 20-4L25-1 25 2 17 5 3 5-7 2-20 2-26 4Z" fill="#747c63" stroke="#2f3836" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="M16-5Q21-4 25-1V1L19 2 14-2Z" fill="#5d8791" stroke="#303e3e" stroke-width=".75"/>
+      <path d="M-8 4 16 6M-4 2v3m16-2v4" fill="none" stroke="#b1b9b5" stroke-width="1" stroke-linecap="round"/>
+      <path d="M-24-3v6m-3-3 6-1M5-6v4" fill="none" stroke="#373d3d" stroke-width="1.25" stroke-linecap="round"/>
+      <path d="M-17-10 27-3M-9-2 19-11" fill="none" stroke="#c0c5be" stroke-width="1.3" stroke-linecap="round"/>
+      <circle cx="5" cy="-6.6" r="1.8" fill="#969e95" stroke="#363b39" stroke-width=".75"/>
+    </g>
+  </defs>
+
+  <g id="rumpf">
+    <path d="M21 106 63 83H412L484 92Q479 108 462 125L429 151Q399 164 352 165H80Q52 165 40 156L24 144Q20 140 20 131Z" fill="#252b2e" stroke="#23292c" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M23 107 65 85H412L484 92Q479 110 461 126L427 147Q405 159 351 159H81Q56 159 43 151L26 139Q23 137 23 130Z" fill="#7d8688"/>
+    <path d="M23 107 63 119 66 156Q51 155 43 151L26 139Q23 137 23 130Z" fill="#646e72"/>
+    <path d="M72 156Q82 157 99 157H352Q400 157 427 148L413 156Q385 164 349 164H92Q73 164 58 159L46 154Z" fill="#764944"/>
+    <path d="M66 139H350Q399 139 428 128L456 113 462 115 431 133Q403 144 350 145H66Z" fill="#677175"/>
+    <path d="M27 122 54 131V144L28 135Z" fill="#293438" stroke="#515c5f" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M31 125 51 132V140L31 134Z" fill="#525f63"/>
+    <path d="M34 127 34 135m4-6v8m4-7v8m4-6v8" fill="none" stroke="#849093" stroke-width=".85"/>
+    <path d="M27 136 52 145 54 144 29 135Z" fill="#a0a6a5"/>
+    <g fill="#364246">
+      <path d="M88 127h22v5H88zM119 127h6v5h-6zM132 127h6v5h-6zM181 127h6v5h-6zM190 127h6v5h-6zM376 125h15l-2 7h-13z"/>
+      <circle cx="421" cy="118" r="1.7"/><circle cx="427" cy="116.4" r="1.6"/>
+    </g>
+    <path d="M149 145h40m28 0h113" fill="none" stroke="#a1abaa" stroke-width="1" stroke-linecap="round" opacity=".65"/>
+    <path d="M270 125v8h5m7-3h-4v-5h4v8m3-8h4v8h-4zM292 125h2v8m8-8h-4v4h4v4h-4" fill="none" stroke="#414d50" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g id="landedeck">
+    <path d="M23 98 62 72Q67 69 75 69H409Q433 69 448 77L480 89Q486 93 481 97L446 109Q432 115 409 118H78Q67 118 56 114L23 104Q19 102 23 98Z" fill="#40484a" stroke="#2b3337" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M21 103 56 114Q67 118 78 118H409Q432 115 446 109L481 97 477 103 446 115Q430 121 409 123H78Q65 123 55 119L23 109Z" fill="#697477" stroke="#343d40" stroke-width="1.15" stroke-linejoin="round"/>
+    <path d="M27 98 64 74H411Q430 74 445 81L475 92M30 104 60 112Q70 115 80 115H408Q428 113 443 107L476 96" fill="none" stroke="#a3acab" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M65 80H93M67 78l-8 6m16-6-8 6m16-6-8 6m342 23 15-3m-7 4 15-3" fill="none" stroke="#c9aa67" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M64 110H390" fill="none" stroke="#a1aaa9" stroke-width="1" stroke-dasharray="4 6" opacity=".75"/>
+    <path d="M197 77h43l-6 13h-46Z" fill="#495457" stroke="#6d7d7e" stroke-width="1"/>
+    <use href="#landeplatz" transform="translate(106 96)"/>
+    <use href="#landeplatz" transform="translate(182 96)"/>
+    <use href="#landeplatz" transform="translate(255 96)"/>
+    <use href="#landeplatz" transform="translate(331 96)"/>
+    <use href="#landeplatz" transform="translate(407 95)"/>
+  </g>
+
+  <g id="brueckeninsel">
+    <path d="M248 83 275 73H373L387 82 365 90H270Z" fill="#293235" opacity=".65"/>
+    <path d="M251 78V55L268 46H351L368 53V75L354 84H269Z" fill="#8b9697" stroke="#394346" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M269 63H354V84H269Z" fill="#768487"/>
+    <path d="M354 63 368 53V75L354 84Z" fill="#5d6b6e"/>
+    <path d="M251 55 268 46H351L368 53 354 63H269Z" fill="#a5adac" stroke="#4d595b" stroke-width="1"/>
+    <path d="M277 69h43m-42 4h9m7 0h9m10 0h9" fill="none" stroke="#546367" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M324 58V44L334 39H358L366 44V54L353 63H337Z" fill="#839193" stroke="#3e4b4f" stroke-width="1.3" stroke-linejoin="round"/>
+    <path d="M324 44 334 39H358L366 44 353 51H337Z" fill="#a9b2b1" stroke="#4d595b" stroke-width="1"/>
+    <path d="M337 52h16v6h-16zM355 51l9-5v5l-9 6z" fill="#3f5660"/>
+    <path d="M342 52v6m6-6v6" stroke="#a0b0ae" stroke-width=".8"/>
+    <path d="M266 51v-7a5 5 0 0 1 10 0v7Z" fill="#b3bdbc" stroke="#626f72" stroke-width="1"/>
+    <path d="M306 48l2-17h13l2 17Z" fill="#7a898d" stroke="#425056" stroke-width="1"/>
+    <path d="M311 31V18h4v13M317 31V22h3v9" fill="#88989a" stroke="#435259" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M301 23h25m-20-8h15m-9 7V10m5 8v-5" fill="none" stroke="#aab7b6" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="312" cy="10" r="1.5" fill="#d0af69"/>
+  </g>
+
+  <g id="hubschrauber-an-deck">
+    <use href="#hubschrauber" transform="translate(105 95) rotate(-7) scale(.85)"/>
+    <use href="#hubschrauber" transform="translate(402 94) rotate(5) scale(.82)"/>
+  </g>
+</svg>

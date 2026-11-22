@@ -1,0 +1,60 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 160" width="450" height="160" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">Korvette Huangshi vom Typ 056A</title>
+
+  <g id="rumpf">
+    <path d="M20 113 65 95 374 90 434 91 400 137Q385 145 347 146H88Q48 145 26 138Z" fill="#354348" stroke="#344448" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M22 114 66 97 373 92 432 92 399 135Q380 141 347 141H88Q49 141 27 134Z" fill="#84999c"/>
+    <path d="M25 124 72 129H346Q391 126 417 109L400 134Q380 140 347 140H89Q50 140 27 133Z" fill="#71888e"/>
+    <path d="M27 134Q50 140 88 140H347Q380 140 399 135L394 139Q380 145 347 145H89Q50 144 27 138Z" fill="#794b43"/>
+    <path d="M41 130Q63 135 90 135H342Q379 134 394 128" fill="none" stroke="#a6b7b8" stroke-width=".92" stroke-linecap="round"/>
+    <path d="M49 126h5m6 1h5m56 2h4m5 0h4m5 0h4m175-2h4m5-1h4" fill="none" stroke="#4b666e" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M363 126h5v3h-5v3h5m3-6h5v6h-5zm8 0h5v3h-5v3h5" fill="none" stroke="#d0d9d8" stroke-width=".93" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="406" cy="112" rx="3.3" ry="1.8" transform="rotate(-29 406 112)" fill="#48616b" stroke="#9cafb3" stroke-width=".8"/>
+  </g>
+
+  <g id="deck">
+    <path d="M20 113 60 98Q73 93 92 93H341L373 90 434 91Q412 108 390 115 367 123 333 124H86Q50 124 27 118Z" fill="#4e6266" stroke="#394d54" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M20 113 27 118Q50 124 86 124H333Q367 123 390 115 412 108 434 91L431 96Q412 112 391 119 367 127 333 128H86Q47 127 26 122L21 119Z" fill="#748b91" stroke="#485e65" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M26 112 65 100Q77 96 91 96H342L376 93H426M29 117Q55 122 85 122H332Q367 122 389 113" fill="none" stroke="#aebcba" stroke-width="1" stroke-linecap="round"/>
+    <path d="M34 111 68 99H135L131 120H90Q58 121 34 116Z" fill="#42595f" stroke="#7b9193" stroke-width=".85" stroke-linejoin="round"/>
+    <path d="M60 109 72 102H122L116 118H76L60 115Z" fill="none" stroke="#c0c8bb" stroke-width="1"/>
+    <ellipse cx="92" cy="110" rx="19" ry="6.8" fill="none" stroke="#c1a467" stroke-width="1.15"/>
+    <path d="M87 106v8m10-8v8m-10-4h10" fill="none" stroke="#c8d2cd" stroke-width="1.04" stroke-linecap="round"/>
+    <path d="M31 111v-4m13 0v-4m12 0v-4m13 0v-4m321-2h26m-19 0v-4m11 4v-4" fill="none" stroke="#b0bebd" stroke-width=".93" stroke-linecap="round"/>
+  </g>
+
+  <g id="aufbauten">
+    <path d="M143 118 150 97 165 86H289L311 98 322 115 291 121H163Z" fill="#9aaeb0" stroke="#4c6870" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M163 107H298L322 115 291 121H163Z" fill="#829da2"/>
+    <path d="M150 97 165 86H289L311 98 296 107H163Z" fill="#aebfc0" stroke="#59757e" stroke-width=".9"/>
+    <path d="M174 111h10v4h-10zm15 0h6v4h-6zm74 0h15v4h-15zm21 0h6v4h-6z" fill="#506e7a"/>
+    <path d="M157 99v-9l8-4h22v12l-7 4h-16Z" fill="#94aeb2" stroke="#54747d" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M164 92h19" fill="none" stroke="#b5c4c4" stroke-width="1" stroke-linecap="round"/>
+    <path d="M184 101 189 77H210L218 97 207 105H193Z" fill="#879ea2" stroke="#506c75" stroke-width="1.12" stroke-linejoin="round"/>
+    <path d="M189 77 194 72H207L211 75 214 88 206 92H189Z" fill="#3e5055" stroke="#475f66" stroke-width=".95" stroke-linejoin="round"/>
+    <path d="M195 78h12m-11 3h12m-11 3h12" fill="none" stroke="#74898b" stroke-width=".72" stroke-linecap="round"/>
+
+    <path d="M220 105 225 84 240 74H283L297 83 305 103 291 113H237Z" fill="#a4b8ba" stroke="#526f79" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M237 94H291V113H237Z" fill="#8ca6ad"/>
+    <path d="M291 95 297 83 305 103 291 113Z" fill="#758f99"/>
+    <path d="M225 84 240 74H283L297 83 291 94H237Z" fill="#b9c7c7" stroke="#628088" stroke-width=".85"/>
+    <path d="M235 88H294L291 95H238L231 91V86Z" fill="#405e68"/>
+    <path d="M244 88v6m8-6v6m8-6v6m8-6v6m8-6v6m8-6v6" stroke="#9fb6b8" stroke-width=".8" stroke-linecap="round"/>
+    <path d="M242 102h10m6 0h6m13 0h8" fill="none" stroke="#597a83" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M243 77 252 57H260L271 77 259 82Z" fill="#96aeb2" stroke="#5c7b84" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M256 58V31m-9 17h19m-16 6h13m-20 13h28" fill="none" stroke="#7f9da3" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M245 38 254 34 268 38V44L258 47 245 44Z" fill="#8faab1" stroke="#4e717b" stroke-width=".85" stroke-linejoin="round"/>
+    <path d="M249 38v7m5-9v10m5-10v10m5-9v8m-18-4h21" fill="none" stroke="#b7caca" stroke-width=".74"/>
+    <circle cx="256" cy="30" r="1.4" fill="#c6ad77"/>
+    <circle cx="232" cy="76" r="4.1" fill="#bfcece" stroke="#718c93" stroke-width=".78"/>
+    <circle cx="280" cy="71" r="4.5" fill="#c1cfcc" stroke="#718c93" stroke-width=".78"/>
+    <path d="M192 108 198 105h15l5 3-4 4h-17Z" fill="#acbdbc" stroke="#55747b" stroke-width=".82" stroke-linejoin="round"/>
+  </g>
+
+  <g id="vordeck">
+    <path d="M336 108 339 99 347 95H359L366 100V106L359 112H344Z" fill="#a5b9bb" stroke="#587580" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M339 99 347 95H359L366 100 359 103H344Z" fill="#c0cdcd" stroke="#67868d" stroke-width=".78"/>
+    <path d="M363 102 383 99" stroke="#506e79" stroke-width="2.45" stroke-linecap="round"/>
+    <path d="M364 101.5 382 98.5m27-1v-15" fill="none" stroke="#a5babc" stroke-width="1" stroke-linecap="round"/>
+  </g>
+</svg>

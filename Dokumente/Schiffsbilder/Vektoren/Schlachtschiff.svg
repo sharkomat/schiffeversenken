@@ -1,0 +1,77 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 188" width="530" height="188" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">Schlachtschiff</title>
+
+  <defs>
+    <g id="twin-turret">
+      <path d="M-21 4H8L17 0H-13Z" fill="#313f42" opacity=".55"/>
+      <path d="M-18-3a17 7 0 0 1 34 0v4a17 7 0 0 1-34 0Z" fill="#616e71" stroke="#3d494d" stroke-width="1"/>
+      <path d="M-17-7-10-16H10L20-11V-3L12 0H-11L-17-4Z" fill="#899496" stroke="#354246" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="M-17-7-10-16H10L20-11 12-7Z" fill="#a8b0af" stroke="#4a5658" stroke-width=".75"/>
+      <path d="M12-7 20-11V-3L12 0Z" fill="#647378"/>
+      <path d="M14-9 42-11M16-5 44-7" fill="none" stroke="#39474c" stroke-width="3.9" stroke-linecap="round"/>
+      <path d="M14-9.8 42-11.8M16-5.8 44-7.8" fill="none" stroke="#a7b2b1" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+    <g id="lifeboat">
+      <path d="M-12 0Q-9-4-5-4H7L12-1 8 3H-8Z" fill="#abb3b0" stroke="#424f52" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M-7 0H7" stroke="#68777a" stroke-width=".8" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <g id="rumpf">
+    <path d="M19 122 70 99 460 95 512 104Q502 121 484 138L461 155Q427 171 382 171H110Q63 170 39 157 24 148 19 134Z" fill="#262f33" stroke="#263034" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M21 123 74 101 461 96 512 104Q502 121 484 138L460 153Q429 164 382 166H111Q68 166 40 152 26 145 21 133Z" fill="#748288"/>
+    <path d="M24 132Q45 145 93 148H384Q439 147 479 132L500 117 487 134 463 150Q433 162 382 162H110Q69 162 41 150 28 144 24 132Z" fill="#66747a"/>
+    <path d="M48 154Q74 163 111 163H382Q433 162 460 152L449 159Q423 170 381 170H111Q73 169 48 158Z" fill="#794943"/>
+    <path d="M77 153H379Q429 153 459 143" fill="none" stroke="#a4adad" stroke-width="1" stroke-linecap="round" opacity=".62"/>
+    <path d="M42 141 66 149M462 138 480 128" fill="none" stroke="#9ba5a6" stroke-width="1" stroke-linecap="round"/>
+    <path d="M74 145h3m8 1h3m8 1h3m46 1h3m9 0h3m9 0h3m43 0h3m9 0h3m9 0h3m50 0h3m9 0h3m9 0h3m41-1h3m8-1h3" fill="none" stroke="#3e4a4e" stroke-width="2.3" stroke-linecap="round"/>
+    <ellipse cx="474" cy="133" rx="3.2" ry="2.2" transform="rotate(-28 474 133)" fill="#3c484d" stroke="#a1aaaa" stroke-width=".8"/>
+  </g>
+
+  <g id="deck">
+    <path d="M18 120Q24 111 45 103L72 96Q94 92 119 92H367Q424 91 460 95L513 103Q498 114 477 123 449 136 405 139H102Q65 139 37 131 24 128 18 122Z" fill="#a39982" stroke="#333e41" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M18 122Q26 128 37 131 65 139 102 139H405Q449 136 477 123 498 114 513 103L509 110Q493 121 479 127 449 140 405 143H102Q64 142 36 135 23 132 19 128Z" fill="#5d6b70" stroke="#374447" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M24 120Q57 98 121 96H375Q446 95 504 104M26 124Q56 136 104 136H405Q461 132 493 112" fill="none" stroke="#d0c5aa" stroke-width="1.05" stroke-linecap="round"/>
+    <path d="M55 114H170M45 119H158M55 124H170M78 130H161M349 102H443M366 108H474M369 114H476M360 120H452M367 126H430" fill="none" stroke="#7b7363" stroke-width=".75" stroke-linecap="round" opacity=".8"/>
+    <path d="M44 118 65 114m-7 11 17 2M475 110l21-6" fill="none" stroke="#515c5c" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="472" cy="110" r="3.3" fill="#798582" stroke="#515b5b" stroke-width=".9"/>
+    <circle cx="463" cy="113" r="2.4" fill="#798582" stroke="#515b5b" stroke-width=".9"/>
+    <path d="M36 116V100m1 6 13-4m444 5V91" fill="none" stroke="#59676a" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+
+  <g id="aufbauten">
+    <use href="#twin-turret" transform="translate(105 115) scale(-.94 .94)"/>
+    <path d="M131 111V105L141 98H170L180 104V114L168 119H142Z" fill="#7f8b8d" stroke="#424f53" stroke-width="1.1" stroke-linejoin="round"/>
+    <use href="#twin-turret" transform="translate(155 104) scale(-.87 .87)"/>
+    <path d="M181 108V92L197 82H332L351 91V111L332 123H198Z" fill="#8b9899" stroke="#415056" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M198 101H332V123H198Z" fill="#718286"/>
+    <path d="M332 101 351 91V111L332 123Z" fill="#627478"/>
+    <path d="M182 92 197 82H332L351 91 332 101H198Z" fill="#a6afac" stroke="#556164" stroke-width="1"/>
+    <path d="M203 107h23m-17 5h6m8 0h6m14-5h16m44 1h22m-24 5h7m8 0h7" stroke="#46575c" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M200 94V82L211 76H237L248 82V92L240 98H212Z" fill="#839295" stroke="#494f50" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M200 82 211 76H237L248 82 240 87H212Z" fill="#a4aeaa" stroke="#536266" stroke-width=".9"/>
+    <path d="M206 77V60m-7 7h16m-11-5h4" fill="none" stroke="#627276" stroke-width="1.55" stroke-linecap="round"/>
+    <path d="M230 82 236 65H257L260 83Q247 90 230 82Z" fill="#718387" stroke="#455459" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M241 78 244 55H258L260 80Q250 84 241 78Z" fill="#819092" stroke="#455459" stroke-width="1.1"/>
+    <path d="M244 55Q252 51 258 55L259 59Q250 62 243 59Z" fill="#465357" stroke="#354347" stroke-width="1"/>
+    <path d="M245 55Q251 53 257 55" stroke="#a9b1b0" fill="none" stroke-width=".75" stroke-linecap="round"/>
+    <path d="M268 90V70L281 63H322L333 70V90L319 99H282Z" fill="#89979a" stroke="#45545a" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M282 77H319V99H282Z" fill="#738488"/>
+    <path d="M319 77 333 70V90L319 99Z" fill="#5f7175"/>
+    <path d="M268 70 281 63H322L333 70 319 77H282Z" fill="#abb4b3" stroke="#58666b" stroke-width="1"/>
+    <path d="M277 70V56L286 50H311L321 56V67L311 74H288Z" fill="#88999b" stroke="#4d5a60" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M277 56 286 50H311L321 56 311 62H288Z" fill="#adb6b4" stroke="#57666b" stroke-width="1"/>
+    <path d="M288 63h23v6h-23zM313 62l6-4v6l-6 4z" fill="#3d555f"/>
+    <path d="M293 63v6m6-6v6m6-6v6" stroke="#a9b4b3" stroke-width=".75"/>
+    <path d="M291 52V43L298 39H308L314 42V50L306 54H298Z" fill="#98a5a5" stroke="#566468" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M303 41V16m-13 11h26m-21 7h17m-19-7v-4m21 4v-5" fill="none" stroke="#6d7d80" stroke-width="1.45" stroke-linecap="round"/>
+    <circle cx="303" cy="15.5" r="1.45" fill="#c6ab73"/>
+    <path d="M210 71 295 31 327 67" fill="none" stroke="#59696a" stroke-width=".65" opacity=".55"/>
+    <use href="#lifeboat" transform="translate(220 114)"/>
+    <use href="#lifeboat" transform="translate(247 114) scale(.83)"/>
+    <use href="#twin-turret" transform="translate(291 114) rotate(14) scale(.44)"/>
+    <path d="M350 112V102L359 96H388L400 101V112L389 118H361Z" fill="#7d8b8e" stroke="#435155" stroke-width="1.05" stroke-linejoin="round"/>
+    <use href="#twin-turret" transform="translate(375 101) scale(.88)"/>
+    <use href="#twin-turret" transform="translate(426 111) scale(.94)"/>
+  </g>
+</svg>

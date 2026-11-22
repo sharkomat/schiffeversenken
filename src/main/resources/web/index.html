@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Schiffeversenken</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/game.js" defer></script>
+</head>
+<body>
+<main class="game">
+    <header class="game-header">
+        <div>
+            <h1>Schiffeversenken</h1>
+            <p id="game-caption">Gegen den Computer</p>
+        </div>
+        <button type="button" class="play" id="play" hidden>Neu spielen</button>
+    </header>
+    <section id="start-screen" class="start-panel" aria-labelledby="start-heading">
+        <h2 id="start-heading" tabindex="-1">Neue Partie</h2>
+        <form id="start-form">
+            <label for="player-name">Spielername</label>
+            <input id="player-name" name="player" type="text" maxlength="60" autocomplete="nickname" required>
+            <label for="difficulty">Schwierigkeit</label>
+            <select id="difficulty" name="difficulty">
+                <option value="LEICHT">Leicht</option>
+                <option value="MITTEL" selected>Mittel</option>
+                <option value="SCHWER">Schwer</option>
+            </select>
+            <button type="submit" class="play" id="start">Gegen Computer spielen</button>
+        </form>
+        <p id="start-error" class="feedback" role="status"></p>
+    </section>
+    <section id="setup-screen" class="setup-layout" aria-labelledby="setup-heading" hidden>
+        <div class="setup-panel">
+            <h2 id="setup-heading" tabindex="-1">Schiffe platzieren</h2>
+            <label for="nation">Nation</label>
+            <select id="nation"></select>
+            <p class="setup-help">Wählen Sie ein Schiff und klicken Sie aufs Raster oder ziehen Sie es auf ein Feld.</p>
+            <ul id="ship-list" class="ship-list"></ul>
+            <button type="button" class="setup-button" id="orientation">Ausrichtung: waagerecht</button>
+            <p id="setup-feedback" class="feedback" role="status"></p>
+            <button type="button" class="play" id="finish" disabled>Platzierung abschließen</button>
+        </div>
+        <div class="target-panel">
+            <h2 id="placement-heading">Eigenes Spielfeld</h2>
+            <div id="placement" class="board target" aria-labelledby="placement-heading"></div>
+        </div>
+    </section>
+    <div id="game-screen" class="game-layout" hidden>
+        <section class="turn-panel" aria-label="Zugstatus">
+            <h2 id="status" role="status">Sie sind dran</h2>
+            <button type="button" id="resume" class="resume" hidden>Computerzug fortsetzen</button>
+        </section>
+        <section class="target-panel" aria-labelledby="target-heading">
+            <h2 id="target-heading" tabindex="-1">Gegnerisches Zielraster</h2>
+            <div id="target" class="board target" aria-label="Gegnerisches Zielraster"></div>
+            <div class="legend">
+                <span><span class="fire" aria-hidden="true">🔥</span> Schiffstreffer</span>
+                <span><span class="dot" aria-hidden="true"></span> Wassertreffer</span>
+            </div>
+        </section>
+        <aside class="sidebar">
+            <section class="tablet" aria-label="Protokolltafel">
+                <p id="feedback" class="feedback" aria-live="polite"></p>
+                <dl class="counts">
+                    <div><dt>Abgegebene Schüsse</dt><dd id="shots">0</dd></div>
+                    <div><dt>Neue Treffer</dt><dd id="new-hits">0</dd></div>
+                    <div><dt>Alte Treffer</dt><dd id="old-hits">0</dd></div>
+                </dl>
+                <section class="fleet" aria-labelledby="fleet-heading">
+                    <h3 id="fleet-heading">Gegnerische Flotte</h3>
+                    <p id="unknown">5 unbekannte Schiffe</p>
+                    <ul id="sunk" aria-label="Versenkte Schiffe"></ul>
+                </section>
+            </section>
+            <section class="own-panel" aria-labelledby="own-heading">
+                <h2 id="own-heading">eigene Flotte</h2>
+                <div id="own" class="board mini" aria-label="Minikarte der eigenen Flotte"></div>
+            </section>
+        </aside>
+    </div>
+</main>
+</body>
+</html>

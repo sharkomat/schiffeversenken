@@ -1,0 +1,114 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 232" width="612" height="232" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">Kreuzer Marschall Ustinow</title>
+
+  <defs>
+    <g id="schraeges-deckdetail">
+      <path d="M0 9V3L12-3 23-2 22 8 15 12Z" fill="#626d71" stroke="#424c50" stroke-width="1.05" stroke-linejoin="round"/>
+      <path d="M4 2 24-10 29-9 31-6 31-3 10 10Q7 12 4 10L1 7Q0 4 4 2Z" fill="#788386" stroke="#424d51" stroke-width="1.05" stroke-linejoin="round"/>
+      <path d="M4 3 25-9 29-7 8 6Q5 8 3 6Z" fill="#9ca7a6"/>
+      <ellipse cx="27" cy="-6" rx="3.3" ry="4.1" transform="rotate(-34 27 -6)" fill="#a8b0ae" stroke="#5f6b6d" stroke-width=".85"/>
+      <path d="M14-2q-1 2 2 5" fill="none" stroke="#647274" stroke-width=".8"/>
+    </g>
+    <g id="rettungsboot">
+      <path d="M0 3 5-2H22L28 1 23 6H4Z" fill="#a3acab" stroke="#445257" stroke-width=".95" stroke-linejoin="round"/>
+      <path d="M5 2H21" fill="none" stroke="#657578" stroke-width=".8" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <g id="rumpf">
+    <path d="M20 149 96 126 492 129 590 126 558 182Q546 201 512 209 480 217 428 218H131Q72 216 42 202 22 192 21 178Z" fill="#282f33" stroke="#242d32" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M22 150 96 129 491 131 588 127 556 182Q544 198 511 204 478 211 428 212H132Q74 210 43 197 25 189 23 177Z" fill="#737c81"/>
+    <path d="M22 165Q57 174 112 177H422Q521 174 571 150L555 178Q540 196 510 200 476 207 427 208H133Q76 205 45 194 28 185 24 179Z" fill="#535e65"/>
+    <path d="M50 199Q84 209 133 211H428Q494 210 534 198L524 204Q490 216 428 217H131Q81 216 50 204Z" fill="#774842"/>
+    <path d="M53 192Q85 201 137 202H426Q487 200 525 189" fill="none" stroke="#929da0" stroke-width="1.05" stroke-linecap="round"/>
+    <path d="M65 180h4m7 2h3m8 1h3m50 0h3m9 0h3m8 0h3m10 0h3m31-1h3m9 0h3m9 0h3m139-1h4m10-1h4m10-1h4" fill="none" stroke="#39474e" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M518 171 532 165l4 5-13 7Z" fill="#3d494f"/>
+    <ellipse cx="548" cy="156" rx="4.1" ry="2.2" transform="rotate(-27 548 156)" fill="#39464d" stroke="#90999b" stroke-width=".8"/>
+    <path d="M460 181h5l-2 9h-5Zm8 0h6m-6 0-1 4h5l-1 5h-5m12-9h6m-6 0-1 4h5l-1 5h-5" fill="none" stroke="#b2b8b8" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g id="deck">
+    <path d="M20 150 74 132Q90 127 108 127H436Q477 126 509 124L590 126C566 147 526 162 471 170Q447 174 414 174H116Q62 172 29 161Z" fill="#4f5353" stroke="#2e373a" stroke-width="1.65" stroke-linejoin="round"/>
+    <path d="M20 150 29 161Q62 172 116 174H414Q447 174 471 170C526 162 566 147 590 126L587 132C568 151 527 167 471 174Q441 179 413 179H117Q63 178 30 167L21 156Z" fill="#6a7376" stroke="#343e43" stroke-width="1.15" stroke-linejoin="round"/>
+    <path d="M27 149 78 134Q92 130 108 130H434Q483 129 511 127H583M32 159Q66 169 116 171H413Q499 169 553 146" fill="none" stroke="#a3aaaa" stroke-width="1.03" stroke-linecap="round"/>
+    <path d="M108 132H425L482 142 466 164 414 171H113Z" fill="#69554e"/>
+    <path d="M123 164H419L463 159M480 135 510 130H548" fill="none" stroke="#93766a" stroke-width="1.05" stroke-linecap="round"/>
+    <path d="M33 151 78 136H120L114 166H98Q62 165 36 158Z" fill="#454d4e" stroke="#798785" stroke-width=".9" stroke-linejoin="round"/>
+    <ellipse cx="80" cy="152" rx="22" ry="8.2" fill="none" stroke="#c6a667" stroke-width="1.2"/>
+    <path d="M74 148v8m12-8v8m-12-4h12M39 154h11m55-2h7" fill="none" stroke="#bfc2b6" stroke-width="1.05" stroke-linecap="round"/>
+    <path d="M30 150v-4m11 0v-4m12 0v-4m13 1v-4m13 0v-4m461 0 38-2m-31 2v-4m11 4v-4m12 3v-4" fill="none" stroke="#a3adad" stroke-width=".95" stroke-linecap="round"/>
+  </g>
+
+  <g id="heckaufbau">
+    <path d="M119 157 130 141 144 132H197L214 138V154L197 164H137Z" fill="#909c9d" stroke="#465256" stroke-width="1.25" stroke-linejoin="round"/>
+    <path d="M137 148H197V164H137Z" fill="#737f84"/>
+    <path d="M197 148 214 138V154L197 164Z" fill="#59686e"/>
+    <path d="M130 141 144 132H197L214 138 197 148H137Z" fill="#a8b0ae" stroke="#5d696a" stroke-width=".9"/>
+    <path d="M137 146H197L210 139" fill="none" stroke="#8c5c50" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M145 140V124L154 118H177L187 123V139L176 146H155Z" fill="#849195" stroke="#4b595d" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M145 124 154 118H177L187 123 176 129H155Z" fill="#a0acab" stroke="#606f70" stroke-width=".8"/>
+    <path d="M160 121v-8h13v7" fill="#626f74" stroke="#4b5d62" stroke-width="1"/>
+    <circle cx="166" cy="107" r="10.2" fill="#819195" stroke="#4f6268" stroke-width="1.15"/>
+    <path d="M158 105q3-6 8-6" fill="none" stroke="#aebcb9" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M107 143v-13m-4 6 7-2" fill="none" stroke="#8d9c9b" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <g id="mittschiff">
+    <path d="M209 153 215 132 233 119H322L340 130V151L319 166H230Z" fill="#869496" stroke="#47565c" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M230 142H319V166H230Z" fill="#727f85"/>
+    <path d="M319 142 340 130V151L319 166Z" fill="#607078"/>
+    <path d="M215 132 233 119H322L340 130 319 142H230Z" fill="#a4aead" stroke="#5c6b70" stroke-width="1"/>
+    <path d="M221 134 227 108 240 100H254L264 106V128L250 139H234Z" fill="#77858a" stroke="#4b5c62" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M227 108 240 100H254L264 106 251 114H235Z" fill="#454e51" stroke="#58696e" stroke-width="1"/>
+    <path d="M250 134 256 105 269 97H283L293 103V128L281 140H264Z" fill="#859194" stroke="#4b5a61" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M256 105 269 97H283L293 103 281 111H265Z" fill="#474f52" stroke="#5b696c" stroke-width="1"/>
+    <path d="M236 123v10m6-13v10m26-9v14m5-16v14" fill="none" stroke="#a2adad" stroke-width=".88" stroke-linecap="round"/>
+    <use href="#rettungsboot" x="205" y="151"/>
+    <path d="M229 148 247 130m-10 6 3 6" fill="none" stroke="#9faaaa" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+
+  <g id="hauptaufbau">
+    <path d="M304 151 311 121 332 103H410L429 112 434 141 413 157H326Z" fill="#899799" stroke="#45565d" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M326 132H413V157H326Z" fill="#6f8188"/>
+    <path d="M413 132 429 112 434 141 413 157Z" fill="#5b7077"/>
+    <path d="M311 121 332 103H410L429 112 413 132H326Z" fill="#a6b0af" stroke="#56696d" stroke-width="1"/>
+    <path d="M322 120 329 107 344 99H408L427 107 430 115 415 127H337Z" fill="#9eaaaa" stroke="#4b5e64" stroke-width="1.13" stroke-linejoin="round"/>
+    <path d="M329 107 344 99H408L427 107 413 114H341Z" fill="#735b53"/>
+    <path d="M337 117H414L412 123H340Z" fill="#3b5059"/>
+    <path d="M344 117v6m10-6v6m10-6v6m10-6v6m10-6v6m10-6v6m10-6v6" fill="none" stroke="#a6b4b3" stroke-width="1"/>
+    <path d="M418 116 426 111v4l-8 6Z" fill="#4c626a"/>
+    <path d="M336 138h8m8 0h8m26-2h8m8-1h8" fill="none" stroke="#52656b" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M337 108h67m-74-2h8" fill="none" stroke="#a5b2b1" stroke-width=".9" stroke-linecap="round"/>
+
+    <path d="M329 106 342 71 350 61H370L378 71 392 104 376 114H345Z" fill="#8d9b9f" stroke="#4a6068" stroke-width="1.25" stroke-linejoin="round"/>
+    <path d="M366 72 370 61 378 71 392 104 376 114Z" fill="#647b83"/>
+    <path d="M341 80H382M337 89H386m-41 6h21m-14-25v-3" fill="none" stroke="#abb9ba" stroke-width=".98" stroke-linecap="round"/>
+    <path d="M344 66V58L351 53H374L383 57V63L374 69H352Z" fill="#778c91" stroke="#4a626a" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M344 58 351 53H374L383 57 374 62H352Z" fill="#a2b0af" stroke="#5f747a" stroke-width=".8"/>
+    <path d="M355 54V39h14v14" fill="#7d9298" stroke="#4e636b" stroke-width=".9"/>
+    <path d="M349 28 359 25 381 28V42L371 45 349 42Z" fill="#a0adae" stroke="#4d666f" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M352 32 376 34m-24 2 24 2m-24 2 24 2" fill="none" stroke="#758e95" stroke-width=".73"/>
+    <path d="M347 52V14m-5 11h10m-12 24h13m-9-9h6" fill="none" stroke="#81979a" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M333 86h13m33-8 18 2m-66 6h-6m72-5h7" fill="none" stroke="#8b9fa1" stroke-width="1.05" stroke-linecap="round"/>
+    <circle cx="330" cy="108" r="4.2" fill="#afbab9" stroke="#5c747a" stroke-width=".8"/>
+    <circle cx="402" cy="98" r="4.2" fill="#b4bfbd" stroke="#5c747a" stroke-width=".8"/>
+  </g>
+
+  <g id="achterer-radarmast">
+    <path d="M283 112 290 72H300L308 110Z" fill="#7e8d93" stroke="#485e68" stroke-width="1.12" stroke-linejoin="round"/>
+    <path d="M280 52 301 55 308 74 287 71Z" fill="#40575f" stroke="#34464e" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M285 55 291 70m1-14 6 14m1-13 6 14m-20-12 19 3m-17 2 19 3" fill="none" stroke="#84999d" stroke-width=".72"/>
+    <path d="M300 75h17m-30-3h-12" fill="none" stroke="#8c9fa2" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <g id="vordeck">
+    <use href="#schraeges-deckdetail" x="311" y="152"/>
+    <use href="#schraeges-deckdetail" x="344" y="152"/>
+    <use href="#schraeges-deckdetail" x="377" y="150"/>
+    <use href="#schraeges-deckdetail" x="410" y="147"/>
+    <path d="M455 144 459 134 468 128H486L495 134V141L486 150H467Z" fill="#8f9c9e" stroke="#4b5e65" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M459 134 468 128H486L495 134 486 140H469Z" fill="#abb6b5" stroke="#607478" stroke-width=".8"/>
+    <path d="M492 138 515 135m-24-1 21-3" fill="none" stroke="#4c626d" stroke-width="1.7" stroke-linecap="round"/>
+    <path d="M523 147 546 141m-17 8 19-6" fill="none" stroke="#a6b0af" stroke-width="1" stroke-linecap="round"/>
+  </g>
+</svg>

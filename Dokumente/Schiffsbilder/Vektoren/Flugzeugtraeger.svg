@@ -1,0 +1,74 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 207" width="620" height="207" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">Flugzeugträger</title>
+
+  <defs>
+    <g id="jet">
+      <path d="M0 0 5-2 13-2 9-8 13-8 22-3 28-2 32 0 28 2 22 3 13 8 9 8 13 2 5 2Z" fill="#acb6b8" stroke="#252b30" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M1 0-2-4 2-4 8 0 2 4-2 4Z" fill="#818d93" stroke="#252b30" stroke-width=".8"/>
+      <path d="M20 0H26" stroke="#47707c" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+    <clipPath id="flight-deck">
+      <path d="M18 107 63 83Q68 80 77 80H420L439 84H516Q547 84 566 91L601 106 566 125 530 131H406L366 143H123L88 134 31 130 16 119Z"/>
+    </clipPath>
+  </defs>
+
+  <g id="rumpf">
+    <path d="M36 119 89 108 529 106 588 110Q580 126 564 143L546 163Q534 179 513 186 481 193 438 194H126Q88 193 63 182 45 174 37 156 30 138 36 119Z" fill="#242a2c" stroke="#212629" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M39 122 96 113 524 111 588 110Q580 126 564 143L544 165Q532 177 510 181 475 186 440 187H125Q89 186 64 175 47 168 41 154 36 138 39 122Z" fill="#747b7d"/>
+    <path d="M72 173Q94 181 125 182H439Q494 182 522 176 510 184 487 188 464 191 437 191H125Q89 190 66 179Z" fill="#794944"/>
+    <path d="M91 130 138 136H364L403 124H527L577 115 562 136 533 144H412L372 158H143L103 152Z" fill="#535a5e"/>
+    <path d="M143 171H446Q491 171 524 163" fill="none" stroke="#a2a6a5" stroke-width="1.2" stroke-linecap="round" opacity=".58"/>
+    <g fill="#333b3f">
+      <path d="M156 157h29v8h-29zM208 157h13v8h-13zM424 149h24v9h-24zM473 148h12v8h-12z"/>
+      <circle cx="332" cy="168" r="1.7"/><circle cx="341" cy="168" r="1.7"/><circle cx="350" cy="168" r="1.7"/>
+      <circle cx="520" cy="153" r="2"/><circle cx="528" cy="151" r="1.7"/>
+    </g>
+    <g fill="#9da4a4">
+      <path d="M156 157h29v1h-29zM208 157h13v1h-13zM424 149h24v1h-24zM473 148h12v1h-12z"/>
+    </g>
+  </g>
+
+  <g id="flugdeck">
+    <path d="M18 107 63 83Q68 80 77 80H420L439 84H516Q547 84 566 91L601 106 566 125 530 131H406L366 143H123L88 134 31 130 16 119Z" fill="#3e4446" stroke="#272e31" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M601 106 566 125 530 131H406L366 143H123L88 134 31 130 16 119 19 125 31 136 87 141 122 150H369L408 137H531L567 131 598 113Z" fill="#666e71" stroke="#2a3033" stroke-width="1.5" stroke-linejoin="round"/>
+    <g clip-path="url(#flight-deck)">
+      <path d="M22 121 175 124 408 98 498 96 510 107 409 117 188 141 122 142 90 135 31 130Z" fill="#494f50"/>
+      <path d="M28 113 111 122H172L410 96 496 93M36 128 113 137H176L410 112 502 105" fill="none" stroke="#a8adab" stroke-width="1.25" stroke-linecap="round"/>
+      <path d="M48 123 117 129H172L410 104 494 99" fill="none" stroke="#d1af68" stroke-width="1.7" stroke-dasharray="9 7" stroke-linecap="round"/>
+      <path d="M113 124V134M122 124V134M131 124V134M140 124V134" fill="none" stroke="#b8beb9" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M269 89H520L548 96M426 122H525L567 111" fill="none" stroke="#a4aead" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M340 89H517M437 122H525" fill="none" stroke="#b9bcb6" stroke-width="1" stroke-dasharray="5 6" opacity=".65"/>
+      <path d="M52 102 70 88H182L183 108 70 117Z" fill="#454b4b" stroke="#758385" stroke-width="1"/>
+      <path d="M197 112 221 108 224 124 200 127Z" fill="#454b4b" stroke="#758385" stroke-width="1"/>
+      <path d="M553 102h10l-6 8M573 106c-5 0-5-4 0-4s5 4 0 4-6 5 0 5 6-5 0-5Z" fill="none" stroke="#b5b9b3" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <path d="M20 109 63 85Q69 82 77 82H418M125 146H365L405 134" fill="none" stroke="#989d9c" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+
+  <g id="deckflugzeuge">
+    <use href="#jet" transform="translate(74 104) rotate(-25) scale(.7)"/>
+    <use href="#jet" transform="translate(105 103) rotate(-25) scale(.7)"/>
+    <use href="#jet" transform="translate(136 102) rotate(-25) scale(.7)"/>
+    <use href="#jet" transform="translate(464 121) rotate(-5) scale(.72)"/>
+    <use href="#jet" transform="translate(499 120) rotate(-7) scale(.68)"/>
+  </g>
+
+  <g id="brueckeninsel">
+    <path d="M215 96 242 86H276L291 94 278 104H232Z" fill="#2b3032" opacity=".6"/>
+    <path d="M221 91V71L236 62H274L284 69V91L269 100H235Z" fill="#788589" stroke="#333b3e" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M235 78H269V100H235Z" fill="#667579"/>
+    <path d="M269 78 284 69V91L269 100Z" fill="#566267"/>
+    <path d="M221 71 236 62H274L284 69 269 78H235Z" fill="#a0a8a8" stroke="#424a4d" stroke-width="1"/>
+    <path d="M230 72V55L241 48H269L279 54V70L266 78H241Z" fill="#829094" stroke="#343d41" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M230 55 241 48H269L279 54 266 61H241Z" fill="#a6adae" stroke="#485155" stroke-width="1"/>
+    <path d="M241 63H266V69H241Z M268 62 277 57V63L268 68Z" fill="#3d555e"/>
+    <path d="M246 63V69M253 63V69M260 63V69" stroke="#8b9ea0" stroke-width=".9"/>
+    <path d="M239 54V45L246 40H266L272 45V53L265 57H247Z" fill="#79858a" stroke="#394246" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M239 45 246 40H266L272 45 265 49H247Z" fill="#a6adae" stroke="#414a4f" stroke-width="1"/>
+    <path d="M243 45V39a4 4 0 0 1 8 0v6M263 44v-7a3 3 0 0 1 6 0v7" fill="#adb5b5" stroke="#586266" stroke-width="1" stroke-linecap="round"/>
+    <path d="M255 45V17" fill="none" stroke="#3f494d" stroke-width="3" stroke-linecap="round"/>
+    <path d="M255 43V17M247 24H266M250 31H264" fill="none" stroke="#a5adae" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M247 24v-3M266 24v-3M251 31v-2" fill="none" stroke="#768488" stroke-width="1" stroke-linecap="round"/>
+    <circle cx="255" cy="16" r="1.8" fill="#d1af68"/>
+  </g>
+</svg>

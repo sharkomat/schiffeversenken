@@ -1,0 +1,69 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 197" width="530" height="197" preserveAspectRatio="none" role="img" aria-labelledby="title">
+  <title id="title">Fregatte Hessen der Sachsen-Klasse</title>
+
+  <g id="rumpf">
+    <path d="M18 137 64 118 443 112 512 105 471 165Q454 178 409 181H99Q46 180 25 168Z" fill="#28343a" stroke="#26353b" stroke-width="1.65" stroke-linejoin="round"/>
+    <path d="M20 138 65 120 443 114 510 107 470 163Q454 173 409 174H99Q48 174 27 164Z" fill="#657a85"/>
+    <path d="M23 148 82 155H410Q461 152 488 140L471 161Q451 171 409 172H99Q48 172 27 163Z" fill="#546a77"/>
+    <path d="M30 164Q58 173 99 174H408Q449 173 470 163L466 169Q447 179 410 179H99Q50 178 30 169Z" fill="#343e46"/>
+    <path d="M45 162Q68 166 99 166H405Q439 165 459 159" fill="none" stroke="#8c9da4" stroke-width="1" stroke-linecap="round"/>
+    <path d="M64 157h5m6 0h5m105 1h5m7 0h5m149-1h5m7 0h5" stroke="#374e59" stroke-width="1.45" stroke-linecap="round"/>
+    <path d="M454 142 462 138 465 142 457 147Z" fill="#354952" stroke="#82939b" stroke-width=".85"/>
+    <path d="M306 150h5m-5 0v8m0-5h4m5-3h5v4h-5v4h5m4-8h5v4h-5v4h5m4-8h2v8" fill="none" stroke="#bdc8c9" stroke-width=".95" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g id="deck">
+    <path d="M18 137 59 121Q72 116 90 116H304L360 109 448 107 512 105Q491 126 465 133 428 144 389 146H99Q51 146 28 142Z" fill="#485c64" stroke="#344750" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M18 137 28 142Q51 146 99 146H389Q428 144 465 133 491 126 512 105L509 110Q490 131 467 137 428 149 389 151H99Q48 150 27 146L19 142Z" fill="#71868d" stroke="#394d56" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M24 137 63 123Q74 119 90 119H302L361 112 450 110 502 108M27 141Q56 145 99 145H385Q429 143 457 135" fill="none" stroke="#aab6b8" stroke-width="1" stroke-linecap="round"/>
+    <path d="M34 136 65 124H126L118 142H96Q62 141 34 138Z" fill="#3f535c" stroke="#718991" stroke-width=".9" stroke-linejoin="round"/>
+    <ellipse cx="87" cy="133" rx="22" ry="7.6" fill="none" stroke="#c8ac6f" stroke-width="1.2"/>
+    <path d="M81 129v8m11-8v8m-11-4h11m22 0h6m-72 1h7" fill="none" stroke="#c3cbc8" stroke-width="1" stroke-linecap="round"/>
+    <path d="M28 135v-4m12 0v-5m14 1v-5m15 0v-4m366-8 55-4m-41 4v-4m13 3v-4m15 3v-4" fill="none" stroke="#a8b9bc" stroke-width=".92" stroke-linecap="round"/>
+  </g>
+
+  <g id="heckaufbau">
+    <path d="M122 142 136 112 154 101H221L241 111V133L224 143Z" fill="#8198a0" stroke="#465e69" stroke-width="1.25" stroke-linejoin="round"/>
+    <path d="M139 125H222V143H122Z" fill="#6b838d"/>
+    <path d="M136 112 154 101H221L241 111 222 125H139Z" fill="#a2b2b6" stroke="#576f77" stroke-width=".95"/>
+    <path d="M134 133 139 124h39v13h-44Z" fill="#324950" stroke="#91a6ac" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M142 132 148 128H170L174 131 167 134H145Z" fill="#aab6b5" stroke="#527078" stroke-width=".75"/>
+    <path d="M184 126h20v8h-20Zm25 0h6v8h-6Z" fill="#435e6a"/>
+    <path d="M161 110 171 85H192L202 108 190 116H176Z" fill="#7e949b" stroke="#4b636c" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M166 83 174 77 202 77 207 80 201 89 173 90Z" fill="#4d646d" stroke="#394f59" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="M170 83 176 80H202m-28 6h25" fill="none" stroke="#899fa2" stroke-width=".83" stroke-linecap="round"/>
+    <path d="M218 107V76m-13 7h27m-22 7h16m-14-7v-5m13 5v-5" fill="none" stroke="#788f97" stroke-width="1.25" stroke-linecap="round"/>
+  </g>
+
+  <g id="bruecke">
+    <path d="M219 137 229 111 253 99H344L358 108 366 124 346 138Z" fill="#8da0a5" stroke="#48616b" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M248 117H345V138H219Z" fill="#748b95"/>
+    <path d="M345 117 358 108 366 124 346 138Z" fill="#607c88"/>
+    <path d="M229 111 253 99H344L358 108 345 117H248Z" fill="#aab9bc" stroke="#5a737b" stroke-width=".95"/>
+    <path d="M239 112 244 102 257 96H339L353 103 354 112 340 120H253Z" fill="#a3b5b9" stroke="#516a74" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M252 111H344L340 117H253L242 112V107Z" fill="#3c5865"/>
+    <path d="M261 111v6m10-6v6m10-6v6m10-6v6m10-6v6m10-6v6m10-6v6m10-6v6m12-7 8-5" fill="none" stroke="#9cafb4" stroke-width=".8"/>
+    <path d="M258 126h10m7 0h7m32 1h11m-14 4h7" stroke="#4f6a77" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M271 100 281 81 292 76H316L325 82 333 100 318 108H287Z" fill="#84999f" stroke="#506b75" stroke-width="1.05" stroke-linejoin="round"/>
+    <path d="M289 85H320L325 96 316 101H289Z" fill="#738d98"/>
+    <path d="M285 72 293 45 303 40 318 41 328 72 319 81H295Z" fill="#9eb0b5" stroke="#4f6974" stroke-width="1.15" stroke-linejoin="round"/>
+    <path d="M285 72 295 68H321L328 72 319 81H295Z" fill="#6d8792"/>
+    <path d="M318 41 328 72 321 68 313 46Z" fill="#849da5"/>
+    <path d="M298 48h12l3 13-5 4h-8l-5-4Z" fill="#bac8cb" stroke="#6c8a95" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M318 49l6 1 3 11-5 3Z" fill="#abc0c5" stroke="#64808a" stroke-width=".8"/>
+    <path d="M306 41V19m-8 14h17m-14-6h11m-6-8v-3" fill="none" stroke="#80989f" stroke-width="1.15" stroke-linecap="round"/>
+    <circle cx="306" cy="16" r="1.5" fill="#c5ae77"/>
+    <path d="M238 99v-6h8v6m86-4v-7h7v7" fill="#8198a0" stroke="#5a7781" stroke-width=".8"/>
+    <circle cx="238" cy="91" r="3.8" fill="#bdcbca" stroke="#647f89" stroke-width=".82"/>
+    <circle cx="336" cy="87" r="4.2" fill="#bccbca" stroke="#647f89" stroke-width=".82"/>
+  </g>
+
+  <g id="vordeck">
+    <path d="M368 131V122l9-4h21l9 4v8l-9 6h-23Z" fill="#839ba2" stroke="#506a74" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M368 122l9-4h21l9 4-9 5h-23Z" fill="#a8bbbd" stroke="#627f87" stroke-width=".78"/>
+    <path d="M410 129 414 120 422 116H435L442 120V128L433 133H420Z" fill="#93a8ad" stroke="#536e79" stroke-width=".98" stroke-linejoin="round"/>
+    <path d="M414 120 422 116H435L442 120 434 124H421Z" fill="#b0c1c2" stroke="#6b8790" stroke-width=".78"/>
+    <path d="M438 124 462 121" fill="none" stroke="#4b6772" stroke-width="2.45" stroke-linecap="round"/>
+    <path d="M439 123.5 461 120.5m20-7v-15" fill="none" stroke="#9eb3b7" stroke-width=".9" stroke-linecap="round"/>
+  </g>
+</svg>
