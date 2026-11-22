@@ -64,6 +64,14 @@ public final class Main {
                     return;
                 }
                 update(exchange, game, id, game.selectNation(nation), "Die Partie läuft bereits.");
+            } else if (path.equals("/api/placement/random") && method.equals("POST")) {
+                String mode = body(exchange, 16);
+                if (!mode.equals("ALL") && !mode.equals("REMAINING")) {
+                    json(exchange, 400, "{\"error\":\"Unbekannte Option für die Zufallsplatzierung.\"}");
+                    return;
+                }
+                update(exchange, game, id, game.randomizePlacement(mode.equals("ALL")),
+                        "Zufallsplatzierung nicht möglich. Entfernen Sie ein Schiff oder losen Sie die ganze Flotte neu aus.");
             } else if (path.equals("/api/placement") && method.equals("POST")) {
                 String placement = body(exchange, 32);
                 if (!placement.matches("[0-4] [0-9]{1,2} (HORIZONTAL|VERTICAL)")) {
@@ -128,6 +136,8 @@ public final class Main {
                 case "/" -> "index.html";
                 case "/style.css" -> "style.css";
                 case "/game.js" -> "game.js";
+                case "/sounds/water.wav" -> "sounds/water.wav";
+                case "/sounds/hit.wav" -> "sounds/hit.wav";
                 default -> path.matches("/ships/[A-Za-z-]+\\.svg") ? path.substring(1) : null;
             };
             if (resource == null || !exchange.getRequestMethod().equals("GET")) {
@@ -138,6 +148,7 @@ public final class Main {
                 case "index.html" -> "text/html";
                 case "style.css" -> "text/css";
                 case "game.js" -> "text/javascript";
+                case "sounds/water.wav", "sounds/hit.wav" -> "audio/wav";
                 default -> "image/svg+xml";
             };
             try (var input = Main.class.getResourceAsStream("/web/" + resource)) {
@@ -156,7 +167,7 @@ public final class Main {
     }
 
     private static void send(HttpExchange exchange, int status, String type, byte[] body) throws IOException {
-        exchange.getResponseHeaders().set("Content-Type", type + "; charset=utf-8");
+        exchange.getResponseHeaders().set("Content-Type", type.startsWith("audio/") ? type : type + "; charset=utf-8");
         exchange.sendResponseHeaders(status, body.length);
         exchange.getResponseBody().write(body);
     }

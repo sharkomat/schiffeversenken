@@ -6,7 +6,7 @@ Der Spieler tritt gegen den Computer oder gegen einen anderen Menschen an. Beide
 
 ### Partie starten
 
-Für alle drei Startwege trägt der Spieler zuerst seinen Namen ein. Beim direkten Spiel gegen den Computer und beim Erstellen einer Spielanfrage wählt der Spieler die Schwierigkeitsstufe. **Mittel** ist voreingestellt. Die Stufe bestimmt, welche Schussmarkierungen im Zielraster und auf der Minikarte sichtbar sind.
+Für alle drei Startwege trägt der Spieler zuerst seinen Namen ein. Beim direkten Spiel gegen den Computer und beim Erstellen einer Spielanfrage wählt der Spieler die Schwierigkeitsstufe. **Mittel** ist voreingestellt. Die Stufe bestimmt, welche Schussmarkierungen im Zielraster und im eigenen Raster sichtbar sind.
 
 - **Gegen den Computer spielen** – Die Platzierungsphase beginnt sofort.
 - **Eine Spielanfrage erstellen** – Die Anfrage erscheint mit Spielername und gewählter Stufe auf der Startseite. Der Ersteller wartet dort auf einen Gegner. Nimmt niemand die Anfrage an, verschwindet sie spätestens **drei Minuten nach dem Erstellen**.
@@ -14,7 +14,7 @@ Für alle drei Startwege trägt der Spieler zuerst seinen Namen ein. Beim direkt
 
 ### Spielfelder
 
-Das eigene Spielfeld und das gegnerische Zielraster verwenden standardmäßig je ein Raster mit 10 × 10 Feldern. Auf dem eigenen Feld platziert der Spieler seine Flotte, im gegnerischen Zielraster wählt er seine Schusskoordinaten. Während der Partie erscheint das eigene Feld als kleinere Minikarte. Die Gestaltung im Browser ist in [Anzeige.md](Anzeige.md) beschrieben.
+Das eigene Spielfeld und das gegnerische Zielraster verwenden standardmäßig je ein Raster mit 10 × 10 Feldern. Auf dem eigenen Feld platziert der Spieler seine Flotte, im gegnerischen Zielraster wählt er seine Schusskoordinaten. Während der Partie erscheint das eigene Feld gleich groß unter dem gegnerischen Zielraster. Die Gestaltung im Browser ist in [Anzeige.md](Anzeige.md) beschrieben.
 
 ### Flotte und Platzierung
 
@@ -30,56 +30,56 @@ Mit Ablauf des Countdowns endet die Platzierung. Nur gültig platzierte Schiffe 
 
 Ein Zug beginnt, wenn eine Seite an der Reihe ist. Ein menschlicher Spieler hat **12 Sekunden**, um im gegnerischen Zielraster eine Koordinate wie `D4` auszuwählen. Ein Countdown zeigt die verbleibende Zeit. Ein Klick außerhalb des Spielfelds löst keinen Schuss aus und der Countdown läuft weiter. Verstreichen die 12 Sekunden ohne gültigen Schuss, wechselt der Zug automatisch zum Gegner. Der Computer wartet vor jedem Schuss **anderthalb Sekunden**.
 
-Nach jedem gültigen Schuss wird das Ergebnis direkt auf dem betreffenden Raster markiert, soweit die Schwierigkeitsstufe es sichtbar macht. Ein sichtbarer Computerschuss erhält zusätzlich einen pulsierenden Feldrahmen auf der Minikarte. Bei Wasser wechselt der Zug unmittelbar zum Gegner. Nach einem Treffer, auch auf einem bereits getroffenen Feld, bleibt dieselbe Seite am Zug. Ein Mensch kann sofort erneut schießen. Für den Computer beginnt die Wartezeit von anderthalb Sekunden sofort nach dem Zugwechsel oder seinem Treffer. Beim Versenken des letzten gegnerischen Schiffs zeigt der Zugstatus das Ergebnis der Partie.
+Nach jedem gültigen Schuss wird das Ergebnis direkt auf dem betreffenden Raster markiert, soweit die Schwierigkeitsstufe es sichtbar macht. Ein sichtbarer Computerschuss erhält zusätzlich einen pulsierenden Feldrahmen im eigenen Raster. Bei Wasser wechselt der Zug unmittelbar zum Gegner. Nach einem Treffer, auch auf einem bereits getroffenen Feld, bleibt dieselbe Seite am Zug. Ein Mensch kann sofort erneut schießen. Für den Computer beginnt die Wartezeit von anderthalb Sekunden sofort nach dem Zugwechsel oder seinem Treffer. Beim Versenken des letzten gegnerischen Schiffs zeigt der Zugstatus das Ergebnis der Partie.
 
 Der Computer merkt sich Treffer, Wasserschüsse und Versenkungen. Aus der gemeldeten Schiffslänge und den Treffern zum Zeitpunkt der Versenkung leitet er die möglichen Lagen des versenkten Schiffs ab. Passen mehrere Lagen zu den Platzierungsregeln und den bisherigen Schüssen, prüft er sie weiter. Bei offenen Treffern bevorzugt er Positionen, die mehrere Treffer erklären und nur noch wenige ungetroffene Felder haben. Für die Zielsuche erhält er dieselben Schussmeldungen wie ein Mensch und kennt die möglichen Schiffslängen.
 
 - **Wasser** erscheint bei einem Schuss auf ein leeres Feld, auch wenn es schon einmal beschossen wurde. Danach ist der andere Spieler am Zug.
 - **Neuer Treffer** erscheint, wenn ein Schiffsfeld zum ersten Mal getroffen wird.
-- **Alter Treffer** erscheint, wenn ein bereits getroffenes Schiffsfeld erneut getroffen wird. Der Schuss verursacht keinen weiteren Schaden und der Spieler darf erneut schießen.
+- **Redundanter Treffer** erscheint, wenn ein bereits getroffenes Schiffsfeld erneut getroffen wird. Der Schuss verursacht keinen weiteren Schaden und der Spieler darf erneut schießen.
 - **Schiff versenkt** erscheint, wenn das letzte ungetroffene Feld eines Schiffs getroffen wird. Dieser Schuss zählt als neuer Treffer und gibt den Schiffstyp bekannt.
 
 ## Protokolltafel
 
 Die eigene Protokolltafel zeigt die Zähler für die laufende Partie.
 
-- **Abgegebene Schüsse** zählt jeden eigenen Schuss auf eine gültige Koordinate, einschließlich Wasser, neuer Treffer und alter Treffer.
+- **Abgegebene Schüsse** zählt jeden eigenen Schuss auf eine gültige Koordinate, einschließlich Wasser, neuer Treffer und redundanter Treffer.
 - **Neue Treffer** zählt jedes erstmals getroffene gegnerische Schiffsfeld einmal. Der Treffer, der ein Schiff versenkt, zählt mit.
-- **Alte Treffer** zählt jeden erneuten Treffer auf ein bereits getroffenes gegnerisches Schiffsfeld. Zwei weitere Schüsse auf dasselbe getroffene Feld ergeben zwei alte Treffer.
+- **Redundante Treffer** zählt jeden erneuten Treffer auf ein bereits getroffenes gegnerisches Schiffsfeld. Zwei weitere Schüsse auf dasselbe getroffene Feld ergeben zwei redundante Treffer.
 
 Die Zähler erscheinen ohne Koordinaten. Erst beim Versenken erfährt der schießende Spieler den Typ des getroffenen Schiffs. Das versenkte Schiff erscheint mit seinem **Typ**, seiner **Länge in Feldern** und dem Status **Versenkt** auf der Tafel. Der Eintrag bleibt in allen Schwierigkeitsstufen bis zum Ende der Partie sichtbar. Die Anzahl der verbleibenden unbekannten gegnerischen Schiffe bezieht sich auf die tatsächlich platzierte Flotte.
 
 > **Abgegebene Schüsse** 8 
 > **Neue Treffer** 3 
-> **Alte Treffer** 1  
+> **Redundante Treffer** 1<br>
 > 
 > **Versenkte Schiffe:**<br>
 > **Kreuzer** · 3 Felder · **Versenkt**  
 > 
 > **Unbekannte Schiffe verbleibend** 4
 
-Unter der Tafel zeigt eine separate **Minikarte** das eigene 10 × 10-Raster mit den Schiffspositionen. Welche gegnerischen Schüsse darauf markiert werden, hängt von der Schwierigkeitsstufe ab.
+Unter dem Zielraster zeigt das **eigene Raster** die Schiffspositionen. Welche gegnerischen Schüsse darauf markiert werden, hängt von der Schwierigkeitsstufe ab.
 
 ## Schwierigkeitsstufen
 
-Für die Anzeige im Zielraster und das Gedächtnis des Computers zählt jeder eigene Schuss, auch ein Folgeschuss oder eine Wiederholung. Ein erneuter Schuss auf dasselbe Wasserfeld erneuert die Markierung oder Erinnerung. Vergessene Wasserfelder gelten für den Computer wieder als unbeschossen. Die Minikarte pulsiert bei Wasser blau und bei einem Schiffstreffer gelb-orange.
+Für die Anzeige im Zielraster und das Gedächtnis des Computers zählt jeder eigene Schuss, auch ein Folgeschuss oder eine Wiederholung. Ein erneuter Schuss auf dasselbe Wasserfeld erneuert die Markierung oder Erinnerung. Vergessene Wasserfelder gelten für den Computer wieder als unbeschossen. Das eigene Raster pulsiert bei Wasser blau und bei einem Schiffstreffer gelb-orange.
 
 ### Leicht
 
 - **Zielraster** – Alle Schiffstreffer und Wasserschüsse bleiben sichtbar.
-- **Minikarte** – Alle gegnerischen Schiffstreffer und Wasserschüsse erscheinen sofort auf ihren jeweiligen Feldern. Der Rahmen des beschossenen Feldes pulsiert.
+- **Eigenes Raster** – Alle gegnerischen Schiffstreffer und Wasserschüsse erscheinen sofort auf ihren jeweiligen Feldern. Der Rahmen des beschossenen Feldes pulsiert.
 - **Computer** – Er merkt sich Wasserschüsse aus seinen letzten **50 eigenen Schüssen** und behält alle Schiffstreffer und Versenkungen bis zum Spielende im Gedächtnis. Bei **25 %** seiner Schüsse wählt er gleichverteilt unter den Feldern, die er für unbeschossen hält. Bei seinen übrigen Schüssen sucht er taktisch anhand seiner bekannten Schüsse und der Platzierungsregeln.
 
 ### Mittel
 
 - **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Wasserschüsse bleiben markiert, solange sie unter den letzten **30 eigenen Schüssen** sind.
-- **Minikarte** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld unmittelbar waagerecht, senkrecht oder diagonal an ein eigenes Schiffsfeld grenzt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenem Wasser der Außenrahmen.
+- **Eigenes Raster** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld unmittelbar waagerecht, senkrecht oder diagonal an ein eigenes Schiffsfeld grenzt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenem Wasser der Außenrahmen.
 - **Computer** – Er merkt sich Wasserschüsse aus seinen letzten **30 eigenen Schüssen** und behält alle Schiffstreffer und Versenkungen bis zum Spielende im Gedächtnis. Bei **15 %** seiner Schüsse wählt er gleichverteilt unter den Feldern, die er für unbeschossen hält. Bei seinen übrigen Schüssen sucht er taktisch anhand seiner bekannten Schüsse und der Platzierungsregeln.
 
 ### Schwer
 
 - **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Wasserschüsse bleiben markiert, solange sie unter den letzten **20 eigenen Schüssen** sind.
-- **Minikarte** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld unmittelbar waagerecht, senkrecht oder diagonal an ein eigenes Schiffsfeld grenzt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenem Wasser der Außenrahmen.
+- **Eigenes Raster** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld unmittelbar waagerecht, senkrecht oder diagonal an ein eigenes Schiffsfeld grenzt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenem Wasser der Außenrahmen.
 - **Computer** – Er merkt sich Wasserschüsse aus seinen letzten **20 eigenen Schüssen** und behält alle Schiffstreffer und Versenkungen bis zum Spielende im Gedächtnis. Bei **8 %** seiner Schüsse wählt er gleichverteilt unter den Feldern, die er für unbeschossen hält. Bei seinen übrigen Schüssen sucht er taktisch anhand seiner bekannten Schüsse und der Platzierungsregeln.
 
 ## Spielende

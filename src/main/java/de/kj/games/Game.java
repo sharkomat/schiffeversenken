@@ -2,6 +2,7 @@ package de.kj.games;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -52,12 +53,21 @@ final class Game {
         return opponent == null && own.remove(ship);
     }
 
+    boolean randomizePlacement(boolean replaceAll) {
+        if (opponent != null) return false;
+        Board board = replaceAll ? new Board(nation.fleet) : own;
+        if (!board.placeRandomFleet(0)) return false;
+        own = board;
+        return true;
+    }
+
     boolean start() {
         if (opponent != null) return true;
         if (own.placedCount() != nation.fleet.size()) return false;
-        opponent = new Board(Nation.DEUTSCHLAND.fleet);
-        opponent.placeRandomFleet();
+        Board computerBoard = new Board(Nation.DEUTSCHLAND.fleet);
+        if (!computerBoard.placeRandomFleet(0)) throw new IllegalStateException("Cannot place computer fleet");
         computer = new ComputerTargeting(nation.fleet.stream().map(ShipType::length).toList(), difficulty);
+        opponent = computerBoard;
         return true;
     }
 
@@ -117,16 +127,17 @@ final class Game {
                     """.formatted(id, difficulty.label, nation.name(), own.visibleCells(true, cell -> true),
                     own.placedCount(), own.setupShips(), Nation.optionsJson());
         }
-        // The opposing board is projected from shots alone. Only sunk ships expose their type.
-        String sunk = opponent.sunk.stream().map(ship -> ship.type.json()).collect(Collectors.joining(","));
+        // Only sunk opposing ships expose their type and placement.
+        String sunk = opponent.sunk.stream().map(Ship::placementJson).collect(Collectors.joining(","));
         return """
                 {"id":"%s","phase":"PLAY","difficulty":"%s","nation":"%s","own":"%s","target":"%s","turn":"%s","winner":%s,
-                 "shots":%d,"newHits":%d,"oldHits":%d,"sunk":[%s],"unknown":%d,
+                 "shots":%d,"newHits":%d,"oldHits":%d,"ownFleet":[%s],"sunk":[%s],"unknown":%d,
                  "computerWaitMillis":%d,"lastShot":%s}
                 """.formatted(id, difficulty.label, nation.label, own.visibleCells(true, this::showOwnWater),
                 opponent.visibleCells(false, playerShots::remembers), turn,
                 winner == null ? "null" : "\"" + winner + "\"",
-                playerShots.shots(), newHits, oldHits, sunk, opponent.fleet.size() - opponent.sunk.size(),
+                playerShots.shots(), newHits, oldHits, own.placedFleetJson(), sunk,
+                opponent.fleet.size() - opponent.sunk.size(),
                 computerWaitMillis(),
                 lastShot == null ? "null" : lastShot.json(showShotLocation(lastShot)));
     }
@@ -170,6 +181,11 @@ final class Game {
             this.type = type;
             this.placement = placement;
         }
+
+        private String placementJson() {
+            return "{\"type\":%s,\"start\":%d,\"direction\":\"%s\"}"
+                    .formatted(type.json(), placement.start(), placement.direction());
+        }
     }
 
     private static final class Board {
@@ -184,26 +200,25 @@ final class Game {
             this.placed = new Ship[fleet.size()];
         }
 
-        private void placeRandomFleet() {
-            int ship = 0;
-            while (ship < fleet.size()) {
-                List<ShipPlacement> available = new ArrayList<>();
-                int length = fleet.get(ship).length();
-                for (Direction direction : Direction.values()) {
-                    IntStream.range(0, CELLS)
-                            .mapToObj(cell -> new ShipPlacement(cell, direction, length))
-                            .filter(this::canPlace)
-                            .forEach(available::add);
-                }
-                if (available.isEmpty()) {
-                    Arrays.fill(ships, null);
-                    Arrays.fill(placed, null);
-                    ship = 0;
-                    continue;
-                }
-                ShipPlacement placement = available.get(ThreadLocalRandom.current().nextInt(available.size()));
-                place(ship++, placement.start(), placement.direction());
+        private boolean placeRandomFleet(int ship) {
+            while (ship < placed.length && placed[ship] != null) ship++;
+            if (ship == placed.length) return true;
+
+            int length = fleet.get(ship).length();
+            List<ShipPlacement> available = new ArrayList<>();
+            for (Direction direction : Direction.values()) {
+                IntStream.range(0, CELLS)
+                        .mapToObj(cell -> new ShipPlacement(cell, direction, length))
+                        .filter(this::canPlace)
+                        .forEach(available::add);
             }
+            Collections.shuffle(available, ThreadLocalRandom.current());
+            for (ShipPlacement placement : available) {
+                place(ship, placement.start(), placement.direction());
+                if (placeRandomFleet(ship + 1)) return true;
+                remove(ship);
+            }
+            return false;
         }
 
         private boolean place(int index, int start, Direction direction) {
@@ -229,6 +244,11 @@ final class Game {
 
         private int placedCount() {
             return (int) Arrays.stream(placed).filter(ship -> ship != null).count();
+        }
+
+        private String placedFleetJson() {
+            return Arrays.stream(placed).filter(ship -> ship != null).map(Ship::placementJson)
+                    .collect(Collectors.joining(","));
         }
 
         private String setupShips() {

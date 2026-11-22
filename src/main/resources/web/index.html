@@ -40,7 +40,11 @@
             <ul id="ship-list" class="ship-list"></ul>
             <button type="button" class="setup-button" id="orientation">Ausrichtung: waagerecht</button>
             <p id="setup-feedback" class="feedback" role="status"></p>
-            <button type="button" class="play" id="finish" disabled>Platzierung abschließen</button>
+            <div class="placement-actions">
+                <button type="button" class="setup-button" id="random-all">Flotte zufällig setzen</button>
+                <button type="button" class="setup-button" id="random-remaining" hidden>fehlende Schiffe ergänzen</button>
+                <button type="button" class="play" id="finish" disabled>Platzierung abschließen</button>
+            </div>
         </div>
         <div class="target-panel">
             <h2 id="placement-heading">Eigenes Spielfeld</h2>
@@ -52,32 +56,40 @@
             <h2 id="status" role="status">Sie sind dran</h2>
             <button type="button" id="resume" class="resume" hidden>Computerzug fortsetzen</button>
         </section>
-        <section class="target-panel" aria-labelledby="target-heading">
-            <h2 id="target-heading" tabindex="-1">Gegnerisches Zielraster</h2>
-            <div id="target" class="board target" aria-label="Gegnerisches Zielraster"></div>
-            <div class="legend">
-                <span><span class="fire" aria-hidden="true">🔥</span> Schiffstreffer</span>
-                <span><span class="dot" aria-hidden="true"></span> Wassertreffer</span>
-            </div>
-        </section>
+        <div class="battle-boards">
+            <section class="target-panel" aria-labelledby="target-heading">
+                <h2 id="target-heading" tabindex="-1">Gegnerische Flotte</h2>
+                <div id="target" class="board target" aria-labelledby="target-heading"></div>
+            </section>
+            <section class="target-panel" aria-labelledby="own-heading">
+                <h2 id="own-heading">eigene Flotte</h2>
+                <div id="own" class="board own-board" aria-label="Eigenes Spielfeld"></div>
+            </section>
+        </div>
         <aside class="sidebar">
             <section class="tablet" aria-label="Protokolltafel">
                 <p id="feedback" class="feedback" aria-live="polite"></p>
                 <dl class="counts">
                     <div><dt>Abgegebene Schüsse</dt><dd id="shots">0</dd></div>
                     <div><dt>Neue Treffer</dt><dd id="new-hits">0</dd></div>
-                    <div><dt>Alte Treffer</dt><dd id="old-hits">0</dd></div>
+                    <div><dt>Redundante Treffer</dt><dd id="old-hits">0</dd></div>
                 </dl>
-                <section class="fleet" aria-labelledby="fleet-heading">
-                    <h3 id="fleet-heading">Gegnerische Flotte</h3>
-                    <p id="unknown">5 unbekannte Schiffe</p>
-                    <ul id="sunk" aria-label="Versenkte Schiffe"></ul>
-                </section>
+                <div class="fleet-columns">
+                    <section class="fleet" aria-labelledby="opponent-fleet-heading">
+                        <h2 id="opponent-fleet-heading">Gegnerische Flotte</h2>
+                        <p id="unknown">5 unbekannte Schiffe</p>
+                        <ul id="sunk" class="fleet-list" aria-label="Versenkte Schiffe"></ul>
+                    </section>
+                    <section class="fleet" aria-labelledby="own-fleet-heading">
+                        <h2 id="own-fleet-heading">Eigene Flotte</h2>
+                        <ul id="own-fleet" class="fleet-list"></ul>
+                    </section>
+                </div>
             </section>
-            <section class="own-panel" aria-labelledby="own-heading">
-                <h2 id="own-heading">eigene Flotte</h2>
-                <div id="own" class="board mini" aria-label="Minikarte der eigenen Flotte"></div>
-            </section>
+            <div class="legend">
+                <span><span class="fire" aria-hidden="true">🔥</span> Schiffstreffer</span>
+                <span><span class="dot" aria-hidden="true"></span> Wassertreffer</span>
+            </div>
         </aside>
     </div>
 </main>

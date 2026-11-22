@@ -11,10 +11,13 @@ const difficulty = document.querySelector("#difficulty");
 const startError = document.querySelector("#start-error");
 const setupScreen = document.querySelector("#setup-screen");
 const gameScreen = document.querySelector("#game-screen");
+const gameHeader = document.querySelector(".game-header");
 const caption = document.querySelector("#game-caption");
 const nation = document.querySelector("#nation");
 const shipList = document.querySelector("#ship-list");
 const orientation = document.querySelector("#orientation");
+const randomAll = document.querySelector("#random-all");
+const randomRemaining = document.querySelector("#random-remaining");
 const setupFeedback = document.querySelector("#setup-feedback");
 const finish = document.querySelector("#finish");
 const resume = document.querySelector("#resume");
@@ -25,7 +28,9 @@ const newHits = document.querySelector("#new-hits");
 const oldHits = document.querySelector("#old-hits");
 const unknown = document.querySelector("#unknown");
 const sunk = document.querySelector("#sunk");
-const target = makeBoard(document.querySelector("#target"), fire);
+const ownFleet = document.querySelector("#own-fleet");
+const targetGrid = document.querySelector("#target");
+const target = makeBoard(targetGrid, fire);
 const ownGrid = document.querySelector("#own");
 const own = makeBoard(ownGrid);
 const placementGrid = document.querySelector("#placement");
@@ -41,9 +46,14 @@ let shipCards = [];
 let listedNation;
 let pulseGameId;
 let lastPulsedShot;
+let fleetGameId;
+let renderedOwnBoard;
+let renderedSunkCount;
+let audioContext;
+let shotSounds;
 
 ownGrid.addEventListener("animationend", event => {
-    if (event.animationName === "minimap-shot-pulse" || event.animationName === "minimap-shot-steady") {
+    if (event.animationName === "own-board-shot-pulse" || event.animationName === "own-board-shot-steady") {
         event.target.classList.remove("shot-pulse", "shot-pulse-hit");
     }
 });
@@ -125,6 +135,97 @@ function pulseComputerShot() {
     highlight.classList.add("shot-pulse");
 }
 
+function renderBoardShips(board, ships) {
+    board.querySelectorAll(".board-ship").forEach(graphic => graphic.remove());
+    board.classList.toggle("has-ship-graphics", ships.length > 0);
+    for (const {type, start, direction} of ships) {
+        const vertical = direction === "VERTICAL";
+        const row = Math.floor(start / size) + 2;
+        const column = start % size + 2;
+        const width = vertical ? 1 : type.length;
+        const height = vertical ? type.length : 1;
+        const namespace = "http://www.w3.org/2000/svg";
+        const graphic = document.createElementNS(namespace, "svg");
+        graphic.classList.add("board-ship");
+        graphic.setAttribute("aria-hidden", "true");
+        graphic.setAttribute("viewBox", "0 0 " + width + " " + height);
+        graphic.setAttribute("preserveAspectRatio", "none");
+        graphic.style.gridRow = row + " / span " + height;
+        graphic.style.gridColumn = column + " / span " + width;
+
+        const image = document.createElementNS(namespace, "image");
+        image.setAttribute("href", type.image);
+        image.setAttribute("width", String(type.length));
+        image.setAttribute("height", "1");
+        image.setAttribute("preserveAspectRatio", "none");
+        if (vertical) image.setAttribute("transform", "translate(1 0) rotate(90)");
+        graphic.append(image);
+        board.append(graphic);
+    }
+}
+
+function fleetRow(type, visibleHits) {
+    const row = document.createElement("li");
+    row.className = "fleet-ship";
+
+    const graphic = document.createElement("div");
+    graphic.className = "fleet-ship-graphic";
+    graphic.style.setProperty("--ship-length", type.length);
+    graphic.setAttribute("aria-hidden", "true");
+    const image = document.createElement("img");
+    image.src = type.image;
+    image.alt = "";
+    const markers = document.createElement("div");
+    markers.className = "fleet-ship-markers";
+    graphic.append(image, markers);
+    visibleHits.forEach((hit, offset) => {
+        if (!hit) return;
+        const marker = document.createElement("span");
+        marker.className = "fleet-ship-hit";
+        marker.style.gridColumn = String(offset + 1);
+        markers.append(marker);
+    });
+
+    const details = document.createElement("div");
+    details.className = "fleet-ship-details";
+    const name = document.createElement("strong");
+    name.textContent = type.name;
+    const shipClass = document.createElement("small");
+    shipClass.textContent = type.shipClass;
+    const summary = document.createElement("small");
+    const hits = visibleHits.filter(Boolean).length;
+    let state = "Intakt";
+    if (hits === type.length) state = "Versenkt";
+    else if (hits > 0) state = hits + " getroffen";
+    summary.textContent = type.length + " Felder · " + state;
+    details.append(name, shipClass, summary);
+    row.append(graphic, details);
+    return row;
+}
+
+function renderFleets() {
+    const ships = game.ownFleet ?? [];
+    const newGame = fleetGameId !== game.id;
+    if (newGame) {
+        fleetGameId = game.id;
+        renderBoardShips(ownGrid, ships);
+    }
+    if (newGame || renderedOwnBoard !== game.own) {
+        renderedOwnBoard = game.own;
+        ownFleet.replaceChildren(...ships.map(({type, start, direction}) => {
+            const step = direction === "VERTICAL" ? size : 1;
+            const visibleHits = Array.from({length: type.length}, (_, offset) => game.own[start + offset * step] === "h");
+            return fleetRow(type, visibleHits);
+        }));
+    }
+    if (newGame || renderedSunkCount !== game.sunk.length) {
+        renderedSunkCount = game.sunk.length;
+        renderBoardShips(targetGrid, game.sunk);
+        unknown.textContent = game.unknown === 1 ? "1 unbekanntes Schiff" : game.unknown + " unbekannte Schiffe";
+        sunk.replaceChildren(...game.sunk.map(({type}) => fleetRow(type, Array(type.length).fill(true))));
+    }
+}
+
 function render() {
     const nextScreen = showingStart ? "START" : game.phase;
     startScreen.hidden = nextScreen !== "START";
@@ -139,6 +240,8 @@ function render() {
     if (nextScreen === "SETUP") renderSetup();
     if (nextScreen === "PLAY") renderGame();
     if (screen !== nextScreen) {
+        if (nextScreen === "PLAY") gameScreen.prepend(gameHeader);
+        else startScreen.before(gameHeader);
         const headings = {START: "#start-heading", SETUP: "#setup-heading", PLAY: "#target-heading"};
         document.querySelector(headings[nextScreen]).focus();
         screen = nextScreen;
@@ -149,6 +252,7 @@ function renderGame() {
     const canShoot = !busy && !game.winner && game.turn === "PLAYER";
     drawBoard(target, game.target, true, canShoot);
     drawBoard(own, game.own, false, false);
+    renderFleets();
     pulseComputerShot();
     resume.hidden = busy || Boolean(game.winner) || game.turn !== "COMPUTER";
 
@@ -161,12 +265,6 @@ function renderGame() {
     shots.textContent = game.shots;
     newHits.textContent = game.newHits;
     oldHits.textContent = game.oldHits;
-    unknown.textContent = game.unknown === 1 ? "1 unbekanntes Schiff" : game.unknown + " unbekannte Schiffe";
-    sunk.replaceChildren(...game.sunk.map(ship => {
-        const row = document.createElement("li");
-        row.textContent = ship.name + " · " + ship.shipClass + " · " + ship.length + " Felder · Versenkt";
-        return row;
-    }));
 }
 
 function renderSetup() {
@@ -176,8 +274,12 @@ function renderSetup() {
     nation.value = game.nation;
     nation.disabled = busy;
     orientation.disabled = busy;
+    randomAll.disabled = busy;
+    const allPlaced = game.placed === game.ships.length;
+    randomRemaining.hidden = game.placed === 0 || allPlaced;
+    randomRemaining.disabled = busy;
     orientation.textContent = "Ausrichtung: " + (vertical ? "senkrecht" : "waagerecht");
-    finish.disabled = busy || game.placed !== game.ships.length;
+    finish.disabled = busy || !allPlaced;
 
     if (listedNation !== game.nation) {
         shipCards = game.ships.map(({type}, index) => makeShipCard(type, index));
@@ -310,6 +412,37 @@ async function request(path, method = "POST", body) {
     return result;
 }
 
+function prepareShotAudio() {
+    if (!window.AudioContext) return;
+    try {
+        audioContext ??= new AudioContext();
+    } catch {
+        return;
+    }
+    if (audioContext.state !== "running") void audioContext.resume().catch(() => {});
+    shotSounds ??= Promise.all(["water", "hit"].map(async sound => {
+        const response = await fetch("/sounds/" + sound + ".wav");
+        if (!response.ok) throw new Error("Sound unavailable");
+        return audioContext.decodeAudioData(await response.arrayBuffer());
+    })).catch(() => {
+        shotSounds = undefined;
+        return [];
+    });
+}
+
+async function takeShot(path, body) {
+    const state = await request(path, "POST", body);
+    const soundIndex = state.lastShot.result === "WATER" ? 0 : 1;
+    void shotSounds?.then(sounds => {
+        if (!sounds[soundIndex] || audioContext.state !== "running") return;
+        const source = audioContext.createBufferSource();
+        source.buffer = sounds[soundIndex];
+        source.connect(audioContext.destination);
+        source.start();
+    }).catch(() => {});
+    return state;
+}
+
 function wait(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
@@ -318,7 +451,7 @@ async function continueAfterShot() {
     while (!game.winner && game.turn === "COMPUTER") {
         render();
         await wait(game.computerWaitMillis ?? 1500);
-        game = await request("computer");
+        game = await takeShot("computer");
     }
 }
 
@@ -350,9 +483,10 @@ async function run(action) {
 }
 
 function fire(cell) {
-    if (!game || game.winner || game.turn !== "PLAYER") return;
+    if (busy || !game || game.winner || game.turn !== "PLAYER") return;
+    prepareShotAudio();
     run(async () => {
-        game = await request("shot", "POST", String(cell));
+        game = await takeShot("shot", String(cell));
         await continueAfterShot();
     });
 }
@@ -365,6 +499,7 @@ startForm.addEventListener("submit", event => {
         return;
     }
     startError.textContent = "";
+    prepareShotAudio();
     run(async () => {
         game = await request("setup", "POST", difficulty.value);
         selectedShip = undefined;
@@ -383,6 +518,12 @@ orientation.addEventListener("click", () => {
     vertical = !vertical;
     renderSetup();
 });
+for (const [button, mode] of [[randomAll, "ALL"], [randomRemaining, "REMAINING"]]) {
+    button.addEventListener("click", () => run(async () => {
+        game = await request("placement/random", "POST", mode);
+        selectedShip = undefined;
+    }));
+}
 finish.addEventListener("click", () => run(async () => {
     game = await request("game");
 }));
@@ -390,8 +531,11 @@ play.addEventListener("click", () => {
     showingStart = true;
     render();
 });
-resume.addEventListener("click", () => run(async () => {
-    game = await request("game", "GET");
-    await continueAfterShot();
-}));
+resume.addEventListener("click", () => {
+    prepareShotAudio();
+    run(async () => {
+        game = await request("game", "GET");
+        await continueAfterShot();
+    });
+});
 render();

@@ -13,9 +13,9 @@ Die erste Fassung soll lokal im Browser laufen und eine vollständige Partie geg
 
 1. **Ansicht aufbauen.** Eine lokale Seite mit HTML, CSS und JavaScript zeigt das große anklickbare 10 × 10-Zielraster links, die ersten Schusszähler rechts oben und die kleine eigene Karte darunter. Das vorhandene Java-21-/Maven-Projekt kann die Seite lokal per HTTP bereitstellen. Als erste Kontrolle genügt es, ein Zielfeld anzuklicken und seine Koordinate anzeigen zu lassen.
 2. **Partie spielbar machen.** „Spielen“ startet eine Partie gegen einen einfachen Computergegner. **Deutschland** ist die Standardnation für beide Seiten. Bei jedem Start werden die Schiffe beider Flotten automatisch und zufällig platziert. Jedes Schiff liegt waagerecht oder senkrecht vollständig im Raster. Berührungen sind nur bei parallelen Schiffen in benachbarten Zeilen oder Spalten erlaubt. Eigene Schiffe erscheinen als schwarze Felder. Treffer erscheinen als Flammen, Wasserschüsse als hellblaue Punkte.
-3. **Grundregeln umsetzen.** Ein Treffer erlaubt einen weiteren Schuss. Wasser wechselt den Zug. Neue und alte Treffer zählen getrennt. Versenkte Schiffe und das Spielende werden angezeigt. Für diese Fassung bleiben die Schussmarkierungen sichtbar. Java verwaltet die Partiedaten im Arbeitsspeicher des lokalen Servers. JavaScript zeigt den zurückgegebenen Spielstand an.
+3. **Grundregeln umsetzen.** Ein Treffer erlaubt einen weiteren Schuss. Wasser wechselt den Zug. Neue und redundante Treffer zählen getrennt. Versenkte Schiffe und das Spielende werden angezeigt. Für diese Fassung bleiben die Schussmarkierungen sichtbar. Java verwaltet die Partiedaten im Arbeitsspeicher des lokalen Servers. JavaScript zeigt den zurückgegebenen Spielstand an.
 
-**Abnahme:** Eine Partie lässt sich im Browser starten, bis zum Sieg oder zur Niederlage spielen und neu starten. Bei jedem Start werden für beide Seiten gültige Startaufstellungen mit den fünf Schiffen der deutschen Flotte neu ausgelost. Ein wiederholter Treffer erhöht nur den Zähler für alte Treffer und verursacht keinen weiteren Schaden.
+**Abnahme:** Eine Partie lässt sich im Browser starten, bis zum Sieg oder zur Niederlage spielen und neu starten. Bei jedem Start werden für beide Seiten gültige Startaufstellungen mit den fünf Schiffen der deutschen Flotte neu ausgelost. Ein wiederholter Treffer erhöht nur den Zähler für redundante Treffer und verursacht keinen weiteren Schaden.
 
 **Lokal starten:** Mit Java 21 im Projektordner zuerst `mvn compile` und dann `java -cp target/classes de.kj.games.Main` ausführen. Alternativ `Main.main()` in IntelliJ starten. Die Seite ist unter [localhost:8080](http://127.0.0.1:8080/) erreichbar.
 
@@ -26,23 +26,23 @@ Die erste Fassung soll lokal im Browser laufen und eine vollständige Partie geg
 3. Drag-and-drop aus der Schiffsliste ergänzen. Beim Ziehen hebt die Vorschau die vorgesehenen Felder hervor. Nach dem Ablegen erscheinen belegte Felder schwarz. Beide Bedienwege prüfen dieselben Regeln für Rastergrenzen, Überlappung und Berührungen wie die automatische Platzierung in Stufe 1.
 4. Für diese Stufe startet eine Schaltfläche „Platzierung abschließen“ die Partie mit der fertig platzierten Flotte. Die nächste Stufe übernimmt den Übergang per Countdown.
 
-**Abnahme:** Die gewählte Nation bestimmt die angebotenen Schiffe mit ihren SVG-Vorschauen. Der Spieler kann ein Schiff aus der Liste aufs Raster ziehen und seine Flotte anschließend in der Minikarte wiederfinden. Ungültige Platzierungen verändern das Spielfeld nicht.
+**Abnahme:** Die gewählte Nation bestimmt die angebotenen Schiffe mit ihren SVG-Vorschauen. Der Spieler kann ein Schiff aus der Liste aufs Raster ziehen und seine Flotte anschließend im eigenen Raster wiederfinden. Ungültige Platzierungen verändern das Spielfeld nicht.
 
 ## Stufe 3 · Countdown und Rückmeldung
 
 - **60 Sekunden Platzierung.** Bei Ablauf startet die Partie mit den gültig platzierten Schiffen. Eine leere Flotte führt zum Spielende gemäß Spielverlauf.
-- **Zufällige Platzierung.** Alternativ zum manuellen Setzen platziert „Zufällig platzieren“ die gesamte Flotte der gewählten Nation auf dem eigenen Raster. Für beide Varianten gelten dieselben Platzierungsregeln.
+- **Zufällige Platzierung.** „Flotte zufällig setzen“ erzeugt eine vollständige Aufstellung für die gewählte Nation. „fehlende Schiffe ergänzen“ wird bei einer teilweise gesetzten Flotte angeboten und behält bereits platzierte Schiffe bei. Für beide Optionen gelten dieselben Regeln wie beim manuellen Setzen.
 - **12 Sekunden pro Schuss für Menschen.** Ohne gültigen Schuss wechselt der Zug. Der Computer wartet vor seinem ersten Schuss **anderthalb Sekunden**.
-- **Sofortige Rückmeldung pro Schuss.** Das Ergebnis wird direkt im Raster markiert. Bei sichtbaren Computerschüssen pulsiert zusätzlich der Rahmen des Feldes auf der Minikarte. Bei einem Treffer bleibt dieselbe Seite am Zug. Der Computer wartet auch vor jedem Folgeschuss **anderthalb Sekunden**, gerechnet ab seinem letzten Treffer.
+- **Sofortige Rückmeldung pro Schuss.** Das Ergebnis wird direkt im Raster markiert. Ein **ein bis zwei Sekunden** langer Ton unterscheidet Wasser und Schiffstreffer. Bei sichtbaren Computerschüssen pulsiert zusätzlich der Rahmen des Feldes im eigenen Raster. Bei einem Treffer bleibt dieselbe Seite am Zug. Der Computer wartet auch vor jedem Folgeschuss **anderthalb Sekunden**, gerechnet ab seinem letzten Treffer.
 - Countdown in der Platzierungsansicht links und während der Partie im eigenen Rahmen über der Protokolltafel anzeigen. Der Rahmen zeigt durchgehend an, wer am Zug ist.
 
-**Abnahme:** „Zufällig platzieren“ erzeugt eine vollständige, gültige Aufstellung für die gewählte Nation. Ein verspäteter Klick löst keinen Schuss aus. Nach einem Treffer kann ein Mensch sofort erneut schießen und hat dafür wieder 12 Sekunden. Der Computer feuert seinen ersten Schuss und jeden Folgeschuss nach jeweils anderthalb Sekunden ab. Das Ergebnis erscheint sofort und der Zugstatus bleibt sichtbar.
+**Abnahme:** Beide Zufallsoptionen erzeugen eine vollständige, gültige Aufstellung, sofern die vorhandenen Schiffe genug Platz lassen. Beim Ergänzen bleiben bereits platzierte Schiffe auf ihren Feldern. Ein verspäteter Klick löst keinen Schuss aus. Nach einem Treffer kann ein Mensch sofort erneut schießen und hat dafür wieder 12 Sekunden. Der Computer feuert seinen ersten Schuss und jeden Folgeschuss nach jeweils anderthalb Sekunden ab. Das Ergebnis erscheint sofort und der Zugstatus bleibt sichtbar.
 
 ## Stufe 4 · Schwierigkeitsstufen
 
 Die Auswahl **Leicht**, **Mittel** und **Schwer** erscheint im Startfenster. Standard ist **Mittel**. Die Stufe steuert die Schussmarkierungen und die Zielwahl des Computers. Die Treffer- und Versenkungsregeln bleiben für alle Stufen gleich.
 
-| Stufe | Zielraster | Minikarte | Zielwahl des Computers |
+| Stufe | Zielraster | Eigenes Raster | Zielwahl des Computers |
 | --- | --- | --- | --- |
 | **Leicht** | Alle Schiffstreffer und Wasserschüsse bleiben sichtbar. | Alle Schiffstreffer und Wasserschüsse bleiben sichtbar. | Bei **25 %** der Schüsse wählt er zufällig. |
 | **Mittel** | Alle Schiffstreffer bleiben sichtbar. Wasserschüsse bleiben sichtbar, solange sie unter den letzten **30 eigenen Schüssen** sind. | Schiffstreffer sind sofort sichtbar. Wasserschüsse werden nur auf Feldern unmittelbar waagerecht, senkrecht oder diagonal neben einem eigenen Schiffsfeld markiert. | Bei **15 %** der Schüsse wählt er zufällig. |
@@ -52,14 +52,14 @@ Der Computer merkt sich Wasserschüsse aus seinen letzten **50** eigenen Schüss
 
 Außerhalb der Zufallsschüsse verwendet der Computer seine taktische Zielsuche. Bei einem Zufallsschuss wählt er gleichverteilt aus den Feldern, die er für unbeschossen hält. Ein vergessenes Wasserfeld kann dadurch oder bei der taktischen Zielsuche erneut beschossen werden.
 
-**Pulsierende Rückmeldung auf der Minikarte.** Gibt die Schwierigkeitsstufe die Position des aktuellen gegnerischen Schusses frei, pulsiert wie auf „Leicht“ der Rahmen des betroffenen Feldes. Bleibt die Position verborgen, pulsiert stattdessen der Außenrahmen der gesamten Minikarte. Die Rückmeldung zeigt dann nur die Art des Ergebnisses. Für beide Rahmen gelten die [bestehenden Farben und die Dauer](Anzeige.md#minikarte). Rund drei Sekunden lang wechselt die Farbe bei Wasser von Hellblau zu Dunkelblau und bei einem Schiffstreffer von Hellgelb zu Dunkelorange. Die Partie läuft während des Pulsierens weiter.
+**Pulsierende Rückmeldung im eigenen Raster.** Gibt die Schwierigkeitsstufe die Position des aktuellen gegnerischen Schusses frei, pulsiert wie auf „Leicht“ der Rahmen des betroffenen Feldes. Bleibt die Position verborgen, pulsiert stattdessen der Außenrahmen des gesamten eigenen Rasters. Die Rückmeldung zeigt dann nur die Art des Ergebnisses. Für beide Rahmen gelten die [bestehenden Farben und die Dauer](Anzeige.md#eigenes-raster). Rund drei Sekunden lang wechselt die Farbe bei Wasser von Hellblau zu Dunkelblau und bei einem Schiffstreffer von Hellgelb zu Dunkelorange. Die Partie läuft während des Pulsierens weiter.
 
 **Abnahme:** Dieselbe Schussfolge erzeugt in allen Stufen dieselben Trefferzahlen. Der Computer vergisst einen Wasserschuss nach 50 weiteren eigenen Schüssen auf „Leicht“, 30 auf „Mittel“ und 20 auf „Schwer“. Das Zielraster blendet Wasser nach 30 weiteren eigenen Schüssen auf „Mittel“ und nach 20 auf „Schwer“ aus. Auf „Leicht“ bleiben die Wassermarkierungen im Zielraster sichtbar. Schiffstreffer bleiben sichtbar und dem Computer bekannt. Auf „Mittel“ und „Schwer“ pulsiert bei angrenzenden Wasserschüssen das jeweilige Feld blau, bei weiter entfernten Wasserschüssen der Außenrahmen. Bei einem Schiffstreffer pulsiert das betroffene Feld ab dem ersten Treffer gelb-orange. Kontrollierte Zufallswerte prüfen die Zufallsquoten auf allen drei Stufen. Zufallsschüsse gehen nur auf Felder, die der Computer für unbeschossen hält.
 
 ## Stufe 5 · SVG-Grafiken in der Partie
 
 1. Die digitale Anzeige rechts oben mit zwei umrahmten Flottenbereichen ausstatten. Eigene Schiffe erscheinen dort mit den bereits zugeordneten SVGs gleich ausgerichtet untereinander. Rote Markierungen zeigen die nach der Schwierigkeitsstufe sichtbaren Treffer an den betreffenden Schiffsabschnitten.
-2. Gegnerische Schiffe erst beim Versenken mit Grafik, Typ, Länge und Status anzeigen. Von der übrigen gegnerischen Flotte erscheint nur die Anzahl.
+2. Beim Versenken erscheint das gegnerische Schiff mit seiner SVG-Grafik an der tatsächlichen Position und Ausrichtung im Zielraster. Die Flottenübersicht zeigt dazu Grafik, Typ, Länge und Status. Von der übrigen gegnerischen Flotte erscheint nur die Anzahl.
 3. Die SVG-Darstellung auf dem eigenen Raster anhand der tatsächlichen Schiffsposition und Ausrichtung ergänzen.
 
 **Abnahme:** Die gleiche Position ergibt mit schwarzen Feldern oder mit SVG dieselben belegten Koordinaten. Eine ausgeblendete Trefferinformation lässt sich auch in der Flottenübersicht nicht ablesen.
