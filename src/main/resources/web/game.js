@@ -6,6 +6,12 @@ const play = document.querySelector("#play");
 const startScreen = document.querySelector("#start-screen");
 const startForm = document.querySelector("#start-form");
 const start = document.querySelector("#start");
+const createRequest = document.querySelector("#create-request");
+const waitingForOpponent = document.querySelector("#waiting-for-opponent");
+const requestsTable = document.querySelector("#requests-table");
+const requestsList = document.querySelector("#requests-list");
+const requestsEmpty = document.querySelector("#requests-empty");
+const requestsError = document.querySelector("#requests-error");
 const playerName = document.querySelector("#player-name");
 const difficulty = document.querySelector("#difficulty");
 const startError = document.querySelector("#start-error");
@@ -19,9 +25,11 @@ const orientation = document.querySelector("#orientation");
 const randomAll = document.querySelector("#random-all");
 const randomRemaining = document.querySelector("#random-remaining");
 const setupFeedback = document.querySelector("#setup-feedback");
+const placementTimer = document.querySelector("#placement-timer");
 const finish = document.querySelector("#finish");
 const resume = document.querySelector("#resume");
 const status = document.querySelector("#status");
+const shotTimer = document.querySelector("#shot-timer");
 const feedback = document.querySelector("#feedback");
 const shots = document.querySelector("#shots");
 const newHits = document.querySelector("#new-hits");
@@ -51,6 +59,12 @@ let renderedOwnBoard;
 let renderedSunkCount;
 let audioContext;
 let shotSounds;
+let lobbyRequests = [];
+let lobbyLoaded = false;
+let lobbyLoading = false;
+let lobbyTicket;
+let lobbyExpiryTimer;
+let matchLoading = false;
 
 ownGrid.addEventListener("animationend", event => {
     if (event.animationName === "own-board-shot-pulse" || event.animationName === "own-board-shot-steady") {
@@ -112,7 +126,7 @@ function drawBoard(cells, board, interactive, canShoot) {
     });
 }
 
-function pulseComputerShot() {
+function pulseOpponentShot() {
     if (pulseGameId !== game.id) {
         pulseGameId = game.id;
         lastPulsedShot = undefined;
@@ -120,7 +134,7 @@ function pulseComputerShot() {
         own.forEach(cell => cell.classList.remove("shot-pulse", "shot-pulse-hit"));
     }
     const shot = game.lastShot;
-    if (shot?.shooter !== "COMPUTER") return;
+    if (!shot || shot.shooter === "PLAYER") return;
     const shotId = shot.number ?? shot.cell;
     if (shotId === lastPulsedShot) return;
 
@@ -231,12 +245,16 @@ function render() {
     startScreen.hidden = nextScreen !== "START";
     setupScreen.hidden = nextScreen !== "SETUP";
     gameScreen.hidden = nextScreen !== "PLAY";
-    play.hidden = nextScreen !== "PLAY";
+    play.hidden = nextScreen !== "PLAY" || (game.mode === "HUMAN" && !game.finished);
     play.disabled = busy;
-    start.disabled = busy;
-    caption.textContent = nextScreen === "PLAY"
-        ? [playerName.value.trim(), game.nation, game.difficulty, "Gegen den Computer"].filter(Boolean).join(" · ")
-        : "Gegen den Computer";
+    start.disabled = busy || Boolean(lobbyTicket);
+    caption.hidden = nextScreen === "START";
+    if (nextScreen !== "START") {
+        const opponent = game.mode === "HUMAN" ? "Gegen " + game.opponentName : "Gegen den Computer";
+        caption.textContent = [game.playerName || playerName.value.trim(), game.nation, game.difficulty, opponent]
+            .filter(Boolean).join(" · ");
+    }
+    if (nextScreen === "START") renderLobby();
     if (nextScreen === "SETUP") renderSetup();
     if (nextScreen === "PLAY") renderGame();
     if (screen !== nextScreen) {
@@ -249,19 +267,22 @@ function render() {
 }
 
 function renderGame() {
-    const canShoot = !busy && !game.winner && game.turn === "PLAYER";
-    drawBoard(target, game.target, true, canShoot);
+    drawBoard(target, game.target, true, canFire());
     drawBoard(own, game.own, false, false);
     renderFleets();
-    pulseComputerShot();
-    resume.hidden = busy || Boolean(game.winner) || game.turn !== "COMPUTER";
+    pulseOpponentShot();
+    resume.hidden = busy || game.finished || game.turn !== "COMPUTER";
 
+    shotTimer.hidden = game.mode !== "HUMAN" || game.finished;
     const turnText = {
         PLAYER: game.winner ? "Sie haben gewonnen" : "Sie sind dran",
-        COMPUTER: game.winner ? "Der Computer hat gewonnen" : "Der Computer ist dran"
+        COMPUTER: game.winner ? "Der Computer hat gewonnen" : "Der Computer ist dran",
+        OPPONENT: game.opponentName + (game.finished ? " hat gewonnen" : " ist dran")
     }[game.winner ?? game.turn];
-    if (status.textContent !== turnText) status.textContent = turnText;
-    feedback.textContent = "";
+    if (game.finished && !game.winner) {
+        if (status.textContent !== "Unentschieden") status.textContent = "Unentschieden";
+    } else if (status.textContent !== turnText) status.textContent = turnText;
+    updateCountdowns();
     shots.textContent = game.shots;
     newHits.textContent = game.newHits;
     oldHits.textContent = game.oldHits;
@@ -272,14 +293,17 @@ function renderSetup() {
         nation.replaceChildren(...game.nations.map(option => new Option(option.label, option.id)));
     }
     nation.value = game.nation;
-    nation.disabled = busy;
-    orientation.disabled = busy;
-    randomAll.disabled = busy;
+    const locked = !canEditPlacement();
+    placementTimer.hidden = game.mode !== "HUMAN";
+    updateCountdowns();
+    nation.disabled = locked;
+    orientation.disabled = locked;
+    randomAll.disabled = locked;
     const allPlaced = game.placed === game.ships.length;
     randomRemaining.hidden = game.placed === 0 || allPlaced;
-    randomRemaining.disabled = busy;
+    randomRemaining.disabled = locked;
     orientation.textContent = "Ausrichtung: " + (vertical ? "senkrecht" : "waagerecht");
-    finish.disabled = busy || !allPlaced;
+    finish.disabled = locked || !allPlaced;
 
     if (listedNation !== game.nation) {
         shipCards = game.ships.map(({type}, index) => makeShipCard(type, index));
@@ -293,15 +317,17 @@ function renderSetup() {
     shipCards.forEach(({button, details}, index) => {
         const {placed, type} = game.ships[index];
         button.classList.toggle("is-placed", placed);
-        button.draggable = !busy && !placed;
-        button.setAttribute("aria-disabled", String(busy));
+        button.draggable = !locked && !placed;
+        button.disabled = locked;
         if (placed) button.removeAttribute("aria-pressed");
         else button.setAttribute("aria-pressed", String(index === selectedShip));
         details.textContent = type.name + " · " + type.length + " Felder" +
-            (placed ? " · Platziert, zum Entfernen klicken" : "");
+            (placed ? (locked ? " · Platziert" : " · Platziert, zum Entfernen klicken") : "");
     });
-    drawBoard(placement, game.own, true, !busy && selectedShip !== undefined);
-    setupFeedback.textContent = game.placed + " von " + game.ships.length + " Schiffen platziert.";
+    drawBoard(placement, game.own, true, !locked && selectedShip !== undefined);
+    const message = game.ready ? "Warten auf die Aufstellung von " + game.opponentName + "."
+        : game.placed + " von " + game.ships.length + " Schiffen platziert.";
+    if (setupFeedback.textContent !== message) setupFeedback.textContent = message;
 }
 
 function makeShipCard(type, index) {
@@ -320,7 +346,7 @@ function makeShipCard(type, index) {
     button.append(image, text);
 
     button.addEventListener("click", () => {
-        if (busy) return;
+        if (!canEditPlacement()) return;
         if (game.ships[index].placed) {
             run(async () => {
                 game = await request("placement", "DELETE", String(index));
@@ -331,7 +357,7 @@ function makeShipCard(type, index) {
         }
     });
     button.addEventListener("dragstart", event => {
-        if (busy || game.ships[index].placed) {
+        if (!canEditPlacement() || game.ships[index].placed) {
             event.preventDefault();
             return;
         }
@@ -355,7 +381,7 @@ function isValidStart(cell) {
 }
 
 function placeSelected(cell) {
-    if (busy || selectedShip === undefined) return;
+    if (!canEditPlacement() || selectedShip === undefined) return;
     if (!isValidStart(cell)) {
         setupFeedback.textContent = "Dieses Schiff kann auf " + coordinate(cell) + " nicht platziert werden.";
         return;
@@ -404,12 +430,148 @@ placementGrid.addEventListener("drop", event => {
     if (cell) placeSelected(Number(cell.dataset.cell));
 });
 
-async function request(path, method = "POST", body) {
-    const headers = game ? {"X-Game-Id": game.id} : {};
+async function request(path, method = "POST", body, id = game?.id) {
+    const headers = id ? {"X-Game-Id": id} : {};
     const response = await fetch("/api/" + path, {method, headers, body});
     const result = await response.json();
     if (!response.ok) throw new Error(result.error);
+    result.receivedAt = performance.now();
     return result;
+}
+
+function remainingTime() {
+    return Math.max(0, game.remainingMillis - (performance.now() - game.receivedAt));
+}
+
+function updateCountdowns() {
+    if (showingStart || game.mode !== "HUMAN" || game.finished) return;
+    const timer = game.phase === "SETUP" ? placementTimer : shotTimer;
+    const label = game.phase === "SETUP" ? "Zeit zum Platzieren" : "Verbleibende Zugzeit";
+    const time = label + " · " + formatWaitingTime(Math.ceil(remainingTime() / 1000) * 1000);
+    if (timer.textContent !== time) timer.textContent = time;
+}
+
+function canEditPlacement() {
+    return !busy && !game.ready && (game.mode !== "HUMAN" || remainingTime() > 0);
+}
+
+function canFire() {
+    return !busy && game && !game.finished && game.turn === "PLAYER"
+        && (game.mode !== "HUMAN" || remainingTime() > 0);
+}
+
+function formatWaitingTime(milliseconds) {
+    const seconds = Math.floor(milliseconds / 1000);
+    const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
+    return minutes + ":" + String(seconds % 60).padStart(2, "0");
+}
+
+function renderLobby() {
+    clearTimeout(lobbyExpiryTimer);
+    if (!showingStart) return;
+    const now = performance.now();
+    const waiting = Boolean(lobbyTicket);
+    waitingForOpponent.hidden = !waiting;
+    createRequest.disabled = busy || waiting;
+    lobbyRequests = lobbyRequests.filter(entry => entry.expiresAt > now);
+    requestsTable.hidden = lobbyRequests.length === 0;
+    requestsEmpty.hidden = !lobbyLoaded || lobbyRequests.length > 0;
+    const focusedRequest = document.activeElement?.dataset.requestId;
+    let restoreFocus;
+    requestsList.replaceChildren(...lobbyRequests.map(entry => {
+        const row = document.createElement("tr");
+        for (const value of [entry.name, entry.difficulty, formatWaitingTime(Math.max(0, now - entry.createdAt))]) {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.append(cell);
+        }
+        const action = document.createElement("td");
+        if (entry.id !== lobbyTicket?.id) {
+            const join = document.createElement("button");
+            join.type = "button";
+            join.className = "setup-button";
+            join.dataset.requestId = entry.id;
+            join.textContent = "Beitreten";
+            join.setAttribute("aria-label", "Spielanfrage von " + entry.name + " annehmen");
+            join.disabled = busy || waiting;
+            if (entry.id === focusedRequest && !join.disabled) restoreFocus = join;
+            action.append(join);
+        }
+        row.append(action);
+        return row;
+    }));
+    restoreFocus?.focus({preventScroll: true});
+    const nextExpiry = Math.min(...lobbyRequests.map(entry => entry.expiresAt));
+    if (Number.isFinite(nextExpiry)) lobbyExpiryTimer = setTimeout(renderLobby, Math.ceil(nextExpiry - now));
+}
+
+async function refreshLobby() {
+    if (!showingStart || lobbyLoading) return;
+    lobbyLoading = true;
+    const requestedAt = performance.now();
+    const ticket = lobbyTicket;
+    try {
+        if (ticket) {
+            const state = await request("requests/status", "GET", undefined, ticket.token);
+            if (ticket !== lobbyTicket || !showingStart) return;
+            if (state.phase === "EXPIRED") {
+                lobbyTicket = undefined;
+                start.disabled = busy;
+                startError.textContent = "Die Spielanfrage ist abgelaufen.";
+            } else if (state.phase !== "WAITING") {
+                enterGame(state);
+                return;
+            }
+        }
+        const {requests, lifetimeMillis} = await request("requests", "GET");
+        if (!showingStart) return;
+        lobbyRequests = requests.map(entry => ({
+            id: entry.id,
+            name: entry.name,
+            difficulty: entry.difficulty,
+            createdAt: requestedAt - entry.ageMillis,
+            expiresAt: requestedAt - entry.ageMillis + lifetimeMillis
+        }));
+        lobbyLoaded = true;
+        requestsError.textContent = "";
+    } catch {
+        requestsError.textContent = "Spielanfragen konnten gerade nicht geladen werden.";
+    } finally {
+        lobbyLoading = false;
+        renderLobby();
+    }
+}
+
+function enterGame(state) {
+    lobbyTicket = undefined;
+    selectedShip = undefined;
+    vertical = false;
+    showingStart = false;
+    feedback.textContent = "";
+    game = state;
+    render();
+}
+
+async function pollMatch() {
+    if (showingStart || game.mode !== "HUMAN" || game.finished) return;
+    updateCountdowns();
+    if (busy || matchLoading) return;
+    const previous = game;
+    matchLoading = true;
+    try {
+        const state = await request("game", "GET");
+        if (busy || showingStart || game !== previous) return;
+        if (state.lastShot?.shooter === "OPPONENT" && state.lastShot.number !== previous.lastShot?.number) {
+            playShotSound(state.lastShot);
+        }
+        game = state;
+        if (state.phase !== previous.phase || state.turnNumber !== previous.turnNumber) render();
+        else updateCountdowns();
+    } catch {
+        // Retain the current view and try the next poll.
+    } finally {
+        matchLoading = false;
+    }
 }
 
 function prepareShotAudio() {
@@ -432,7 +594,12 @@ function prepareShotAudio() {
 
 async function takeShot(path, body) {
     const state = await request(path, "POST", body);
-    const soundIndex = state.lastShot.result === "WATER" ? 0 : 1;
+    playShotSound(state.lastShot);
+    return state;
+}
+
+function playShotSound(shot) {
+    const soundIndex = shot.result === "WATER" ? 0 : 1;
     void shotSounds?.then(sounds => {
         if (!sounds[soundIndex] || audioContext.state !== "running") return;
         const source = audioContext.createBufferSource();
@@ -440,7 +607,6 @@ async function takeShot(path, body) {
         source.connect(audioContext.destination);
         source.start();
     }).catch(() => {});
-    return state;
 }
 
 function wait(milliseconds) {
@@ -483,28 +649,56 @@ async function run(action) {
 }
 
 function fire(cell) {
-    if (busy || !game || game.winner || game.turn !== "PLAYER") return;
+    if (!canFire()) return;
     prepareShotAudio();
+    feedback.textContent = "";
     run(async () => {
-        game = await takeShot("shot", String(cell));
-        await continueAfterShot();
+        const body = game.mode === "HUMAN" ? cell + " " + game.turnNumber : String(cell);
+        game = await takeShot("shot", body);
+        if (game.mode === "COMPUTER") await continueAfterShot();
     });
 }
 
-startForm.addEventListener("submit", event => {
-    event.preventDefault();
+function readPlayerName() {
     if (!playerName.value.trim()) {
         startError.textContent = "Geben Sie einen Spielernamen ein.";
         playerName.focus();
         return;
     }
     startError.textContent = "";
+    return playerName.value.trim();
+}
+
+requestsList.addEventListener("click", event => {
+    const id = event.target.closest("button[data-request-id]")?.dataset.requestId;
+    if (!id || busy || lobbyTicket || !startForm.reportValidity()) return;
+    const name = readPlayerName();
+    if (!name) return;
     prepareShotAudio();
     run(async () => {
-        game = await request("setup", "POST", difficulty.value);
-        selectedShip = undefined;
-        vertical = false;
-        showingStart = false;
+        try {
+            enterGame(await request("requests/" + id + "/join", "POST", name));
+        } finally {
+            if (showingStart) void refreshLobby();
+        }
+    });
+});
+
+startForm.addEventListener("submit", event => {
+    event.preventDefault();
+    if (busy || lobbyTicket) return;
+    const name = readPlayerName();
+    if (!name) return;
+    prepareShotAudio();
+    if (event.submitter === createRequest) {
+        run(async () => {
+            lobbyTicket = await request("requests", "POST", difficulty.value + "\n" + name);
+            void refreshLobby();
+        });
+        return;
+    }
+    run(async () => {
+        enterGame(await request("setup", "POST", difficulty.value));
     });
 });
 nation.addEventListener("change", () => {
@@ -530,6 +724,7 @@ finish.addEventListener("click", () => run(async () => {
 play.addEventListener("click", () => {
     showingStart = true;
     render();
+    void refreshLobby();
 });
 resume.addEventListener("click", () => {
     prepareShotAudio();
@@ -539,3 +734,6 @@ resume.addEventListener("click", () => {
     });
 });
 render();
+void refreshLobby();
+setInterval(refreshLobby, 1000);
+setInterval(pollMatch, 300);

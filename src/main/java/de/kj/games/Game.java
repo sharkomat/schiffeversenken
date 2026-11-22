@@ -16,85 +16,139 @@ final class Game {
     static final int SIZE = 10;
     private static final int CELLS = SIZE * SIZE;
     private static final long COMPUTER_DELAY_NANOS = TimeUnit.MILLISECONDS.toNanos(1500);
+    private static final long PLACEMENT_NANOS = TimeUnit.SECONDS.toNanos(60);
+    private static final long SHOT_NANOS = TimeUnit.SECONDS.toNanos(12);
     private final Difficulty difficulty;
-    private final WaterShotHistory playerShots;
-    private Board own;
-    private Board opponent;
+    private final Player host;
+    private final Player guest;
+    private final boolean multiplayer;
     private ComputerTargeting computer;
-    private Nation nation;
-    private int newHits;
-    private int oldHits;
-    private long shotNumber;
-    private Side turn = Side.PLAYER;
-    private Side winner;
+    private boolean started;
+    private boolean finished;
+    private Seat turn = Seat.HOST;
+    private Seat winner;
     private Shot lastShot;
-    private long nextComputerShotAt;
+    private long shotNumber;
+    private long turnNumber;
+    private long deadline;
 
     Game(Difficulty difficulty) {
+        this(difficulty, "", null, 0);
+    }
+
+    Game(Difficulty difficulty, String hostName, String guestName, long now) {
         this.difficulty = difficulty;
-        this.playerShots = new WaterShotHistory(difficulty.playerWaterShotWindow());
-        selectNation(Nation.DEUTSCHLAND);
+        this.host = new Player(hostName, difficulty);
+        this.guest = new Player(guestName, difficulty);
+        this.multiplayer = guestName != null;
+        this.deadline = now + PLACEMENT_NANOS;
     }
 
-    boolean selectNation(Nation selection) {
-        if (opponent != null) return false;
-        if (nation != selection) {
-            nation = selection;
-            own = new Board(nation.fleet);
+    boolean multiplayer() {
+        return multiplayer;
+    }
+
+    private Player player(Seat seat) {
+        return seat == Seat.HOST ? host : guest;
+    }
+
+    boolean selectNation(Seat seat, Nation nation) {
+        Player player = player(seat);
+        if (started || player.ready) return false;
+        if (player.nation != nation) {
+            player.nation = nation;
+            player.board = new Board(nation.fleet);
         }
         return true;
     }
 
-    boolean placeShip(int ship, int cell, Direction direction) {
-        return opponent == null && own.place(ship, cell, direction);
+    boolean placeShip(Seat seat, int ship, int cell, Direction direction) {
+        Player player = player(seat);
+        return !started && !player.ready && player.board.place(ship, cell, direction);
     }
 
-    boolean removeShip(int ship) {
-        return opponent == null && own.remove(ship);
+    boolean removeShip(Seat seat, int ship) {
+        Player player = player(seat);
+        return !started && !player.ready && player.board.remove(ship);
     }
 
-    boolean randomizePlacement(boolean replaceAll) {
-        if (opponent != null) return false;
-        Board board = replaceAll ? new Board(nation.fleet) : own;
+    boolean randomizePlacement(Seat seat, boolean replaceAll) {
+        Player player = player(seat);
+        if (started || player.ready) return false;
+        Board board = replaceAll ? new Board(player.nation.fleet) : player.board;
         if (!board.placeRandomFleet(0)) return false;
-        own = board;
+        player.board = board;
         return true;
     }
 
-    boolean start() {
-        if (opponent != null) return true;
-        if (own.placedCount() != nation.fleet.size()) return false;
-        Board computerBoard = new Board(Nation.DEUTSCHLAND.fleet);
-        if (!computerBoard.placeRandomFleet(0)) throw new IllegalStateException("Cannot place computer fleet");
-        computer = new ComputerTargeting(nation.fleet.stream().map(ShipType::length).toList(), difficulty);
-        opponent = computerBoard;
-        return true;
-    }
-
-    boolean playerShot(int cell) {
-        if (opponent == null || winner != null || turn != Side.PLAYER || cell < 0 || cell >= CELLS) return false;
-        Shot shot = shoot(Side.PLAYER, opponent, cell);
-        playerShots.record(cell, shot.result() == Result.WATER);
-        switch (shot.result()) {
-            case HIT, SUNK -> newHits++;
-            case REPEAT -> oldHits++;
+    boolean start(Seat seat, long now) {
+        if (started) return true;
+        Player player = player(seat);
+        if (player.board.placedCount() != player.nation.fleet.size()) return false;
+        player.ready = true;
+        if (multiplayer) {
+            if (host.ready && guest.ready) beginBattle(now);
+        } else {
+            if (!guest.board.placeRandomFleet(0)) throw new IllegalStateException("Cannot place computer fleet");
+            computer = new ComputerTargeting(host.nation.fleet.stream().map(ShipType::length).toList(), difficulty);
+            beginBattle(now);
         }
         return true;
     }
 
-    boolean computerShot() {
-        if (winner != null || turn != Side.COMPUTER || computerWaitMillis() > 0) return false;
-        Shot shot = shoot(Side.COMPUTER, own, computer.choose(ThreadLocalRandom.current()));
+    private void beginBattle(long now) {
+        started = true;
+        turnNumber = 1;
+        deadline = now + SHOT_NANOS;
+        boolean hostEmpty = host.board.placedCount() == 0;
+        boolean guestEmpty = guest.board.placedCount() == 0;
+        if (hostEmpty || guestEmpty) {
+            finished = true;
+            if (hostEmpty != guestEmpty) winner = hostEmpty ? Seat.GUEST : Seat.HOST;
+        }
+    }
+
+    void advance(long now) {
+        if (!multiplayer || finished) return;
+        if (!started && now - deadline >= 0) beginBattle(deadline);
+        if (started && !finished && now - deadline >= 0) {
+            long skipped = 1 + (now - deadline) / SHOT_NANOS;
+            if (skipped % 2 == 1) turn = turn.other();
+            turnNumber += skipped;
+            deadline += skipped * SHOT_NANOS;
+        }
+    }
+
+    boolean playerShot(Seat seat, int cell, long expectedTurn, long now) {
+        if (!started || finished || turn != seat || cell < 0 || cell >= CELLS
+                || (multiplayer && expectedTurn != turnNumber)) return false;
+        Shot shot = shoot(seat, cell, now);
+        Player player = player(seat);
+        player.shots.record(cell, shot.result() == Result.WATER);
+        switch (shot.result()) {
+            case HIT, SUNK -> player.newHits++;
+            case REPEAT -> player.oldHits++;
+        }
+        return true;
+    }
+
+    boolean computerShot(long now) {
+        if (multiplayer || !started || finished || turn != Seat.GUEST || computerWaitMillis(now) > 0) return false;
+        Shot shot = shoot(Seat.GUEST, computer.choose(ThreadLocalRandom.current()), now);
         computer.observe(shot.cell(), shot.result() != Result.WATER, shot.ship() == null ? 0 : shot.ship().length());
         return true;
     }
 
-    long computerWaitMillis() {
-        if (winner != null || turn != Side.COMPUTER) return 0;
-        return Math.max(0, Math.ceilDiv(nextComputerShotAt - System.nanoTime(), 1_000_000L));
+    long computerWaitMillis(long now) {
+        return !multiplayer && started && !finished && turn == Seat.GUEST ? remainingMillis(now) : 0;
     }
 
-    private Shot shoot(Side shooter, Board target, int cell) {
+    private long remainingMillis(long now) {
+        return Math.max(0, Math.ceilDiv(deadline - now, 1_000_000L));
+    }
+
+    private Shot shoot(Seat shooter, int cell, long now) {
+        Board target = player(shooter.other()).board;
         Ship ship = target.ships[cell];
         boolean firstShotAtCell = !target.fired[cell];
         target.fired[cell] = true;
@@ -102,55 +156,67 @@ final class Game {
         Result result;
         if (ship == null) {
             result = Result.WATER;
-            turn = shooter == Side.PLAYER ? Side.COMPUTER : Side.PLAYER;
+            turn = shooter.other();
         } else if (!firstShotAtCell) {
             result = Result.REPEAT;
         } else if (++ship.hits == ship.type.length()) {
             result = Result.SUNK;
             target.sunk.add(ship);
-            if (target.sunk.size() == target.fleet.size()) winner = shooter;
+            if (target.sunk.size() == target.placedCount()) {
+                winner = shooter;
+                finished = true;
+            }
         } else {
             result = Result.HIT;
         }
         lastShot = new Shot(++shotNumber, shooter, cell, result, result == Result.SUNK ? ship.type : null);
-        if (turn == Side.COMPUTER && winner == null) {
-            nextComputerShotAt = System.nanoTime() + COMPUTER_DELAY_NANOS;
-        }
+        turnNumber++;
+        deadline = now + (multiplayer ? SHOT_NANOS : COMPUTER_DELAY_NANOS);
         return lastShot;
     }
 
-    String state(String id) {
-        if (opponent == null) {
+    String state(String id, Seat seat, long now) {
+        Player viewer = player(seat);
+        Player opponent = player(seat.other());
+        String common = """
+                "id":"%s","difficulty":"%s","mode":"%s","playerName":%s,"opponentName":%s
+                """.formatted(id, difficulty.label, multiplayer ? "HUMAN" : "COMPUTER",
+                Json.quote(viewer.name), Json.quote(multiplayer ? opponent.name : "Computer")).stripTrailing();
+        String remaining = multiplayer && !finished ? Long.toString(remainingMillis(now)) : "null";
+        if (!started) {
             return """
-                    {"id":"%s","phase":"SETUP","difficulty":"%s","nation":"%s","own":"%s","placed":%d,
-                     "ships":[%s],"nations":[%s]}
-                    """.formatted(id, difficulty.label, nation.name(), own.visibleCells(true, cell -> true),
-                    own.placedCount(), own.setupShips(), Nation.optionsJson());
+                    {%s,"phase":"SETUP","nation":"%s","own":"%s","placed":%d,"ready":%s,
+                     "remainingMillis":%s,"ships":[%s],"nations":[%s]}
+                    """.formatted(common, viewer.nation.name(), viewer.board.visibleCells(true, cell -> true),
+                    viewer.board.placedCount(), viewer.ready, remaining, viewer.board.setupShips(), Nation.optionsJson());
         }
-        // Only sunk opposing ships expose their type and placement.
-        String sunk = opponent.sunk.stream().map(Ship::placementJson).collect(Collectors.joining(","));
+        IntPredicate showWater = cell -> difficulty == Difficulty.LEICHT || viewer.board.adjoinsShip(cell);
+        String sunk = opponent.board.sunk.stream().map(Ship::placementJson).collect(Collectors.joining(","));
         return """
-                {"id":"%s","phase":"PLAY","difficulty":"%s","nation":"%s","own":"%s","target":"%s","turn":"%s","winner":%s,
-                 "shots":%d,"newHits":%d,"oldHits":%d,"ownFleet":[%s],"sunk":[%s],"unknown":%d,
-                 "computerWaitMillis":%d,"lastShot":%s}
-                """.formatted(id, difficulty.label, nation.label, own.visibleCells(true, this::showOwnWater),
-                opponent.visibleCells(false, playerShots::remembers), turn,
-                winner == null ? "null" : "\"" + winner + "\"",
-                playerShots.shots(), newHits, oldHits, own.placedFleetJson(), sunk,
-                opponent.fleet.size() - opponent.sunk.size(),
-                computerWaitMillis(),
-                lastShot == null ? "null" : lastShot.json(showShotLocation(lastShot)));
+                {%s,"phase":"PLAY","nation":"%s","own":"%s","target":"%s","turn":"%s","winner":%s,"finished":%s,
+                 "remainingMillis":%s,"turnNumber":%d,"shots":%d,"newHits":%d,"oldHits":%d,
+                 "ownFleet":[%s],"sunk":[%s],"unknown":%d,"computerWaitMillis":%d,"lastShot":%s}
+                """.formatted(common, viewer.nation.label, viewer.board.visibleCells(true, showWater),
+                opponent.board.visibleCells(false, viewer.shots::remembers), relativeSide(turn, seat),
+                winner == null ? "null" : Json.quote(relativeSide(winner, seat)), finished,
+                remaining, turnNumber, viewer.shots.shots(), viewer.newHits, viewer.oldHits,
+                viewer.board.placedFleetJson(), sunk, opponent.board.placedCount() - opponent.board.sunk.size(),
+                computerWaitMillis(now), lastShot == null ? "null" : lastShot.json(relativeSide(lastShot.shooter(), seat),
+                        lastShot.shooter() == seat || lastShot.result() != Result.WATER || showWater.test(lastShot.cell())));
     }
 
-    private boolean showOwnWater(int cell) {
-        return difficulty == Difficulty.LEICHT || own.adjoinsShip(cell);
+    private String relativeSide(Seat seat, Seat viewer) {
+        if (seat == viewer) return "PLAYER";
+        return multiplayer ? "OPPONENT" : "COMPUTER";
     }
 
-    private boolean showShotLocation(Shot shot) {
-        return shot.shooter() == Side.PLAYER || shot.result() != Result.WATER || showOwnWater(shot.cell());
-    }
+    enum Seat {
+        HOST, GUEST;
 
-    private enum Side { PLAYER, COMPUTER }
+        Seat other() {
+            return this == HOST ? GUEST : HOST;
+        }
+    }
 
     private enum Result { WATER, HIT, REPEAT, SUNK }
 
@@ -164,11 +230,26 @@ final class Game {
         }
     }
 
-    private record Shot(long number, Side shooter, int cell, Result result, ShipType ship) {
-        String json(boolean showLocation) {
+    private record Shot(long number, Seat shooter, int cell, Result result, ShipType ship) {
+        String json(String relativeShooter, boolean showLocation) {
             return "{\"number\":%d,\"shooter\":\"%s\",\"cell\":%s,\"result\":\"%s\",\"ship\":%s}"
-                    .formatted(number, shooter, showLocation ? Integer.toString(cell) : "null",
+                    .formatted(number, relativeShooter, showLocation ? Integer.toString(cell) : "null",
                             result, ship == null ? "null" : ship.json());
+        }
+    }
+
+    private static final class Player {
+        private final String name;
+        private final WaterShotHistory shots;
+        private Nation nation = Nation.DEUTSCHLAND;
+        private Board board = new Board(nation.fleet);
+        private boolean ready;
+        private int newHits;
+        private int oldHits;
+
+        private Player(String name, Difficulty difficulty) {
+            this.name = name;
+            this.shots = new WaterShotHistory(difficulty.playerWaterShotWindow());
         }
     }
 

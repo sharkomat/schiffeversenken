@@ -45,16 +45,32 @@ h3 { font-size: 1rem; }
 button:disabled { opacity: .58; cursor: default; }
 button:focus-visible { outline: 3px solid #ffe096; outline-offset: 3px; }
 
-.start-panel, .setup-panel {
+.start-layout {
+    display: grid;
+    grid-template-columns: minmax(16rem, 26rem) minmax(0, 36rem);
+    gap: clamp(1rem, 3vw, 2rem);
+}
+.start-panel, .requests-panel, .setup-panel {
     align-self: start;
     padding: clamp(1rem, 3vw, 1.5rem);
     background: #132638;
     border: 1px solid var(--outline);
     border-radius: .75rem;
 }
-.start-panel { max-width: 26rem; }
 .start-panel form { display: grid; gap: .65rem; margin-top: 1rem; }
-.start-panel .play { justify-self: start; }
+.start-actions { display: flex; flex-wrap: wrap; align-items: stretch; gap: .5rem; }
+.start-actions .play { white-space: normal; }
+.start-message { color: var(--muted); margin-top: .65rem; }
+.start-message:empty { display: none; }
+.requests-panel table { border-collapse: collapse; width: 100%; table-layout: fixed; margin-top: .75rem; }
+.requests-panel th, .requests-panel td { padding: .55rem .45rem; text-align: left; overflow-wrap: anywhere; }
+.requests-panel th { color: var(--muted); font-size: .85rem; font-weight: 600; }
+.requests-panel th:first-child { width: 28%; }
+.requests-panel th:last-child { width: 27%; }
+.requests-panel td { border-top: 1px solid var(--outline); }
+.requests-panel td:nth-child(3), .countdown { font-variant-numeric: tabular-nums; }
+.requests-panel .setup-button { max-width: 100%; padding: .4rem; overflow-wrap: anywhere; }
+.countdown { margin: .35rem 0; color: var(--muted); }
 .start-panel .feedback:empty { display: none; }
 .start-panel .feedback { margin-top: .65rem; }
 .start-panel input, .start-panel select, .setup-panel select {
@@ -279,6 +295,7 @@ button:focus-visible { outline: 3px solid #ffe096; outline-offset: 3px; }
 
 @media (max-width: 760px) {
     .game { padding: 1rem; }
+    .start-layout { grid-template-columns: minmax(0, 1fr); }
     .game-layout, .setup-layout { grid-template-columns: minmax(0, 1fr); }
     .game-layout { grid-template-areas: "header" "turn" "boards" "sidebar"; grid-template-rows: auto auto auto auto; }
     .battle-boards, .setup-layout > .target-panel { width: min(100%, 25rem); }
