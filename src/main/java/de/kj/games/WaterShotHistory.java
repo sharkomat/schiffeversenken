@@ -1,31 +1,31 @@
 package de.kj.games;
 
 import java.util.BitSet;
+import java.util.random.RandomGenerator;
 
 import static de.kj.games.Game.SIZE;
 
 final class WaterShotHistory {
-    private final int window;
-    private final int[] lastWaterShot = new int[SIZE * SIZE];
+    private final int guaranteed;
+    private final int forgetPercent;
     private final BitSet water = new BitSet(SIZE * SIZE);
     private int shots;
 
-    WaterShotHistory(int window) {
-        this.window = window;
+    WaterShotHistory(int guaranteed, int forgetPercent) {
+        this.guaranteed = guaranteed;
+        this.forgetPercent = forgetPercent;
     }
 
-    void record(int cell, boolean isWater) {
+    void record(int cell, boolean isWater, RandomGenerator random) {
         shots++;
-        if (isWater) {
-            lastWaterShot[cell] = shots;
-            water.set(cell);
+        if (!isWater || water.get(cell)) return;
+
+        int known = water.cardinality();
+        if (known >= guaranteed && random.nextInt(100) < forgetPercent) {
+            int forgotten = water.stream().skip(random.nextInt(known)).findFirst().orElseThrow();
+            water.clear(forgotten);
         }
-        for (int known = water.nextSetBit(0); known >= 0; known = water.nextSetBit(known + 1)) {
-            if (shots - lastWaterShot[known] >= window) {
-                water.clear(known);
-                lastWaterShot[known] = 0;
-            }
-        }
+        water.set(cell);
     }
 
     int shots() {

@@ -229,9 +229,8 @@ public final class Main {
                 case "/" -> "index.html";
                 case "/style.css" -> "style.css";
                 case "/game.js" -> "game.js";
-                case "/sounds/water.wav" -> "sounds/water.wav";
-                case "/sounds/hit.wav" -> "sounds/hit.wav";
-                default -> path.matches("/ships/[A-Za-z-]+\\.svg") ? path.substring(1) : null;
+                default -> path.matches("/ships/[A-Za-z-]+\\.svg")
+                        || path.matches("/sounds/(?:hit|water)(?:-[0-9]{2})?\\.wav") ? path.substring(1) : null;
             };
             if (resource == null || !exchange.getRequestMethod().equals("GET")) {
                 exchange.sendResponseHeaders(404, -1);
@@ -241,8 +240,7 @@ public final class Main {
                 case "index.html" -> "text/html";
                 case "style.css" -> "text/css";
                 case "game.js" -> "text/javascript";
-                case "sounds/water.wav", "sounds/hit.wav" -> "audio/wav";
-                default -> "image/svg+xml";
+                default -> resource.startsWith("sounds/") ? "audio/wav" : "image/svg+xml";
             };
             try (var input = Main.class.getResourceAsStream("/web/" + resource)) {
                 if (input == null) {

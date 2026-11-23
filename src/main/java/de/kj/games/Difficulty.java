@@ -1,21 +1,22 @@
 package de.kj.games;
 
 enum Difficulty {
-    LEICHT("Leicht", 50, 25),
-    MITTEL("Mittel", 30, 15),
-    SCHWER("Schwer", 20, 8);
+    LEICHT("Leicht", 25, 70, 73, 16),
+    MITTEL("Mittel", 21, 65, 57, 8),
+    SCHWER("Schwer", 17, 60, 55, 4);
 
     final String label;
-    final int computerWaterShotWindow;
-    final int randomShotPercent;
+    final int playerWaterGuaranteed;
+    final int playerWaterForgetPercent;
+    final int computerWaterForgetPercent;
+    final int forcedMissPercent;
 
-    Difficulty(String label, int computerWaterShotWindow, int randomShotPercent) {
+    Difficulty(String label, int playerWaterGuaranteed, int playerWaterForgetPercent,
+               int computerWaterForgetPercent, int forcedMissPercent) {
         this.label = label;
-        this.computerWaterShotWindow = computerWaterShotWindow;
-        this.randomShotPercent = randomShotPercent;
-    }
-
-    int playerWaterShotWindow() {
-        return this == LEICHT ? Integer.MAX_VALUE : computerWaterShotWindow;
+        this.playerWaterGuaranteed = playerWaterGuaranteed;
+        this.playerWaterForgetPercent = playerWaterForgetPercent;
+        this.computerWaterForgetPercent = computerWaterForgetPercent;
+        this.forcedMissPercent = forcedMissPercent;
     }
 }

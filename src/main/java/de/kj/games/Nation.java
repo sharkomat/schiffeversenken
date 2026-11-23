@@ -7,43 +7,43 @@ import java.util.stream.Collectors;
 import static de.kj.games.Nation.Type.*;
 
 enum Nation {
-    DEUTSCHLAND("Deutschland",
+    DEUTSCHLAND("Deutschland", "DE",
             SCHLACHTSCHIFF.ship("Bismarck-Klasse", 5),
             SCHLACHTSCHIFF.ship("Scharnhorst-Klasse", 4),
             FREGATTE.ship("Baden-Württemberg-Klasse", 3),
             FREGATTE.ship("Sachsen-Klasse", 3),
             U_BOOT.ship("Klasse 212A", 2)),
-    RUSSLAND("Russland",
+    RUSSLAND("Russland", "RU",
             KREUZER.ship("Admiral-Kusnezow-Klasse", 5, "Schwerer flugzeugtragender Kreuzer"),
             KREUZER.ship("Slawa-Klasse", 4),
             ZERSTOERER.ship("Udaloy-Klasse", 3),
             FREGATTE.ship("Admiral-Grigorowitsch-Klasse", 3),
             U_BOOT.ship("Improved-Kilo-Klasse", 2)),
-    USA("USA",
+    USA("USA", "US",
             FLUGZEUGTRAEGER.ship("Gerald-R.-Ford-Klasse", 5),
             SCHLACHTSCHIFF.ship("South-Dakota-Klasse", 4),
             KREUZER.ship("Atlanta-Klasse", 3, "Leichter Kreuzer"),
             ZERSTOERER.ship("Fletcher-Klasse", 3),
             U_BOOT.ship("Gato-Klasse", 2)),
-    JAPAN("Japan",
+    JAPAN("Japan", "JP",
             HUBSCHRAUBERTRAEGER.ship("Izumo-Klasse", 5),
             HUBSCHRAUBERTRAEGER.ship("Hyūga-Klasse", 4),
             ZERSTOERER.ship("Maya-Klasse", 3, "Lenkwaffenzerstörer"),
             FREGATTE.ship("Mogami-Klasse", 3),
             U_BOOT.ship("Taigei-Klasse", 2)),
-    FRANKREICH("Frankreich",
+    FRANKREICH("Frankreich", "FR",
             FLUGZEUGTRAEGER.ship("Charles de Gaulle", 5),
             HUBSCHRAUBERTRAEGER.ship("Mistral-Klasse", 4, "Amphibischer Hubschrauberträger"),
             FREGATTE.ship("Horizon-Klasse", 3, "Luftverteidigungsfregatte"),
             FREGATTE.ship("Aquitaine-Klasse", 3, "Mehrzweckfregatte"),
             U_BOOT.ship("Suffren-Klasse", 2)),
-    VEREINIGTES_KOENIGREICH("Vereinigtes Königreich",
+    VEREINIGTES_KOENIGREICH("Vereinigtes Königreich", "GB",
             FLUGZEUGTRAEGER.ship("Queen-Elizabeth-Klasse", 5),
             FLUGZEUGTRAEGER.ship("Invincible-Klasse", 4, "Leichter Flugzeugträger"),
             ZERSTOERER.ship("Daring-Klasse", 3),
             FREGATTE.ship("Duke-Klasse", 3),
             U_BOOT.ship("Astute-Klasse", 2)),
-    CHINA("China",
+    CHINA("China", "CN",
             FLUGZEUGTRAEGER.ship("Fujian (Typ 003)", 5),
             DOCKLANDUNGSSCHIFF.ship("Typ 071", 4, "Amphibisches Docklandungsschiff"),
             ZERSTOERER.ship("Typ 052D", 3, "Lenkwaffenzerstörer"),
@@ -51,10 +51,12 @@ enum Nation {
             KORVETTE.ship("Typ 056A", 2));
 
     final String label;
+    final String countryCode;
     final List<ShipType> fleet;
 
-    Nation(String label, ShipType... fleet) {
+    Nation(String label, String countryCode, ShipType... fleet) {
         this.label = label;
+        this.countryCode = countryCode;
         this.fleet = List.of(fleet);
     }
 

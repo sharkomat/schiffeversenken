@@ -6,7 +6,7 @@ Der Spieler tritt gegen den Computer oder gegen einen anderen Menschen an. Beide
 
 ### Partie starten
 
-Für alle drei Startwege trägt der Spieler zuerst seinen Namen ein. Beim direkten Spiel gegen den Computer und beim Erstellen einer Spielanfrage wählt der Spieler die Schwierigkeitsstufe. **Mittel** ist voreingestellt. Die Stufe bestimmt, welche Schussmarkierungen im Zielraster und im eigenen Raster sichtbar sind.
+Für alle drei Startwege trägt der Spieler zuerst seinen Namen ein. Beim direkten Spiel gegen den Computer und beim Erstellen einer Spielanfrage wählt der Spieler die Schwierigkeitsstufe. **Mittel** ist voreingestellt. Die Stufe bestimmt die Wassermarkierungen im Zielraster und die Zielwahl des Computers.
 
 - **Gegen den Computer spielen** – Die Platzierungsphase beginnt sofort.
 - **Eine Spielanfrage erstellen** – Die Anfrage erscheint mit Spielername und gewählter Stufe auf der Startseite. Der Ersteller wartet dort auf einen Gegner. Nimmt niemand die Anfrage an, verschwindet sie spätestens **drei Minuten nach dem Erstellen**.
@@ -32,7 +32,7 @@ Ein Zug beginnt, wenn eine Seite an der Reihe ist. Im Mehrspielerspiel hat der j
 
 Nach jedem gültigen Schuss wird das Ergebnis direkt auf dem betreffenden Raster markiert, soweit die Schwierigkeitsstufe es sichtbar macht. Ein sichtbarer gegnerischer Schuss erhält zusätzlich einen pulsierenden Feldrahmen im eigenen Raster. Bei Wasser wechselt der Zug unmittelbar zum Gegner. Nach einem Treffer, auch auf einem bereits getroffenen Feld, bleibt dieselbe Seite am Zug. Ein Mensch kann sofort erneut schießen. Für den Computer beginnt die Wartezeit von anderthalb Sekunden sofort nach dem Zugwechsel oder seinem Treffer. Beim Versenken des letzten gegnerischen Schiffs zeigt der Zugstatus das Ergebnis der Partie.
 
-Der Computer merkt sich Treffer, Wasserschüsse und Versenkungen. Aus der gemeldeten Schiffslänge und den Treffern zum Zeitpunkt der Versenkung leitet er die möglichen Lagen des versenkten Schiffs ab. Passen mehrere Lagen zu den Platzierungsregeln und den bisherigen Schüssen, prüft er sie weiter. Bei offenen Treffern bevorzugt er Positionen, die mehrere Treffer erklären und nur noch wenige ungetroffene Felder haben. Für die Zielsuche erhält er dieselben Schussmeldungen wie ein Mensch und kennt die möglichen Schiffslängen.
+Für die normale Zielsuche verwendet der Computer seine bisherigen Schussmeldungen. Solange Treffer an noch schwimmenden Schiffen offen sind, verfolgt er diese Treffer. Erst bei der freien Suche kann das Spiel ein zufälliges Wasserfeld wählen, das der Computer noch nie beschossen oder inzwischen vergessen hat. Gibt es kein solches Feld, verwendet er seine normale Zielwahl. Ein auf diese Weise gewählter Wasserschuss beendet den Zug und geht wie jeder andere Wasserschuss ins Gedächtnis ein.
 
 - **Wasser** erscheint bei einem Schuss auf ein leeres Feld, auch wenn es schon einmal beschossen wurde. Danach ist der andere Spieler am Zug.
 - **Neuer Treffer** erscheint, wenn ein Schiffsfeld zum ersten Mal getroffen wird.
@@ -58,30 +58,37 @@ Die Zähler erscheinen ohne Koordinaten. Erst beim Versenken erfährt der schie�
 > 
 > **Unbekannte Schiffe verbleibend** 4
 
-Unter dem Zielraster zeigt das **eigene Raster** die Schiffspositionen. Welche gegnerischen Schüsse darauf markiert werden, hängt von der Schwierigkeitsstufe ab.
+Unter dem Zielraster zeigt das **eigene Raster** die Schiffspositionen. Die Sichtbarkeitsregel für gegnerische Schüsse gilt auf allen Stufen gleich.
 
 ## Schwierigkeitsstufen
 
-Für die Anzeige im Zielraster und das Gedächtnis des Computers zählt jeder eigene Schuss, auch ein Folgeschuss oder eine Wiederholung. Ein erneuter Schuss auf dasselbe Wasserfeld erneuert die Markierung oder Erinnerung. Vergessene Wasserfelder gelten für den Computer wieder als unbeschossen. Das eigene Raster pulsiert bei Wasser blau und bei einem Schiffstreffer gelb-orange.
+Für die Anzeige im Zielraster und das Gedächtnis des Computers zählt jedes aktuell bekannte Wasserfeld einmal. Ist die garantierte Anzahl erreicht, kann bei jedem neu hinzukommenden Wasserfeld nach der jeweiligen Wahrscheinlichkeit eines der bisher bekannten Felder wegfallen. Dieses Feld wird gleichverteilt aus den bisher bekannten Wasserfeldern gewählt. Das neu beschossene Wasserfeld wird angezeigt oder gespeichert. Treffer und Wiederholungen auf bereits bekannten Wasserfeldern lösen kein Vergessen aus. Vergessene Wasserfelder gelten für den Computer wieder als unbeschossen. Das eigene Raster pulsiert bei Wasser blau und bei einem Schiffstreffer gelb-orange.
 
 ### Leicht
 
-- **Zielraster** – Alle Schiffstreffer und Wasserschüsse bleiben sichtbar.
-- **Eigenes Raster** – Alle gegnerischen Schiffstreffer und Wasserschüsse erscheinen sofort auf ihren jeweiligen Feldern. Der Rahmen des beschossenen Feldes pulsiert.
-- **Computer** – Er merkt sich Wasserschüsse aus seinen letzten **50 eigenen Schüssen** und behält alle Schiffstreffer und Versenkungen bis zum Spielende im Gedächtnis. Bei **25 %** seiner Schüsse wählt er gleichverteilt unter den Feldern, die er für unbeschossen hält. Bei seinen übrigen Schüssen sucht er taktisch anhand seiner bekannten Schüsse und der Platzierungsregeln.
+- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **25 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **70 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
+- **Eigenes Raster** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld höchstens zwei waagerechte, senkrechte oder diagonale Schritte von einem eigenen Schiffsfeld entfernt liegt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenen Wasserschüssen der Außenrahmen.
+- **Computer** – Er merkt sich bis zu **15 Wasserfelder** zuverlässig. Darüber hinaus vergisst er mit **73 %** Wahrscheinlichkeit ein älteres bekanntes Wasserfeld. Treffer behält er dauerhaft im Gedächtnis.
+Nach einem Treffer probiert er die direkten Nachbarfelder. Liegen zwei Treffer direkt nebeneinander, bevorzugt er freie Felder entlang ihrer Linie. Bei der freien Suche bevorzugt er ein Schachbrettmuster. Mit **16 %** Wahrscheinlichkeit löst das Spiel stattdessen einen erzwungenen Wasserschuss aus.
 
 ### Mittel
 
-- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Wasserschüsse bleiben markiert, solange sie unter den letzten **30 eigenen Schüssen** sind.
-- **Eigenes Raster** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld unmittelbar waagerecht, senkrecht oder diagonal an ein eigenes Schiffsfeld grenzt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenem Wasser der Außenrahmen.
-- **Computer** – Er merkt sich Wasserschüsse aus seinen letzten **30 eigenen Schüssen** und behält alle Schiffstreffer und Versenkungen bis zum Spielende im Gedächtnis. Bei **15 %** seiner Schüsse wählt er gleichverteilt unter den Feldern, die er für unbeschossen hält. Bei seinen übrigen Schüssen sucht er taktisch anhand seiner bekannten Schüsse und der Platzierungsregeln.
+- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **21 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **65 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
+- **Eigenes Raster** – Gleiche Anzeige wie auf „Leicht“.
+- **Computer** – Er merkt sich bis zu **15 Wasserfelder** zuverlässig. Darüber hinaus vergisst er mit **57 %** Wahrscheinlichkeit ein älteres bekanntes Wasserfeld. Treffer behält er dauerhaft im Gedächtnis.
+Nach einem Treffer probiert er die direkten Nachbarfelder. Liegen zwei Treffer direkt nebeneinander, bevorzugt er freie Felder entlang ihrer Linie. Bei der freien Suche bevorzugt er ein Schachbrettmuster. Mit **8 %** Wahrscheinlichkeit löst das Spiel stattdessen einen erzwungenen Wasserschuss aus.
 
 ### Schwer
 
-- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Wasserschüsse bleiben markiert, solange sie unter den letzten **20 eigenen Schüssen** sind.
-- **Eigenes Raster** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld unmittelbar waagerecht, senkrecht oder diagonal an ein eigenes Schiffsfeld grenzt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenem Wasser der Außenrahmen.
-- **Computer** – Er merkt sich Wasserschüsse aus seinen letzten **20 eigenen Schüssen** und behält alle Schiffstreffer und Versenkungen bis zum Spielende im Gedächtnis. Bei **8 %** seiner Schüsse wählt er gleichverteilt unter den Feldern, die er für unbeschossen hält. Bei seinen übrigen Schüssen sucht er taktisch anhand seiner bekannten Schüsse und der Platzierungsregeln.
+- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **17 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **60 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
+- **Eigenes Raster** – Gleiche Anzeige wie auf „Leicht“.
+- **Computer** – Er merkt sich bis zu **15 Wasserfelder** zuverlässig. Darüber hinaus vergisst er mit **55 %** Wahrscheinlichkeit ein älteres bekanntes Wasserfeld. Treffer behält er dauerhaft im Gedächtnis.
+Er bewertet mögliche Schiffslagen anhand der bisherigen Treffer, Versenkungen, bekannten Wasserschüsse, möglichen Schiffslängen und Platzierungsregeln. Bei der freien Suche löst das Spiel mit **4 %** Wahrscheinlichkeit stattdessen einen erzwungenen Wasserschuss aus.
 
 ## Spielende
 
 Sobald ein Spieler das letzte gegnerische Schiff versenkt, endet die Partie und er gewinnt. Die Partie kann auch schon mit Ablauf der Platzierungszeit enden, wenn mindestens eine Flotte leer ist.
+
+Nach einer Niederlage zeigt das Zielraster alle übrigen gegnerischen Schiffe mit ihren SVG-Grafiken an ihrer tatsächlichen Position und Ausrichtung.
+
+Das Ergebnis erscheint groß in der Fenstermitte. Bei einer Niederlage fahren die verbliebenen gegnerischen Schiffe von links ins Bild. Flammen markieren ihre bereits getroffenen Abschnitte. Hinter jedem Schiff hängt ein Ballon mit dem Länderkennzeichen seiner Nation. Über „Spielfeld ansehen“ lässt sich die Ergebnisansicht schließen.

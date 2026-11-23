@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schiffversenken – Soundauswahl</title>
+<style>
+  :root { color-scheme: light; font: 16px/1.5 "Segoe UI", system-ui, sans-serif; color: #132f42; background: #eef4f7; accent-color: #076455; }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  header { background: #102e40; color: white; padding: 26px max(20px, calc((100% - 720px)/2)); }
+  h1, p { margin: 0; }
+  h1 { font-size: clamp(1.65rem, 4vw, 2.35rem); line-height: 1.2; margin-bottom: 8px; }
+  header p { color: #d1e5ee; }
+  main { max-width: 760px; margin: auto; padding: 20px; }
+  ul { list-style: none; margin: 0; padding: 0; background: white; border: 1px solid #cbdbe2; border-radius: 12px; overflow: hidden; }
+  li + li { border-top: 1px solid #e1e9ed; }
+  li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 5px 12px; padding: 10px 14px; }
+  .name { font-weight: 600; overflow-wrap: anywhere; }
+  audio { grid-column: 1 / -1; display: block; width: 100%; height: 32px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Raketeneinschläge am Schiffsrumpf</h1>
+  <p>11 ausgewählte Einschläge zum Anhören.</p>
+</header>
+<main>
+  <ul aria-label="Raketeneinschläge am Schiffsrumpf">
+    <li data-file="Treffer/41-Durchschlag-der-Aussenhaut.wav">
+      <span class="name" id="treffer-41">41 · Durchschlag der Außenhaut</span>
+      <audio controls preload="metadata" src="Treffer/41-Durchschlag-der-Aussenhaut.wav" aria-labelledby="treffer-41"></audio>
+    </li>
+    <li data-file="Treffer/42-Massiver-Bugtreffer.wav">
+      <span class="name" id="treffer-42">42 · Massiver Bugtreffer</span>
+      <audio controls preload="metadata" src="Treffer/42-Massiver-Bugtreffer.wav" aria-labelledby="treffer-42"></audio>
+    </li>
+    <li data-file="Treffer/44-Tiefe-Rumpferschuetterung.wav">
+      <span class="name" id="treffer-44">44 · Tiefe Rumpferschütterung</span>
+      <audio controls preload="metadata" src="Treffer/44-Tiefe-Rumpferschuetterung.wav" aria-labelledby="treffer-44"></audio>
+    </li>
+    <li data-file="Treffer/50-Einschlag-in-die-Bordwand.wav">
+      <span class="name" id="treffer-50">50 · Einschlag in die Bordwand</span>
+      <audio controls preload="metadata" src="Treffer/50-Einschlag-in-die-Bordwand.wav" aria-labelledby="treffer-50"></audio>
+    </li>
+    <li data-file="Treffer/51-Tiefe-Panzerverformung.wav">
+      <span class="name" id="treffer-51">51 · Tiefe Panzerverformung</span>
+      <audio controls preload="metadata" src="Treffer/51-Tiefe-Panzerverformung.wav" aria-labelledby="treffer-51"></audio>
+    </li>
+    <li data-file="Treffer/53-Treffer-mit-Nietenscheppern.wav">
+      <span class="name" id="treffer-53">53 · Treffer mit Nietenscheppern</span>
+      <audio controls preload="metadata" src="Treffer/53-Treffer-mit-Nietenscheppern.wav" aria-labelledby="treffer-53"></audio>
+    </li>
+    <li data-file="Treffer/54-Schwerer-Decktreffer.wav">
+      <span class="name" id="treffer-54">54 · Schwerer Decktreffer</span>
+      <audio controls preload="metadata" src="Treffer/54-Schwerer-Decktreffer.wav" aria-labelledby="treffer-54"></audio>
+    </li>
+    <li data-file="Treffer/56-Wuchtiger-Kieltreffer.wav">
+      <span class="name" id="treffer-56">56 · Wuchtiger Kieltreffer</span>
+      <audio controls preload="metadata" src="Treffer/56-Wuchtiger-Kieltreffer.wav" aria-labelledby="treffer-56"></audio>
+    </li>
+    <li data-file="Treffer/57-Treffer-mit-Blechknicken.wav">
+      <span class="name" id="treffer-57">57 · Treffer mit Blechknicken</span>
+      <audio controls preload="metadata" src="Treffer/57-Treffer-mit-Blechknicken.wav" aria-labelledby="treffer-57"></audio>
+    </li>
+    <li data-file="Treffer/59-Rumpftreffer-mit-Nachbeben.wav">
+      <span class="name" id="treffer-59">59 · Rumpftreffer mit Nachbeben</span>
+      <audio controls preload="metadata" src="Treffer/59-Rumpftreffer-mit-Nachbeben.wav" aria-labelledby="treffer-59"></audio>
+    </li>
+    <li data-file="Treffer/60-Schwerster-Rumpfeinschlag.wav">
+      <span class="name" id="treffer-60">60 · Schwerster Rumpfeinschlag</span>
+      <audio controls preload="metadata" src="Treffer/60-Schwerster-Rumpfeinschlag.wav" aria-labelledby="treffer-60"></audio>
+    </li>
+  </ul>
+</main>
+<script type="application/json" id="abgenommene-sounds">
+{
+  "Treffer": [
+    "Treffer/02-Tiefer-Rumpfstoß.wav",
+    "Treffer/03-Heller-Metalltreffer.wav",
+    "Treffer/06-Fernes-Grollen.wav",
+    "Treffer/09-Plattentreffer-mit-Nachhall.wav",
+    "Treffer/11-Krach-mit-Trümmern.wav",
+    "Treffer/14-Original-tief-und-dumpf.wav",
+    "Treffer/15-Original-mit-Echo.wav",
+    "Treffer/41-Durchschlag-der-Aussenhaut.wav",
+    "Treffer/42-Massiver-Bugtreffer.wav",
+    "Treffer/44-Tiefe-Rumpferschuetterung.wav",
+    "Treffer/50-Einschlag-in-die-Bordwand.wav",
+    "Treffer/51-Tiefe-Panzerverformung.wav",
+    "Treffer/53-Treffer-mit-Nietenscheppern.wav",
+    "Treffer/54-Schwerer-Decktreffer.wav",
+    "Treffer/56-Wuchtiger-Kieltreffer.wav",
+    "Treffer/57-Treffer-mit-Blechknicken.wav",
+    "Treffer/59-Rumpftreffer-mit-Nachbeben.wav",
+    "Treffer/60-Schwerster-Rumpfeinschlag.wav"
+  ],
+  "Wasserplatscher": [
+    "Wasserplatscher/01-Schwall-Breiter-Aufprall.wav",
+    "Wasserplatscher/02-Schwall-Tiefer-Eintauchschwall.wav",
+    "Wasserplatscher/03-Schwall-Kompakter-Wasserschlag.wav",
+    "Wasserplatscher/04-Schwall-Masse-mit-langem-Schwall.wav",
+    "Wasserplatscher/05-Schwall-Kräftige-Wasserfontäne.wav",
+    "Wasserplatscher/06-Schwall-Breiter-Klatscher.wav",
+    "Wasserplatscher/07-Schwall-Gedämpfter-Einschlag.wav",
+    "Wasserplatscher/08-Schwall-Schwall-mit-zweiter-Welle.wav",
+    "Wasserplatscher/09-Schwall-Seitlich-wegrollendes-Wasser.wav",
+    "Wasserplatscher/12-Schwall-Weicher-breiter-Schwall.wav",
+    "Wasserplatscher/13-Schwall-Tiefe-Welle-mit-Schaum.wav",
+    "Wasserplatscher/14-Schwall-Scharfe-Wasserkante.wav",
+    "Wasserplatscher/15-Schwall-Voller-Schwall-mit-Auslauf.wav"
+  ]
+}
+</script>
+<script>
+  const players = Array.from(document.querySelectorAll('audio'));
+
+  for (const player of players) {
+    player.addEventListener('play', () => {
+      for (const other of players) {
+        if (other !== player && !other.paused) other.pause();
+      }
+    });
+  }
+
+</script>
+</body>
+</html>

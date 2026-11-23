@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.IntPredicate;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -124,7 +125,7 @@ final class Game {
                 || (multiplayer && expectedTurn != turnNumber)) return false;
         Shot shot = shoot(seat, cell, now);
         Player player = player(seat);
-        player.shots.record(cell, shot.result() == Result.WATER);
+        player.shots.record(cell, shot.result() == Result.WATER, ThreadLocalRandom.current());
         switch (shot.result()) {
             case HIT, SUNK -> player.newHits++;
             case REPEAT -> player.oldHits++;
@@ -134,9 +135,42 @@ final class Game {
 
     boolean computerShot(long now) {
         if (multiplayer || !started || finished || turn != Seat.GUEST || computerWaitMillis(now) > 0) return false;
-        Shot shot = shoot(Seat.GUEST, computer.choose(ThreadLocalRandom.current()), now);
-        computer.observe(shot.cell(), shot.result() != Result.WATER, shot.ship() == null ? 0 : shot.ship().length());
+        shootComputer(Seat.GUEST, computer, ThreadLocalRandom.current(), now);
         return true;
+    }
+
+    private void shootComputer(Seat shooter, ComputerTargeting targeting, RandomGenerator random, long now) {
+        Board target = player(shooter.other()).board;
+        int cell = targeting.choose(random, candidate -> target.ships[candidate] == null);
+        Shot shot = shoot(shooter, cell, now);
+        boolean hit = shot.result() != Result.WATER;
+        ShipPlacement sunkPlacement = shot.result() == Result.SUNK ? target.ships[cell].placement : null;
+        targeting.observe(cell, hit, sunkPlacement, random);
+    }
+
+    static Seat playComputerDuel(Difficulty hostLevel, Difficulty guestLevel, List<ShipPlacement> fleet,
+                                 RandomGenerator random, int shotLimit) {
+        Game game = new Game(hostLevel, hostLevel.label, guestLevel.label, 0);
+        for (Seat seat : Seat.values()) {
+            Board board = game.player(seat).board;
+            if (fleet.size() != board.fleet.size()) throw new IllegalArgumentException("Incomplete fleet");
+            for (int index = 0; index < fleet.size(); index++) {
+                ShipPlacement placement = fleet.get(index);
+                if (placement.length() != board.fleet.get(index).length()
+                        || !game.placeShip(seat, index, placement.start(), placement.direction())) {
+                    throw new IllegalArgumentException("Invalid placement for ship " + index);
+                }
+            }
+            game.start(seat, 0);
+        }
+        List<Integer> lengths = fleet.stream().map(ShipPlacement::length).toList();
+        ComputerTargeting hostTargeting = new ComputerTargeting(lengths, hostLevel);
+        ComputerTargeting guestTargeting = new ComputerTargeting(lengths, guestLevel);
+        for (int shot = 0; shot < shotLimit && !game.finished; shot++) {
+            if (game.turn == Seat.HOST) game.shootComputer(Seat.HOST, hostTargeting, random, 0);
+            else game.shootComputer(Seat.GUEST, guestTargeting, random, 0);
+        }
+        return game.winner;
     }
 
     long computerWaitMillis(long now) {
@@ -190,17 +224,23 @@ final class Game {
                     """.formatted(common, viewer.nation.name(), viewer.board.visibleCells(true, cell -> true),
                     viewer.board.placedCount(), viewer.ready, remaining, viewer.board.setupShips(), Nation.optionsJson());
         }
-        IntPredicate showWater = cell -> difficulty == Difficulty.LEICHT || viewer.board.adjoinsShip(cell);
-        String sunk = opponent.board.sunk.stream().map(Ship::placementJson).collect(Collectors.joining(","));
+        IntPredicate showWater = viewer.board::hasShipWithinTwoCells;
+        Board opponentBoard = opponent.board;
+        boolean revealOpponent = finished && winner == seat.other();
+        String sunk = opponentBoard.sunk.stream().map(Ship::placementJson).collect(Collectors.joining(","));
+        String revealed = revealOpponent ? opponentBoard.remainingFleetJson() : "";
+        int unknown = revealOpponent ? 0 : opponentBoard.placedCount() - opponentBoard.sunk.size();
         return """
                 {%s,"phase":"PLAY","nation":"%s","own":"%s","target":"%s","turn":"%s","winner":%s,"finished":%s,
                  "remainingMillis":%s,"turnNumber":%d,"shots":%d,"newHits":%d,"oldHits":%d,
-                 "ownFleet":[%s],"sunk":[%s],"unknown":%d,"computerWaitMillis":%d,"lastShot":%s}
+                 "ownFleet":[%s],"sunk":[%s],"revealed":[%s],"revealedCountryCode":%s,"unknown":%d,
+                 "computerWaitMillis":%d,"lastShot":%s}
                 """.formatted(common, viewer.nation.label, viewer.board.visibleCells(true, showWater),
-                opponent.board.visibleCells(false, viewer.shots::remembers), relativeSide(turn, seat),
+                opponentBoard.visibleCells(revealOpponent, viewer.shots::remembers), relativeSide(turn, seat),
                 winner == null ? "null" : Json.quote(relativeSide(winner, seat)), finished,
                 remaining, turnNumber, viewer.shots.shots(), viewer.newHits, viewer.oldHits,
-                viewer.board.placedFleetJson(), sunk, opponent.board.placedCount() - opponent.board.sunk.size(),
+                viewer.board.placedFleetJson(), sunk, revealed,
+                revealOpponent ? Json.quote(opponent.nation.countryCode) : "null", unknown,
                 computerWaitMillis(now), lastShot == null ? "null" : lastShot.json(relativeSide(lastShot.shooter(), seat),
                         lastShot.shooter() == seat || lastShot.result() != Result.WATER || showWater.test(lastShot.cell())));
     }
@@ -249,7 +289,7 @@ final class Game {
 
         private Player(String name, Difficulty difficulty) {
             this.name = name;
-            this.shots = new WaterShotHistory(difficulty.playerWaterShotWindow());
+            this.shots = new WaterShotHistory(difficulty.playerWaterGuaranteed, difficulty.playerWaterForgetPercent);
         }
     }
 
@@ -332,6 +372,11 @@ final class Game {
                     .collect(Collectors.joining(","));
         }
 
+        private String remainingFleetJson() {
+            return Arrays.stream(placed).filter(ship -> ship != null && !sunk.contains(ship))
+                    .map(Ship::placementJson).collect(Collectors.joining(","));
+        }
+
         private String setupShips() {
             return IntStream.range(0, fleet.size()).mapToObj(index -> {
                 ShipType type = fleet.get(index);
@@ -357,11 +402,11 @@ final class Game {
                     .allMatch(ship -> ship == null || placement.compatibleWith(ship.placement));
         }
 
-        private boolean adjoinsShip(int cell) {
+        private boolean hasShipWithinTwoCells(int cell) {
             int row = cell / SIZE;
             int col = cell % SIZE;
-            for (int neighborRow = Math.max(0, row - 1); neighborRow <= Math.min(SIZE - 1, row + 1); neighborRow++) {
-                for (int neighborCol = Math.max(0, col - 1); neighborCol <= Math.min(SIZE - 1, col + 1); neighborCol++) {
+            for (int neighborRow = Math.max(0, row - 2); neighborRow <= Math.min(SIZE - 1, row + 2); neighborRow++) {
+                for (int neighborCol = Math.max(0, col - 2); neighborCol <= Math.min(SIZE - 1, col + 2); neighborCol++) {
                     if (ships[neighborRow * SIZE + neighborCol] != null) return true;
                 }
             }

@@ -3,21 +3,25 @@ package de.kj.games;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.function.IntPredicate;
 import java.util.random.RandomGenerator;
 
 import static de.kj.games.Game.SIZE;
 
 final class ComputerTargeting {
+    private static final int GUARANTEED_WATER_FIELDS = 15;
     private final List<Position> positions = new ArrayList<>();
     private final int[] remaining = new int[SIZE + 1];
     private final BitSet hits = new BitSet(SIZE * SIZE);
+    private final BitSet pursuitHits = new BitSet(SIZE * SIZE);
     private final Difficulty difficulty;
     private final WaterShotHistory waterHistory;
     private final List<List<Position>> sinkAlternatives = new ArrayList<>();
 
     ComputerTargeting(List<Integer> lengths, Difficulty difficulty) {
         this.difficulty = difficulty;
-        this.waterHistory = new WaterShotHistory(difficulty.computerWaterShotWindow);
+        waterHistory = new WaterShotHistory(GUARANTEED_WATER_FIELDS, difficulty.computerWaterForgetPercent);
+        if (difficulty != Difficulty.SCHWER) return;
         for (int length : lengths) remaining[length]++;
         for (int length : lengths.stream().distinct().toList()) {
             for (Game.Direction direction : Game.Direction.values()) {
@@ -29,12 +33,18 @@ final class ComputerTargeting {
         }
     }
 
-    void observe(int cell, boolean hit, int sunkLength) {
-        waterHistory.record(cell, !hit);
+    void observe(int cell, boolean hit, ShipPlacement sunkPlacement, RandomGenerator random) {
+        waterHistory.record(cell, !hit, random);
         if (!hit) return;
         hits.set(cell);
-        if (sunkLength == 0) return;
+        if (sunkPlacement == null) {
+            pursuitHits.set(cell);
+            return;
+        }
+        pursuitHits.andNot(cellsOf(sunkPlacement));
+        if (difficulty != Difficulty.SCHWER) return;
 
+        int sunkLength = sunkPlacement.length();
         remaining[sunkLength]--;
         // A ship could only have occupied cells already hit when the sinking was reported.
         sinkAlternatives.add(positions.stream()
@@ -43,10 +53,15 @@ final class ComputerTargeting {
                 .toList());
     }
 
-    int choose(RandomGenerator random) {
-        if (difficulty.randomShotPercent > 0 && random.nextInt(100) < difficulty.randomShotPercent) {
-            return chooseRandom(random);
+    int choose(RandomGenerator random, IntPredicate isWater) {
+        if (pursuitHits.isEmpty() && random.nextInt(100) < difficulty.forcedMissPercent) {
+            BitSet availableWater = unshotCells();
+            for (int cell = availableWater.nextSetBit(0); cell >= 0; cell = availableWater.nextSetBit(cell + 1)) {
+                if (!isWater.test(cell)) availableWater.clear(cell);
+            }
+            if (!availableWater.isEmpty()) return chooseRandom(random, availableWater);
         }
+        if (difficulty != Difficulty.SCHWER) return chooseLocal(random);
         int[] matchedHits = new int[SIZE * SIZE];
         double[] scores = new double[SIZE * SIZE];
         scoreSinkAlternatives(0, new ArrayList<>(), hits, matchedHits, scores);
@@ -66,15 +81,53 @@ final class ComputerTargeting {
         return best.get(random.nextInt(best.size()));
     }
 
-    private int chooseRandom(RandomGenerator random) {
-        BitSet candidates = waterHistory.rememberedCells();
-        candidates.or(hits);
-        candidates.flip(0, SIZE * SIZE);
+    private int chooseLocal(RandomGenerator random) {
+        BitSet unshot = unshotCells();
+        BitSet neighbors = new BitSet(SIZE * SIZE);
+        BitSet lineEnds = new BitSet(SIZE * SIZE);
+        for (int hit = pursuitHits.nextSetBit(0); hit >= 0; hit = pursuitHits.nextSetBit(hit + 1)) {
+            int row = hit / SIZE;
+            int column = hit % SIZE;
+            addNeighbors(unshot, neighbors, lineEnds, column > 0 ? hit - 1 : -1,
+                    column < SIZE - 1 ? hit + 1 : -1);
+            addNeighbors(unshot, neighbors, lineEnds, row > 0 ? hit - SIZE : -1,
+                    row < SIZE - 1 ? hit + SIZE : -1);
+        }
+        if (!lineEnds.isEmpty()) return chooseRandom(random, lineEnds);
+        if (!neighbors.isEmpty()) return chooseRandom(random, neighbors);
+
+        BitSet checkerboard = new BitSet(SIZE * SIZE);
+        for (int cell = unshot.nextSetBit(0); cell >= 0; cell = unshot.nextSetBit(cell + 1)) {
+            if ((cell / SIZE + cell % SIZE) % 2 == 0) checkerboard.set(cell);
+        }
+        return chooseRandom(random, checkerboard.isEmpty() ? unshot : checkerboard);
+    }
+
+    private void addNeighbors(BitSet unshot, BitSet neighbors, BitSet lineEnds, int before, int after) {
+        if (before >= 0 && unshot.get(before)) {
+            neighbors.set(before);
+            if (after >= 0 && pursuitHits.get(after)) lineEnds.set(before);
+        }
+        if (after >= 0 && unshot.get(after)) {
+            neighbors.set(after);
+            if (before >= 0 && pursuitHits.get(before)) lineEnds.set(after);
+        }
+    }
+
+    private BitSet unshotCells() {
+        BitSet unshot = waterHistory.rememberedCells();
+        unshot.or(hits);
+        unshot.flip(0, SIZE * SIZE);
+        return unshot;
+    }
+
+    private static int chooseRandom(RandomGenerator random, BitSet candidates) {
         int offset = random.nextInt(candidates.cardinality());
         int cell = candidates.nextSetBit(0);
         for (int i = 0; i < offset; i++) cell = candidates.nextSetBit(cell + 1);
         return cell;
     }
+
     private void scoreSinkAlternatives(int index, List<ShipPlacement> sunk, BitSet openHits,
                                        int[] matchedHits, double[] scores) {
         if (index == sinkAlternatives.size()) {
