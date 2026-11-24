@@ -6,6 +6,8 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -230,7 +232,9 @@ public final class Main {
                 case "/style.css" -> "style.css";
                 case "/game.js" -> "game.js";
                 default -> path.matches("/ships/[A-Za-z-]+\\.svg")
-                        || path.matches("/sounds/(?:hit|water)(?:-[0-9]{2})?\\.wav") ? path.substring(1) : null;
+                        || path.matches("/sounds/(?:hit|water)(?:-[0-9]{2})?\\.wav")
+                        || path.equals("/sounds/result-win.wav")
+                        || path.matches("/sounds/sos/SOS-[0-9]{2}-[A-Za-z-]+\\.wav") ? path.substring(1) : null;
             };
             if (resource == null || !exchange.getRequestMethod().equals("GET")) {
                 exchange.sendResponseHeaders(404, -1);
@@ -242,6 +246,14 @@ public final class Main {
                 case "game.js" -> "text/javascript";
                 default -> resource.startsWith("sounds/") ? "audio/wav" : "image/svg+xml";
             };
+            if (resource.equals("sounds/result-win.wav")) {
+                exchange.getResponseHeaders().set("Cache-Control", "no-store");
+                byte[] localMusic = localVictoryMusic();
+                if (localMusic != null) {
+                    send(exchange, 200, type, localMusic);
+                    return;
+                }
+            }
             try (var input = Main.class.getResourceAsStream("/web/" + resource)) {
                 if (input == null) {
                     exchange.sendResponseHeaders(404, -1);
@@ -249,6 +261,17 @@ public final class Main {
                 }
                 send(exchange, 200, type, input.readAllBytes());
             }
+        }
+    }
+
+    private static byte[] localVictoryMusic() {
+        String appData = System.getenv("LOCALAPPDATA");
+        if (appData == null || appData.isBlank()) return null;
+        Path file = Path.of(appData, "Schiffeversenken", "result-win.wav");
+        try {
+            return Files.isReadable(file) ? Files.readAllBytes(file) : null;
+        } catch (IOException unavailable) {
+            return null;
         }
     }
 

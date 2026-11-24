@@ -9,9 +9,20 @@
   * { box-sizing: border-box; }
   body { margin: 0; }
   header { background: #102e40; color: white; padding: 26px max(20px, calc((100% - 720px)/2)); }
-  h1, p { margin: 0; }
+  h1, h2, p { margin: 0; }
   h1 { font-size: clamp(1.65rem, 4vw, 2.35rem); line-height: 1.2; margin-bottom: 8px; }
   header p { color: #d1e5ee; }
+  header nav { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-top: .65rem; }
+  header nav a { color: #d1e5ee; }
+  section + section { margin-top: 2rem; }
+  section h2 { font-size: 1.25rem; margin-bottom: .65rem; }
+  .duration { font-size: .875rem; color: #466072; font-variant-numeric: tabular-nums; }
+  .choice { display: flex; align-items: center; gap: .65rem; }
+  .keep { display: inline-flex; align-items: center; gap: .3rem; min-height: 2rem; cursor: pointer; }
+  .keep input { width: 1.2rem; height: 1.2rem; margin: 0; cursor: pointer; }
+  #versenken li:has(input:checked) { background: #e8f6ef; }
+  .selection { margin-bottom: .65rem; color: #07584b; overflow-wrap: anywhere; }
+  @media (max-width: 390px) { #versenken li { grid-template-columns: minmax(0, 1fr); } }
   main { max-width: 760px; margin: auto; padding: 20px; }
   ul { list-style: none; margin: 0; padding: 0; background: white; border: 1px solid #cbdbe2; border-radius: 12px; overflow: hidden; }
   li + li { border-top: 1px solid #e1e9ed; }
@@ -22,56 +33,229 @@
 </head>
 <body>
 <header>
-  <h1>Raketeneinschläge am Schiffsrumpf</h1>
-  <p>11 ausgewählte Einschläge zum Anhören.</p>
+  <h1>Soundauswahl für Schiffeversenken</h1>
+  <p>20 Untergangsklänge von drei bis fünf Sekunden. Vier Hörproben enthalten ein Schiffshorn.</p>
+  <nav aria-label="Klanggruppen">
+    <a href="#versenken">Schiff versenkt</a>
+    <a href="#treffer">Raketeneinschläge</a>
+  </nav>
 </header>
 <main>
-  <ul aria-label="Raketeneinschläge am Schiffsrumpf">
-    <li data-file="Treffer/41-Durchschlag-der-Aussenhaut.wav">
-      <span class="name" id="treffer-41">41 · Durchschlag der Außenhaut</span>
-      <audio controls preload="metadata" src="Treffer/41-Durchschlag-der-Aussenhaut.wav" aria-labelledby="treffer-41"></audio>
-    </li>
-    <li data-file="Treffer/42-Massiver-Bugtreffer.wav">
-      <span class="name" id="treffer-42">42 · Massiver Bugtreffer</span>
-      <audio controls preload="metadata" src="Treffer/42-Massiver-Bugtreffer.wav" aria-labelledby="treffer-42"></audio>
-    </li>
-    <li data-file="Treffer/44-Tiefe-Rumpferschuetterung.wav">
-      <span class="name" id="treffer-44">44 · Tiefe Rumpferschütterung</span>
-      <audio controls preload="metadata" src="Treffer/44-Tiefe-Rumpferschuetterung.wav" aria-labelledby="treffer-44"></audio>
-    </li>
-    <li data-file="Treffer/50-Einschlag-in-die-Bordwand.wav">
-      <span class="name" id="treffer-50">50 · Einschlag in die Bordwand</span>
-      <audio controls preload="metadata" src="Treffer/50-Einschlag-in-die-Bordwand.wav" aria-labelledby="treffer-50"></audio>
-    </li>
-    <li data-file="Treffer/51-Tiefe-Panzerverformung.wav">
-      <span class="name" id="treffer-51">51 · Tiefe Panzerverformung</span>
-      <audio controls preload="metadata" src="Treffer/51-Tiefe-Panzerverformung.wav" aria-labelledby="treffer-51"></audio>
-    </li>
-    <li data-file="Treffer/53-Treffer-mit-Nietenscheppern.wav">
-      <span class="name" id="treffer-53">53 · Treffer mit Nietenscheppern</span>
-      <audio controls preload="metadata" src="Treffer/53-Treffer-mit-Nietenscheppern.wav" aria-labelledby="treffer-53"></audio>
-    </li>
-    <li data-file="Treffer/54-Schwerer-Decktreffer.wav">
-      <span class="name" id="treffer-54">54 · Schwerer Decktreffer</span>
-      <audio controls preload="metadata" src="Treffer/54-Schwerer-Decktreffer.wav" aria-labelledby="treffer-54"></audio>
-    </li>
-    <li data-file="Treffer/56-Wuchtiger-Kieltreffer.wav">
-      <span class="name" id="treffer-56">56 · Wuchtiger Kieltreffer</span>
-      <audio controls preload="metadata" src="Treffer/56-Wuchtiger-Kieltreffer.wav" aria-labelledby="treffer-56"></audio>
-    </li>
-    <li data-file="Treffer/57-Treffer-mit-Blechknicken.wav">
-      <span class="name" id="treffer-57">57 · Treffer mit Blechknicken</span>
-      <audio controls preload="metadata" src="Treffer/57-Treffer-mit-Blechknicken.wav" aria-labelledby="treffer-57"></audio>
-    </li>
-    <li data-file="Treffer/59-Rumpftreffer-mit-Nachbeben.wav">
-      <span class="name" id="treffer-59">59 · Rumpftreffer mit Nachbeben</span>
-      <audio controls preload="metadata" src="Treffer/59-Rumpftreffer-mit-Nachbeben.wav" aria-labelledby="treffer-59"></audio>
-    </li>
-    <li data-file="Treffer/60-Schwerster-Rumpfeinschlag.wav">
-      <span class="name" id="treffer-60">60 · Schwerster Rumpfeinschlag</span>
-      <audio controls preload="metadata" src="Treffer/60-Schwerster-Rumpfeinschlag.wav" aria-labelledby="treffer-60"></audio>
-    </li>
-  </ul>
+  <section id="versenken" aria-labelledby="versenken-heading">
+    <h2 id="versenken-heading">Schiff versenkt</h2>
+    <p class="selection" id="sinking-selection" role="status">Noch keine Hörprobe markiert.</p>
+    <ul aria-labelledby="versenken-heading">
+      <li data-file="Versenken/01-Kurzer-Eintauchschwall.wav">
+        <span class="name" id="versenken-01">V-01 · Kurzer Eintauchschwall</span>
+        <span class="choice">
+          <span class="duration">3,05 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-01" aria-describedby="versenken-01"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/01-Kurzer-Eintauchschwall.wav" aria-labelledby="versenken-01"></audio>
+      </li>
+      <li data-file="Versenken/02-Spritzer-und-drei-Blasen.wav">
+        <span class="name" id="versenken-02">V-02 · Spritzer und drei Blasen</span>
+        <span class="choice">
+          <span class="duration">3,15 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-02" aria-describedby="versenken-02"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/02-Spritzer-und-drei-Blasen.wav" aria-labelledby="versenken-02"></audio>
+      </li>
+      <li data-file="Versenken/03-Gedaempftes-Abtauchen.wav">
+        <span class="name" id="versenken-03">V-03 · Gedämpftes Abtauchen</span>
+        <span class="choice">
+          <span class="duration">3,35 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-03" aria-describedby="versenken-03"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/03-Gedaempftes-Abtauchen.wav" aria-labelledby="versenken-03"></audio>
+      </li>
+      <li data-file="Versenken/04-Kielkipper.wav">
+        <span class="name" id="versenken-04">V-04 · Kielkipper · mit Horn</span>
+        <span class="choice">
+          <span class="duration">3,40 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-04" aria-describedby="versenken-04"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/04-Kielkipper.wav" aria-labelledby="versenken-04"></audio>
+      </li>
+      <li data-file="Versenken/05-Kurzer-Strudel.wav">
+        <span class="name" id="versenken-05">V-05 · Kurzer Strudel</span>
+        <span class="choice">
+          <span class="duration">3,55 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-05" aria-describedby="versenken-05"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/05-Kurzer-Strudel.wav" aria-labelledby="versenken-05"></audio>
+      </li>
+      <li data-file="Versenken/06-Bordwand-knickt-ein.wav">
+        <span class="name" id="versenken-06">V-06 · Bordwand knickt ein</span>
+        <span class="choice">
+          <span class="duration">3,65 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-06" aria-describedby="versenken-06"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/06-Bordwand-knickt-ein.wav" aria-labelledby="versenken-06"></audio>
+      </li>
+      <li data-file="Versenken/07-Brechender-Kiel.wav">
+        <span class="name" id="versenken-07">V-07 · Brechender Kiel</span>
+        <span class="choice">
+          <span class="duration">3,70 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-07" aria-describedby="versenken-07"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/07-Brechender-Kiel.wav" aria-labelledby="versenken-07"></audio>
+      </li>
+      <li data-file="Versenken/08-Schott-gibt-nach.wav">
+        <span class="name" id="versenken-08">V-08 · Schott gibt nach</span>
+        <span class="choice">
+          <span class="duration">3,85 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-08" aria-describedby="versenken-08"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/08-Schott-gibt-nach.wav" aria-labelledby="versenken-08"></audio>
+      </li>
+      <li data-file="Versenken/09-Scharfes-Metall-langer-Schwall.wav">
+        <span class="name" id="versenken-09">V-09 · Scharfes Metall, langer Schwall · mit Horn</span>
+        <span class="choice">
+          <span class="duration">4,00 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-09" aria-describedby="versenken-09"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/09-Scharfes-Metall-langer-Schwall.wav" aria-labelledby="versenken-09"></audio>
+      </li>
+      <li data-file="Versenken/10-Rumpfbruch-in-zwei-Stufen.wav">
+        <span class="name" id="versenken-10">V-10 · Rumpfbruch in zwei Stufen</span>
+        <span class="choice">
+          <span class="duration">4,15 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-10" aria-describedby="versenken-10"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/10-Rumpfbruch-in-zwei-Stufen.wav" aria-labelledby="versenken-10"></audio>
+      </li>
+      <li data-file="Versenken/11-Langsames-Volllaufen.wav">
+        <span class="name" id="versenken-11">V-11 · Langsames Volllaufen</span>
+        <span class="choice">
+          <span class="duration">4,20 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-11" aria-describedby="versenken-11"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/11-Langsames-Volllaufen.wav" aria-labelledby="versenken-11"></audio>
+      </li>
+      <li data-file="Versenken/12-Welle-ueber-dem-Deck.wav">
+        <span class="name" id="versenken-12">V-12 · Welle über dem Deck</span>
+        <span class="choice">
+          <span class="duration">3,80 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-12" aria-describedby="versenken-12"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/12-Welle-ueber-dem-Deck.wav" aria-labelledby="versenken-12"></audio>
+      </li>
+      <li data-file="Versenken/13-Breite-Nachlaufwelle.wav">
+        <span class="name" id="versenken-13">V-13 · Breite Nachlaufwelle</span>
+        <span class="choice">
+          <span class="duration">4,45 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-13" aria-describedby="versenken-13"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/13-Breite-Nachlaufwelle.wav" aria-labelledby="versenken-13"></audio>
+      </li>
+      <li data-file="Versenken/14-Blasenwirbel.wav">
+        <span class="name" id="versenken-14">V-14 · Blasenwirbel</span>
+        <span class="choice">
+          <span class="duration">3,60 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-14" aria-describedby="versenken-14"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/14-Blasenwirbel.wav" aria-labelledby="versenken-14"></audio>
+      </li>
+      <li data-file="Versenken/15-Dumpfer-Sog.wav">
+        <span class="name" id="versenken-15">V-15 · Dumpfer Sog</span>
+        <span class="choice">
+          <span class="duration">3,95 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-15" aria-describedby="versenken-15"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/15-Dumpfer-Sog.wav" aria-labelledby="versenken-15"></audio>
+      </li>
+      <li data-file="Versenken/16-Tiefes-Schlachtschiffgrollen.wav">
+        <span class="name" id="versenken-16">V-16 · Tiefes Schlachtschiffgrollen · mit Horn</span>
+        <span class="choice">
+          <span class="duration">4,55 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-16" aria-describedby="versenken-16"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/16-Tiefes-Schlachtschiffgrollen.wav" aria-labelledby="versenken-16"></audio>
+      </li>
+      <li data-file="Versenken/17-Schwerer-Kiel-mit-Nachbeben.wav">
+        <span class="name" id="versenken-17">V-17 · Schwerer Kiel mit Nachbeben</span>
+        <span class="choice">
+          <span class="duration">4,60 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-17" aria-describedby="versenken-17"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/17-Schwerer-Kiel-mit-Nachbeben.wav" aria-labelledby="versenken-17"></audio>
+      </li>
+      <li data-file="Versenken/18-Flugdeck-taucht-ab.wav">
+        <span class="name" id="versenken-18">V-18 · Flugdeck taucht ab · mit Horn</span>
+        <span class="choice">
+          <span class="duration">4,75 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-18" aria-describedby="versenken-18"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/18-Flugdeck-taucht-ab.wav" aria-labelledby="versenken-18"></audio>
+      </li>
+      <li data-file="Versenken/19-Letzte-Luft-aus-der-Tiefe.wav">
+        <span class="name" id="versenken-19">V-19 · Letzte Luft aus der Tiefe</span>
+        <span class="choice">
+          <span class="duration">4,45 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-19" aria-describedby="versenken-19"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/19-Letzte-Luft-aus-der-Tiefe.wav" aria-labelledby="versenken-19"></audio>
+      </li>
+      <li data-file="Versenken/20-Langer-Untergang-mit-Brandung.wav">
+        <span class="name" id="versenken-20">V-20 · Langer Untergang mit Brandung</span>
+        <span class="choice">
+          <span class="duration">4,95 s</span>
+          <label class="keep"><input type="checkbox" name="keep-sinking" value="V-20" aria-describedby="versenken-20"> Behalten</label>
+        </span>
+        <audio controls preload="none" src="Versenken/20-Langer-Untergang-mit-Brandung.wav" aria-labelledby="versenken-20"></audio>
+      </li>
+    </ul>
+  </section>
+  <section id="treffer" aria-labelledby="treffer-heading">
+    <h2 id="treffer-heading">Raketeneinschläge am Schiffsrumpf</h2>
+    <ul aria-labelledby="treffer-heading">
+      <li data-file="Treffer/41-Durchschlag-der-Aussenhaut.wav">
+        <span class="name" id="treffer-41">41 · Durchschlag der Außenhaut</span>
+        <audio controls preload="metadata" src="Treffer/41-Durchschlag-der-Aussenhaut.wav" aria-labelledby="treffer-41"></audio>
+      </li>
+      <li data-file="Treffer/42-Massiver-Bugtreffer.wav">
+        <span class="name" id="treffer-42">42 · Massiver Bugtreffer</span>
+        <audio controls preload="metadata" src="Treffer/42-Massiver-Bugtreffer.wav" aria-labelledby="treffer-42"></audio>
+      </li>
+      <li data-file="Treffer/44-Tiefe-Rumpferschuetterung.wav">
+        <span class="name" id="treffer-44">44 · Tiefe Rumpferschütterung</span>
+        <audio controls preload="metadata" src="Treffer/44-Tiefe-Rumpferschuetterung.wav" aria-labelledby="treffer-44"></audio>
+      </li>
+      <li data-file="Treffer/50-Einschlag-in-die-Bordwand.wav">
+        <span class="name" id="treffer-50">50 · Einschlag in die Bordwand</span>
+        <audio controls preload="metadata" src="Treffer/50-Einschlag-in-die-Bordwand.wav" aria-labelledby="treffer-50"></audio>
+      </li>
+      <li data-file="Treffer/51-Tiefe-Panzerverformung.wav">
+        <span class="name" id="treffer-51">51 · Tiefe Panzerverformung</span>
+        <audio controls preload="metadata" src="Treffer/51-Tiefe-Panzerverformung.wav" aria-labelledby="treffer-51"></audio>
+      </li>
+      <li data-file="Treffer/53-Treffer-mit-Nietenscheppern.wav">
+        <span class="name" id="treffer-53">53 · Treffer mit Nietenscheppern</span>
+        <audio controls preload="metadata" src="Treffer/53-Treffer-mit-Nietenscheppern.wav" aria-labelledby="treffer-53"></audio>
+      </li>
+      <li data-file="Treffer/54-Schwerer-Decktreffer.wav">
+        <span class="name" id="treffer-54">54 · Schwerer Decktreffer</span>
+        <audio controls preload="metadata" src="Treffer/54-Schwerer-Decktreffer.wav" aria-labelledby="treffer-54"></audio>
+      </li>
+      <li data-file="Treffer/56-Wuchtiger-Kieltreffer.wav">
+        <span class="name" id="treffer-56">56 · Wuchtiger Kieltreffer</span>
+        <audio controls preload="metadata" src="Treffer/56-Wuchtiger-Kieltreffer.wav" aria-labelledby="treffer-56"></audio>
+      </li>
+      <li data-file="Treffer/57-Treffer-mit-Blechknicken.wav">
+        <span class="name" id="treffer-57">57 · Treffer mit Blechknicken</span>
+        <audio controls preload="metadata" src="Treffer/57-Treffer-mit-Blechknicken.wav" aria-labelledby="treffer-57"></audio>
+      </li>
+      <li data-file="Treffer/59-Rumpftreffer-mit-Nachbeben.wav">
+        <span class="name" id="treffer-59">59 · Rumpftreffer mit Nachbeben</span>
+        <audio controls preload="metadata" src="Treffer/59-Rumpftreffer-mit-Nachbeben.wav" aria-labelledby="treffer-59"></audio>
+      </li>
+      <li data-file="Treffer/60-Schwerster-Rumpfeinschlag.wav">
+        <span class="name" id="treffer-60">60 · Schwerster Rumpfeinschlag</span>
+        <audio controls preload="metadata" src="Treffer/60-Schwerster-Rumpfeinschlag.wav" aria-labelledby="treffer-60"></audio>
+      </li>
+    </ul>
+  </section>
 </main>
 <script type="application/json" id="abgenommene-sounds">
 {
@@ -109,10 +293,49 @@
     "Wasserplatscher/13-Schwall-Tiefe-Welle-mit-Schaum.wav",
     "Wasserplatscher/14-Schwall-Scharfe-Wasserkante.wav",
     "Wasserplatscher/15-Schwall-Voller-Schwall-mit-Auslauf.wav"
+  ],
+  "Versenken": [
+    "Versenken/04-Kielkipper.wav",
+    "Versenken/09-Scharfes-Metall-langer-Schwall.wav",
+    "Versenken/10-Rumpfbruch-in-zwei-Stufen.wav",
+    "Versenken/11-Langsames-Volllaufen.wav",
+    "Versenken/13-Breite-Nachlaufwelle.wav",
+    "Versenken/14-Blasenwirbel.wav",
+    "Versenken/15-Dumpfer-Sog.wav",
+    "Versenken/16-Tiefes-Schlachtschiffgrollen.wav",
+    "Versenken/17-Schwerer-Kiel-mit-Nachbeben.wav",
+    "Versenken/18-Flugdeck-taucht-ab.wav",
+    "Versenken/19-Letzte-Luft-aus-der-Tiefe.wav"
   ]
 }
 </script>
 <script>
+  const keepChecks = Array.from(document.querySelectorAll("input[name=keep-sinking]"));
+  const selection = document.querySelector("#sinking-selection");
+  const storageKey = "schiffeversenken-sinking-selection";
+
+  function updateSelection(save) {
+    const selected = keepChecks.filter(input => input.checked).map(input => input.value);
+    selection.textContent = selected.length ? "Markiert · " + selected.join(", ") : "Noch keine Hörprobe markiert.";
+    if (!save) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(selected));
+    } catch {
+      // The current tab still retains the selection if local storage is unavailable.
+    }
+  }
+
+  try {
+    const stored = JSON.parse(localStorage.getItem(storageKey));
+    if (Array.isArray(stored)) {
+      for (const input of keepChecks) input.checked = stored.includes(input.value);
+    }
+  } catch {
+    // Keep the current form state if local storage is unavailable.
+  }
+  for (const input of keepChecks) input.addEventListener("change", () => updateSelection(true));
+  updateSelection(false);
+
   const players = Array.from(document.querySelectorAll('audio'));
 
   for (const player of players) {

@@ -9,7 +9,6 @@ final class WaterShotHistory {
     private final int guaranteed;
     private final int forgetPercent;
     private final BitSet water = new BitSet(SIZE * SIZE);
-    private int shots;
 
     WaterShotHistory(int guaranteed, int forgetPercent) {
         this.guaranteed = guaranteed;
@@ -17,7 +16,6 @@ final class WaterShotHistory {
     }
 
     void record(int cell, boolean isWater, RandomGenerator random) {
-        shots++;
         if (!isWater || water.get(cell)) return;
 
         int known = water.cardinality();
@@ -26,10 +24,6 @@ final class WaterShotHistory {
             water.clear(forgotten);
         }
         water.set(cell);
-    }
-
-    int shots() {
-        return shots;
     }
 
     boolean remembers(int cell) {

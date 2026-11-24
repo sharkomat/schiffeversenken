@@ -52,24 +52,31 @@
             <p id="placement-timer" class="countdown" hidden></p>
             <label for="nation">Nation</label>
             <select id="nation"></select>
-            <p class="setup-help">Wählen Sie ein Schiff und klicken Sie aufs Raster oder ziehen Sie es auf ein Feld.</p>
+            <p class="setup-help">Wähle ein Schiff und klicke aufs Raster oder zieh es auf ein Feld.</p>
             <ul id="ship-list" class="ship-list"></ul>
-            <button type="button" class="setup-button" id="orientation">Ausrichtung: waagerecht</button>
-            <p id="setup-feedback" class="feedback" role="status"></p>
-            <div class="placement-actions">
-                <button type="button" class="setup-button" id="random-all">Flotte zufällig setzen</button>
-                <button type="button" class="setup-button" id="random-remaining" hidden>fehlende Schiffe ergänzen</button>
-                <button type="button" class="play" id="finish" disabled>Platzierung abschließen</button>
-            </div>
         </div>
         <div class="target-panel">
-            <h2 id="placement-heading">Eigenes Spielfeld</h2>
+            <div class="placement-heading">
+                <h2 id="placement-heading">Eigenes Spielfeld</h2>
+                <button type="button" class="setup-button orientation-button" id="orientation" aria-label="Ausrichtung: Waagerecht">
+                    <span class="orientation-icon" aria-hidden="true">↔</span>
+                    <span class="orientation-label">Waagerecht</span>
+                </button>
+            </div>
             <div id="placement" class="board target" aria-labelledby="placement-heading"></div>
+            <div class="placement-actions">
+                <div class="placement-random">
+                    <button type="button" class="setup-button" id="random-all">Flotte zufällig setzen</button>
+                    <button type="button" class="setup-button" id="random-remaining" hidden>Fehlende Schiffe ergänzen</button>
+                </div>
+                <p id="setup-feedback" class="feedback" role="status"></p>
+                <button type="button" class="play" id="finish" disabled>Platzierung abschließen</button>
+            </div>
         </div>
     </section>
     <div id="game-screen" class="game-layout" hidden>
         <section class="turn-panel" aria-label="Zugstatus">
-            <h2 id="status" role="status">Sie sind dran</h2>
+            <h2 id="status" role="status">Du bist drain</h2>
             <p id="shot-timer" class="countdown" hidden></p>
             <button type="button" id="resume" class="resume" hidden>Computerzug fortsetzen</button>
         </section>
@@ -86,19 +93,22 @@
         <aside class="sidebar">
             <section class="tablet" aria-label="Protokolltafel">
                 <p id="feedback" class="feedback" aria-live="polite"></p>
-                <dl class="counts">
-                    <div><dt>Abgegebene Schüsse</dt><dd id="shots">0</dd></div>
-                    <div><dt>Neue Treffer</dt><dd id="new-hits">0</dd></div>
-                    <div><dt>Redundante Treffer</dt><dd id="old-hits">0</dd></div>
-                </dl>
                 <div class="fleet-columns">
                     <section class="fleet" aria-labelledby="opponent-fleet-heading">
                         <h2 id="opponent-fleet-heading">Gegnerische Flotte</h2>
+                        <dl class="counts">
+                            <div><dt>Abgegebene Schüsse</dt><dd id="opponent-shots">0</dd></div>
+                            <div><dt>Treffer</dt><dd id="opponent-hits">0</dd></div>
+                        </dl>
                         <p id="unknown">5 unbekannte Schiffe</p>
                         <ul id="sunk" class="fleet-list" aria-label="Versenkte Schiffe"></ul>
                     </section>
-                    <section class="fleet" aria-labelledby="own-fleet-heading">
+                    <section class="fleet player-fleet" aria-labelledby="own-fleet-heading">
                         <h2 id="own-fleet-heading">Eigene Flotte</h2>
+                        <dl class="counts">
+                            <div><dt>Abgegebene Schüsse</dt><dd id="shots">0</dd></div>
+                            <div><dt>Treffer</dt><dd id="hits">0</dd></div>
+                        </dl>
                         <ul id="own-fleet" class="fleet-list"></ul>
                     </section>
                 </div>
@@ -112,9 +122,11 @@
 </main>
 <dialog id="result-dialog" class="result-dialog" aria-labelledby="result-heading">
     <h2 id="result-heading" class="result-heading"></h2>
+    <ul id="result-fleet" class="result-fleet" aria-label="Wiederholung der Schlacht"></ul>
+    <div class="result-water" aria-hidden="true"></div>
     <div class="result-details">
-        <ul id="result-fleet" class="result-fleet" aria-label="Verbliebene gegnerische Schiffe" hidden></ul>
         <form method="dialog">
+            <button type="button" class="setup-button" id="result-replay">Abspann erneut abspielen</button>
             <button type="submit" class="play" autofocus>Spielfeld ansehen</button>
         </form>
     </div>

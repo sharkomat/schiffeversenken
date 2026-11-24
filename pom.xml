@@ -25,6 +25,13 @@
                     <include>*.svg</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>Dokumente/Sounds/sos</directory>
+                <targetPath>web/sounds/sos</targetPath>
+                <includes>
+                    <include>SOS-*.wav</include>
+                </includes>
+            </resource>
         </resources>
     </build>
 </project>

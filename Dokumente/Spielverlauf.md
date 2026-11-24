@@ -20,7 +20,7 @@ Das eigene Spielfeld und das gegnerische Zielraster verwenden standardmäßig je
 
 Vor der Platzierung stehen beiden Spielern dieselben Schiffslängen zur Verfügung. Jeder Spieler hat ein Schiff mit fünf Feldern, eines mit vier, zwei mit je drei und eines mit zwei Feldern zur Auswahl. Das sind insgesamt 17 Schiffsfelder pro Spieler. Welche Schiffstypen und Klassen diese Längen repräsentieren, darf je nach Nation unterschiedlich sein. Für Platzierung und Treffer zählt die Länge in Spielfeldern. Die recherchierten Vorbilder stehen in [Schiffstypen](Schiffstypen.md).
 
-Mit dem Start einer Partie beginnt die Platzierungsphase. Im Mehrspielerspiel haben beide Spieler **60 Sekunden**, um ihre Schiffe verdeckt zu platzieren. Ein Countdown zeigt die verbleibende Zeit.
+Mit dem Start einer Partie beginnt die Platzierungsphase. Der Computer erhält bei jeder neuen Partie eine zufällig ausgewählte Nation aus der Flottenauswahl. Im Mehrspielerspiel haben beide Spieler **60 Sekunden**, um ihre Schiffe verdeckt zu platzieren. Ein Countdown zeigt die verbleibende Zeit.
 
 Die Schiffe werden waagerecht oder senkrecht platziert. Alle Schiffsfelder müssen innerhalb des Rasters liegen. Jedes Feld kann nur von einem Schiff belegt sein. Eine Berührung über eine Kante oder Ecke ist nur erlaubt, wenn die Schiffe parallel in benachbarten Zeilen oder Spalten liegen. Quer zueinander oder direkt hintereinander müssen sie Abstand halten.
 
@@ -36,27 +36,22 @@ Für die normale Zielsuche verwendet der Computer seine bisherigen Schussmeldung
 
 - **Wasser** erscheint bei einem Schuss auf ein leeres Feld, auch wenn es schon einmal beschossen wurde. Danach ist der andere Spieler am Zug.
 - **Neuer Treffer** erscheint, wenn ein Schiffsfeld zum ersten Mal getroffen wird.
-- **Redundanter Treffer** erscheint, wenn ein bereits getroffenes Schiffsfeld erneut getroffen wird. Der Schuss verursacht keinen weiteren Schaden und der Spieler darf erneut schießen.
-- **Schiff versenkt** erscheint, wenn das letzte ungetroffene Feld eines Schiffs getroffen wird. Dieser Schuss zählt als neuer Treffer und gibt den Schiffstyp bekannt.
+- Bei einem erneuten Schuss auf ein bereits getroffenes Schiffsfeld darf der Spieler noch einmal schießen. Das Schiff nimmt dabei keinen weiteren Schaden.
+- **Schiff versenkt** erscheint, wenn das letzte ungetroffene Feld eines Schiffs getroffen wird. Dieser Schuss zählt als neuer Treffer und gibt den Schiffstyp bekannt. Mit dem Ergebnis ertönt zufällig eines der sieben SOS-Sendesignale.
 
 ## Protokolltafel
 
-Die eigene Protokolltafel zeigt die Zähler für die laufende Partie.
+Die Protokolltafel zeigt links den Gegner und rechts den Spieler. In beiden Bereichen stehen die Zahlen direkt neben den jeweiligen Bezeichnungen.
 
-- **Abgegebene Schüsse** zählt jeden eigenen Schuss auf eine gültige Koordinate, einschließlich Wasser, neuer Treffer und redundanter Treffer.
-- **Neue Treffer** zählt jedes erstmals getroffene gegnerische Schiffsfeld einmal. Der Treffer, der ein Schiff versenkt, zählt mit.
-- **Redundante Treffer** zählt jeden erneuten Treffer auf ein bereits getroffenes gegnerisches Schiffsfeld. Zwei weitere Schüsse auf dasselbe getroffene Feld ergeben zwei redundante Treffer.
+- **Abgegebene Schüsse** zählt alle gültigen Schüsse der jeweiligen Seite, einschließlich Wasserschüssen und Wiederholungen.
+- **Treffer** zählt jedes erstmals getroffene Schiffsfeld der anderen Seite einmal. Der Treffer, der ein Schiff versenkt, zählt mit.
 
 Die Zähler erscheinen ohne Koordinaten. Erst beim Versenken erfährt der schießende Spieler den Typ des getroffenen Schiffs. Das versenkte Schiff erscheint mit seinem **Typ**, seiner **Länge in Feldern** und dem Status **Versenkt** auf der Tafel. Der Eintrag bleibt in allen Schwierigkeitsstufen bis zum Ende der Partie sichtbar. Die Anzahl der verbleibenden unbekannten gegnerischen Schiffe bezieht sich auf die tatsächlich platzierte Flotte.
 
-> **Abgegebene Schüsse** 8 
-> **Neue Treffer** 3 
-> **Redundante Treffer** 1<br>
-> 
-> **Versenkte Schiffe:**<br>
-> **Kreuzer** · 3 Felder · **Versenkt**  
-> 
-> **Unbekannte Schiffe verbleibend** 4
+| Gegnerische Flotte | Eigene Flotte |
+| --- | --- |
+| Abgegebene Schüsse **7** | Abgegebene Schüsse **8** |
+| Treffer **2** | Treffer **3** |
 
 Unter dem Zielraster zeigt das **eigene Raster** die Schiffspositionen. Die Sichtbarkeitsregel für gegnerische Schüsse gilt auf allen Stufen gleich.
 
@@ -91,4 +86,4 @@ Sobald ein Spieler das letzte gegnerische Schiff versenkt, endet die Partie und 
 
 Nach einer Niederlage zeigt das Zielraster alle übrigen gegnerischen Schiffe mit ihren SVG-Grafiken an ihrer tatsächlichen Position und Ausrichtung.
 
-Das Ergebnis erscheint groß in der Fenstermitte. Bei einer Niederlage fahren die verbliebenen gegnerischen Schiffe von links ins Bild. Flammen markieren ihre bereits getroffenen Abschnitte. Hinter jedem Schiff hängt ein Ballon mit dem Länderkennzeichen seiner Nation. Über „Spielfeld ansehen“ lässt sich die Ergebnisansicht schließen.
+Der Abspann zeigt beide Flotten und spielt die Schiffstreffer in 15 Sekunden in ihrer tatsächlichen Reihenfolge ab. Versenkte Schiffe sinken. Die überlebenden Schiffe der Siegerflotte erreichen die Mitte der Wasserlinie. Über „Spielfeld ansehen“ lässt sich die Ergebnisansicht schließen.

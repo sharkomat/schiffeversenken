@@ -2,6 +2,7 @@ package de.kj.games;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static de.kj.games.Nation.Type.*;
@@ -64,6 +65,11 @@ enum Nation {
         return Arrays.stream(values())
                 .map(nation -> "{\"id\":\"%s\",\"label\":\"%s\"}".formatted(nation.name(), nation.label))
                 .collect(Collectors.joining(","));
+    }
+
+    static Nation random() {
+        Nation[] nations = values();
+        return nations[ThreadLocalRandom.current().nextInt(nations.length)];
     }
 
     record ShipType(String name, String shipClass, int length, Type type) {

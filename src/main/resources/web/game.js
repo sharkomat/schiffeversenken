@@ -6,7 +6,13 @@ const shotSoundVariants = {
     hit: ["02", "03", "06", "09", "11", "14", "15", "41", "42", "44", "50", "51", "53", "54", "56", "57", "59", "60"],
     water: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "12", "13", "14", "15"]
 };
-const shotSounds = new Map();
+const sosVariants = [
+    "sos/SOS-01-Klarer-Morseton", "sos/SOS-02-Tiefer-Bordfunk", "sos/SOS-03-Heller-Kuestenfunk",
+    "sos/SOS-04-Roehrenfunk", "sos/SOS-06-Entfernter-Frachter", "sos/SOS-16-Funkkabine",
+    "sos/SOS-20-Schwaches-Notsignal"
+];
+const gameSounds = new Map();
+const victoryMusicFile = "result-win";
 const play = document.querySelector("#play");
 const startScreen = document.querySelector("#start-screen");
 const startForm = document.querySelector("#start-form");
@@ -23,6 +29,7 @@ const startError = document.querySelector("#start-error");
 const setupScreen = document.querySelector("#setup-screen");
 const gameScreen = document.querySelector("#game-screen");
 const resultDialog = document.querySelector("#result-dialog");
+const resultReplay = document.querySelector("#result-replay");
 const resultHeading = document.querySelector("#result-heading");
 const resultFleet = document.querySelector("#result-fleet");
 const gameHeader = document.querySelector(".game-header");
@@ -30,6 +37,8 @@ const caption = document.querySelector("#game-caption");
 const nation = document.querySelector("#nation");
 const shipList = document.querySelector("#ship-list");
 const orientation = document.querySelector("#orientation");
+const orientationIcon = orientation.querySelector(".orientation-icon");
+const orientationLabel = orientation.querySelector(".orientation-label");
 const randomAll = document.querySelector("#random-all");
 const randomRemaining = document.querySelector("#random-remaining");
 const setupFeedback = document.querySelector("#setup-feedback");
@@ -40,8 +49,9 @@ const status = document.querySelector("#status");
 const shotTimer = document.querySelector("#shot-timer");
 const feedback = document.querySelector("#feedback");
 const shots = document.querySelector("#shots");
-const newHits = document.querySelector("#new-hits");
-const oldHits = document.querySelector("#old-hits");
+const hits = document.querySelector("#hits");
+const opponentShots = document.querySelector("#opponent-shots");
+const opponentHits = document.querySelector("#opponent-hits");
 const unknown = document.querySelector("#unknown");
 const sunk = document.querySelector("#sunk");
 const ownFleet = document.querySelector("#own-fleet");
@@ -60,6 +70,7 @@ let draggedShip;
 let vertical = false;
 let shipCards = [];
 let listedNation;
+let renderedPlacementFleet;
 let pulseGameId;
 let lastPulsedShot;
 let fleetGameId;
@@ -67,6 +78,8 @@ let renderedOwnBoard;
 let renderedTargetShipCount;
 let shownResultGameId;
 let audioContext;
+let resultMusic;
+let resultPlayback = 0;
 let lobbyRequests = [];
 let lobbyLoaded = false;
 let lobbyLoading = false;
@@ -189,40 +202,49 @@ function renderBoardShips(board, ships) {
 function fleetRow(type, visibleHits) {
     const row = document.createElement("li");
     row.className = "fleet-ship";
+    row.append(...fleetShipContent(type, visibleHits));
+    return row;
+}
 
-    const graphic = document.createElement("div");
+function fleetShipContent(type, visibleHits) {
+    const graphic = document.createElement("span");
     graphic.className = "fleet-ship-graphic";
     graphic.style.setProperty("--ship-length", type.length);
     graphic.setAttribute("aria-hidden", "true");
     const image = document.createElement("img");
     image.src = type.image;
     image.alt = "";
-    const markers = document.createElement("div");
-    markers.className = "fleet-ship-markers";
-    graphic.append(image, markers);
-    visibleHits.forEach((hit, offset) => {
-        if (!hit) return;
-        const marker = document.createElement("span");
-        marker.className = "fleet-ship-hit";
-        marker.style.gridColumn = String(offset + 1);
-        markers.append(marker);
-    });
+    image.draggable = false;
+    graphic.append(image);
 
-    const details = document.createElement("div");
+    const details = document.createElement("span");
     details.className = "fleet-ship-details";
     const name = document.createElement("strong");
     name.textContent = type.name;
     const shipClass = document.createElement("small");
     shipClass.textContent = type.shipClass;
     const summary = document.createElement("small");
-    const hits = visibleHits.filter(Boolean).length;
-    let state = "Intakt";
-    if (hits === type.length) state = "Versenkt";
-    else if (hits > 0) state = hits + " getroffen";
-    summary.textContent = type.length + " Felder · " + state;
+    summary.textContent = type.length + " Felder";
+    if (visibleHits) {
+        const markers = document.createElement("span");
+        markers.className = "fleet-ship-markers";
+        let hits = 0;
+        visibleHits.forEach((hit, offset) => {
+            if (!hit) return;
+            hits++;
+            const marker = document.createElement("span");
+            marker.className = "fleet-ship-hit";
+            marker.style.gridColumn = String(offset + 1);
+            markers.append(marker);
+        });
+        graphic.append(markers);
+        let state = "Intakt";
+        if (hits === type.length) state = "Versenkt";
+        else if (hits > 0) state = hits + " getroffen";
+        summary.textContent += " · " + state;
+    }
     details.append(name, shipClass, summary);
-    row.append(graphic, details);
-    return row;
+    return [graphic, details];
 }
 
 function shipHits(board, {type, start, direction}) {
@@ -252,40 +274,66 @@ function renderFleets() {
     }
 }
 
-function resultShip(ship, index) {
-    const item = document.createElement("li");
-    item.className = "result-ship";
-    item.style.setProperty("--ship-length", ship.type.length);
-    item.style.setProperty("--arrival-delay", index * 140 + "ms");
-
-    const balloon = document.createElement("span");
-    balloon.className = "result-balloon";
-    balloon.textContent = game.revealedCountryCode;
-    balloon.setAttribute("aria-label", "Länderkennzeichen " + game.revealedCountryCode);
-
-    const graphic = document.createElement("div");
-    graphic.className = "result-ship-graphic";
-    const image = document.createElement("img");
-    image.src = ship.type.image;
-    image.alt = ship.type.name;
-    graphic.append(image);
-
-    const hits = shipHits(game.target, ship);
-    const markers = document.createElement("div");
-    markers.className = "result-ship-hits";
-    markers.setAttribute("aria-hidden", "true");
-    hits.forEach((hit, offset) => {
-        if (!hit) return;
-        const flame = document.createElement("span");
-        flame.className = "fire";
-        flame.textContent = "🔥";
-        flame.style.gridColumn = String(offset + 1);
-        markers.append(flame);
+function resultFleetShips(ships, hits, own) {
+    let offset = 0;
+    let survivorOffset = 0;
+    const gap = .5;
+    const entries = ships.map(ship => {
+        const step = ship.direction === "VERTICAL" ? size : 1;
+        const impacts = Array.from({length: ship.type.length}, (_, segment) => hits.get(ship.start + segment * step));
+        return {ship, impacts, sinking: impacts.find(impact => impact?.sunk)};
     });
-    image.alt += ", " + hits.filter(Boolean).length + " von " + ship.type.length + " Feldern getroffen";
-    graphic.append(markers);
-    item.append(balloon, graphic);
-    return item;
+    // Keep ships that sink late near the edges, clear of the survivors' path to the center.
+    entries.sort((first, second) => (second.sinking?.time ?? -1) - (first.sinking?.time ?? -1));
+    const survivors = entries.filter(({sinking}) => !sinking);
+    const survivorWidth = survivors.reduce((width, {ship}) => width + ship.type.length, 0)
+        + Math.max(0, survivors.length - 1) * gap;
+
+    return entries.map(({ship, impacts, sinking}, index) => {
+        const item = document.createElement("li");
+        item.className = "result-ship";
+        item.toggleAttribute("data-own", own);
+        item.style.setProperty("--ship-length", ship.type.length);
+        const start = own
+            ? "calc(98% - " + (offset + ship.type.length) + " * var(--ship-unit))"
+            : "calc(2% + " + offset + " * var(--ship-unit))";
+        item.style.setProperty("--start-x", start);
+        offset += ship.type.length + gap;
+
+        const graphic = document.createElement("div");
+        graphic.className = "result-ship-graphic";
+        if (sinking) {
+            item.setAttribute("data-sunk", "");
+            item.style.setProperty("--arrival-x", "calc(" + start + (own ? " - 5%" : " + 5%") + ")");
+            graphic.style.setProperty("--sink-time", (sinking.time + 700) + "ms");
+            const tilt = [-28, 0, 28][(index + Number(own)) % 3];
+            graphic.style.setProperty("--sink-tilt", tilt + "deg");
+        } else {
+            const centerOffset = survivorOffset - survivorWidth / 2;
+            item.style.setProperty("--arrival-x", "calc(50% + " + centerOffset + " * var(--ship-unit))");
+            survivorOffset += ship.type.length + gap;
+        }
+
+        const image = document.createElement("img");
+        image.src = ship.type.image;
+        image.alt = ship.type.name + ", " + impacts.filter(Boolean).length
+            + " von " + ship.type.length + " Feldern getroffen";
+        const markers = document.createElement("div");
+        markers.className = "result-ship-hits";
+        markers.setAttribute("aria-hidden", "true");
+        impacts.forEach((impact, segment) => {
+            if (!impact) return;
+            const flame = document.createElement("span");
+            flame.className = "fire";
+            flame.textContent = "🔥";
+            flame.style.gridColumn = String(segment + 1);
+            flame.style.setProperty("--hit-time", impact.time + "ms");
+            markers.append(flame);
+        });
+        graphic.append(image, markers);
+        item.append(graphic);
+        return item;
+    });
 }
 
 function renderResult(nextScreen) {
@@ -298,11 +346,38 @@ function renderResult(nextScreen) {
     const outcome = !game.winner ? "draw" : game.winner === "PLAYER" ? "win" : "loss";
     resultDialog.dataset.outcome = outcome;
     resultHeading.textContent = {win: "Gewonnen", loss: "Verloren", draw: "Unentschieden"}[outcome];
-    const revealed = game.revealed ?? [];
-    resultFleet.replaceChildren(...revealed.map(resultShip));
-    resultFleet.hidden = revealed.length === 0;
     resultDialog.showModal();
+    startResultReplay();
 }
+
+function startResultReplay() {
+    stopResultMusic();
+    const ownHits = new Map();
+    const enemyHits = new Map();
+    const hits = game.replayHits;
+    if (hits.length) {
+        const first = hits[0].timeMillis;
+        const duration = hits.at(-1).timeMillis - first;
+        const minimumGap = 160;
+        const remainingTime = 14100 - (hits.length - 1) * minimumGap;
+        hits.forEach((hit, index) => {
+            const progress = duration ? (hit.timeMillis - first) / duration : index / Math.max(1, hits.length - 1);
+            const time = Math.round(900 + index * minimumGap + progress * remainingTime);
+            (hit.own ? ownHits : enemyHits).set(hit.cell, {...hit, time});
+        });
+    }
+    resultFleet.replaceChildren(
+        ...resultFleetShips([...game.sunk, ...game.revealed], enemyHits, false),
+        ...resultFleetShips(game.ownFleet, ownHits, true)
+    );
+    resultReplay.hidden = resultFleet.children.length === 0;
+    void playResultMusic(resultDialog.dataset.outcome, resultPlayback);
+}
+
+resultReplay.addEventListener("click", () => {
+    prepareShotAudio();
+    startResultReplay();
+});
 
 function render() {
     const nextScreen = showingStart ? "START" : game.phase;
@@ -322,6 +397,7 @@ function render() {
     if (nextScreen === "SETUP") renderSetup();
     if (nextScreen === "PLAY") renderGame();
     if (screen !== nextScreen) {
+        gameHeader.classList.toggle("placement-header", nextScreen === "SETUP");
         if (nextScreen === "PLAY") gameScreen.prepend(gameHeader);
         else startScreen.before(gameHeader);
         const headings = {START: "#start-heading", SETUP: "#setup-heading", PLAY: "#target-heading"};
@@ -340,7 +416,7 @@ function renderGame() {
 
     shotTimer.hidden = game.mode !== "HUMAN" || game.finished;
     const turnText = {
-        PLAYER: game.winner ? "Sie haben gewonnen" : "Sie sind dran",
+        PLAYER: game.winner ? "Du hast gewonnen" : "Du bist drain",
         COMPUTER: game.winner ? "Der Computer hat gewonnen" : "Der Computer ist dran",
         OPPONENT: game.opponentName + (game.finished ? " hat gewonnen" : " ist dran")
     }[game.winner ?? game.turn];
@@ -349,8 +425,9 @@ function renderGame() {
     } else if (status.textContent !== turnText) status.textContent = turnText;
     updateCountdowns();
     shots.textContent = game.shots;
-    newHits.textContent = game.newHits;
-    oldHits.textContent = game.oldHits;
+    hits.textContent = game.hits;
+    opponentShots.textContent = game.opponentShots;
+    opponentHits.textContent = game.opponentHits;
 }
 
 function renderSetup() {
@@ -367,29 +444,42 @@ function renderSetup() {
     const allPlaced = game.placed === game.ships.length;
     randomRemaining.hidden = game.placed === 0 || allPlaced;
     randomRemaining.disabled = locked;
-    orientation.textContent = "Ausrichtung: " + (vertical ? "senkrecht" : "waagerecht");
+    const direction = vertical ? "Senkrecht" : "Waagerecht";
+    if (orientationLabel.textContent !== direction) {
+        orientationIcon.textContent = vertical ? "↕" : "↔";
+        orientationLabel.textContent = direction;
+        orientation.setAttribute("aria-label", "Ausrichtung: " + direction);
+    }
     finish.disabled = locked || !allPlaced;
 
     if (listedNation !== game.nation) {
         shipCards = game.ships.map(({type}, index) => makeShipCard(type, index));
-        shipList.replaceChildren(...shipCards.map(({button}) => {
+        shipList.replaceChildren(...shipCards.map(button => {
             const row = document.createElement("li");
             row.append(button);
             return row;
         }));
         listedNation = game.nation;
     }
-    shipCards.forEach(({button, details}, index) => {
-        const {placed, type} = game.ships[index];
+    shipCards.forEach((button, index) => {
+        const {placed} = game.ships[index];
         button.classList.toggle("is-placed", placed);
         button.draggable = !locked && !placed;
         button.disabled = locked;
-        if (placed) button.removeAttribute("aria-pressed");
-        else button.setAttribute("aria-pressed", String(index === selectedShip));
-        details.textContent = type.name + " · " + type.length + " Felder" +
-            (placed ? (locked ? " · Platziert" : " · Platziert, zum Entfernen klicken") : "");
+        if (placed) {
+            button.removeAttribute("aria-pressed");
+            button.setAttribute("aria-description", "Platziert");
+        } else {
+            button.setAttribute("aria-pressed", String(index === selectedShip));
+            button.removeAttribute("aria-description");
+        }
     });
     drawBoard(placement, game.own, true, !locked && selectedShip !== undefined);
+    const fleet = JSON.stringify(game.ownFleet);
+    if (renderedPlacementFleet !== fleet) {
+        renderBoardShips(placementGrid, game.ownFleet);
+        renderedPlacementFleet = fleet;
+    }
     const message = game.ready ? "Warten auf die Aufstellung von " + game.opponentName + "."
         : game.placed + " von " + game.ships.length + " Schiffen platziert.";
     if (setupFeedback.textContent !== message) setupFeedback.textContent = message;
@@ -398,17 +488,8 @@ function renderSetup() {
 function makeShipCard(type, index) {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "ship-card";
-    const image = document.createElement("img");
-    image.src = type.image;
-    image.alt = "";
-    image.draggable = false;
-    const text = document.createElement("span");
-    const name = document.createElement("strong");
-    name.textContent = type.shipClass;
-    const details = document.createElement("small");
-    text.append(name, details);
-    button.append(image, text);
+    button.className = "fleet-ship ship-card";
+    button.append(...fleetShipContent(type));
 
     button.addEventListener("click", () => {
         if (!canEditPlacement()) return;
@@ -432,7 +513,7 @@ function makeShipCard(type, index) {
         selectShip(index);
     });
     button.addEventListener("dragend", endDrag);
-    return {button, details};
+    return button;
 }
 
 function selectShip(index) {
@@ -614,6 +695,7 @@ function enterGame(state) {
     showingStart = false;
     feedback.textContent = "";
     game = state;
+    if (audioContext) void loadGameSound(victoryMusicFile).catch(() => {});
     render();
 }
 
@@ -627,7 +709,11 @@ async function pollMatch() {
         const state = await request("game", "GET");
         if (busy || showingStart || game !== previous) return;
         if (state.lastShot?.shooter === "OPPONENT" && state.lastShot.number !== previous.lastShot?.number) {
-            playShotSound(state.lastShot);
+            // Multiple opponent shots can arrive between polls, including a sinking before the latest shot.
+            const newSinkings = state.ownFleet.filter(ship => shipHits(state.own, ship).every(Boolean)
+                && !shipHits(previous.own, ship).every(Boolean)).length;
+            for (let i = 0; i < newSinkings; i++) playShotSound({result: "SUNK"});
+            if (newSinkings === 0 || state.lastShot.result !== "SUNK") playShotSound(state.lastShot);
         }
         game = state;
         if (state.phase !== previous.phase || state.turnNumber !== previous.turnNumber) render();
@@ -649,8 +735,8 @@ function prepareShotAudio() {
     if (audioContext.state !== "running") void audioContext.resume().catch(() => {});
 }
 
-function loadShotSound(name) {
-    if (!shotSounds.has(name)) {
+function loadGameSound(name) {
+    if (!gameSounds.has(name)) {
         const sound = fetch("/sounds/" + name + ".wav", {signal: AbortSignal.timeout(2500)})
             .then(response => {
                 if (!response.ok) throw new Error("Sound unavailable");
@@ -658,13 +744,48 @@ function loadShotSound(name) {
             })
             .then(bytes => audioContext.decodeAudioData(bytes))
             .catch(error => {
-                shotSounds.delete(name);
+                gameSounds.delete(name);
                 throw error;
             });
-        shotSounds.set(name, sound);
+        gameSounds.set(name, sound);
     }
-    return shotSounds.get(name);
+    return gameSounds.get(name);
 }
+
+async function playResultMusic(outcome, playback) {
+    if (outcome !== "win" || !audioContext) return;
+    try {
+        const buffer = await loadGameSound(victoryMusicFile);
+        if (audioContext.state !== "running") await audioContext.resume();
+        if (!resultDialog.open || playback !== resultPlayback) return;
+        const source = audioContext.createBufferSource();
+        const volume = audioContext.createGain();
+        volume.gain.value = .45;
+        source.buffer = buffer;
+        source.connect(volume).connect(audioContext.destination);
+        source.addEventListener("ended", () => {
+            if (resultMusic?.source === source) resultMusic = undefined;
+            source.disconnect();
+            volume.disconnect();
+        }, {once: true});
+        resultMusic = {source, volume};
+        source.start();
+    } catch {
+        // The result is still available when audio playback fails.
+    }
+}
+
+function stopResultMusic() {
+    resultPlayback++;
+    if (!resultMusic) return;
+    const {source, volume} = resultMusic;
+    resultMusic = undefined;
+    const now = audioContext.currentTime;
+    volume.gain.setTargetAtTime(0, now, .035);
+    source.stop(now + .18);
+}
+
+resultDialog.addEventListener("close", stopResultMusic);
 
 async function takeShot(path, body) {
     const state = await request(path, "POST", body);
@@ -674,11 +795,17 @@ async function takeShot(path, body) {
 
 async function playShotSound(shot) {
     if (!shot || !audioContext) return;
+    const sunk = shot.result === "SUNK";
     const category = shot.result === "WATER" ? "water" : "hit";
-    const variants = shotSoundVariants[category];
+    const variants = sunk ? sosVariants : shotSoundVariants[category];
     const variant = variants[Math.floor(Math.random() * variants.length)];
+    const name = sunk ? variant : category + "-" + variant;
+    const fallback = sunk ? sosVariants[0] : category;
     try {
-        const buffer = await loadShotSound(category + "-" + variant).catch(() => loadShotSound(category));
+        const buffer = await loadGameSound(name).catch(error => {
+            if (name === fallback) throw error;
+            return loadGameSound(fallback);
+        });
         if (audioContext.state !== "running") await audioContext.resume();
         const source = audioContext.createBufferSource();
         source.buffer = buffer;
@@ -741,7 +868,7 @@ function fire(cell) {
 
 function readPlayerName() {
     if (!playerName.value.trim()) {
-        startError.textContent = "Geben Sie einen Spielernamen ein.";
+        startError.textContent = "Gib einen Spielernamen ein.";
         playerName.focus();
         return;
     }
