@@ -7,7 +7,11 @@ import java.util.stream.Collectors;
 
 import static de.kj.games.Nation.Type.*;
 
-enum Nation {
+/**
+ * Definiert die spielbaren Nationen mit Anzeigename, Ländercode und Flotte.
+ */
+enum Nation
+{
     DEUTSCHLAND("Deutschland", "DE",
             SCHLACHTSCHIFF.ship("Bismarck-Klasse", 5),
             SCHLACHTSCHIFF.ship("Scharnhorst-Klasse", 4),
@@ -55,32 +59,47 @@ enum Nation {
     final String countryCode;
     final List<ShipType> fleet;
 
-    Nation(String label, String countryCode, ShipType... fleet) {
+    Nation(String label, String countryCode, ShipType... fleet)
+    {
         this.label = label;
         this.countryCode = countryCode;
         this.fleet = List.of(fleet);
     }
 
-    static String optionsJson() {
+    /**
+     * Erzeugt die kommaseparierten JSON-Objekte mit ID und Anzeigename für die Nationenauswahl.
+     */
+    static String optionsJson()
+    {
         return Arrays.stream(values())
                 .map(nation -> "{\"id\":\"%s\",\"label\":\"%s\"}".formatted(nation.name(), nation.label))
                 .collect(Collectors.joining(","));
     }
 
-    static Nation random() {
+    static Nation random()
+    {
         Nation[] nations = values();
         return nations[ThreadLocalRandom.current().nextInt(nations.length)];
     }
 
-    record ShipType(String name, String shipClass, int length, Type type) {
-        String json() {
+    /**
+     * Beschreibt einen Eintrag im Flottenkatalog mit Anzeigename, Schiffsklasse, Länge und Kategorie.
+     */
+    record ShipType(String name, String shipClass, int length, Type type)
+    {
+        String json()
+        {
             return """
                     {"name":"%s","shipClass":"%s","length":%d,"image":"/ships/%s.svg"}
                     """.formatted(name, shipClass, length, type.image).stripTrailing();
         }
     }
 
-    enum Type {
+    /**
+     * Definiert Schiffskategorien mit ihrem Standardnamen und der zugehörigen Grafik.
+     */
+    enum Type
+    {
         SCHLACHTSCHIFF("Schlachtschiff", "Schlachtschiff"),
         FREGATTE("Fregatte", "Fregatte"),
         U_BOOT("U-Boot", "U-Boot"),
@@ -94,16 +113,19 @@ enum Nation {
         final String label;
         final String image;
 
-        Type(String label, String image) {
+        Type(String label, String image)
+        {
             this.label = label;
             this.image = image;
         }
 
-        ShipType ship(String shipClass, int length) {
+        ShipType ship(String shipClass, int length)
+        {
             return ship(shipClass, length, label);
         }
 
-        ShipType ship(String shipClass, int length, String name) {
+        ShipType ship(String shipClass, int length, String name)
+        {
             return new ShipType(name, shipClass, length, this);
         }
     }

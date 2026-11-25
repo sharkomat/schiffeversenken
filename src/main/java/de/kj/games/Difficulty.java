@@ -1,6 +1,11 @@
 package de.kj.games;
 
-enum Difficulty {
+/**
+ * Definiert die Schwierigkeitsstufen und ihre Einstellungen für das Wasserschussgedächtnis von Spieler und
+ * Computer. Legt außerdem die Wahrscheinlichkeit für einen absichtlichen Wasserschuss des Computers fest.
+ */
+enum Difficulty
+{
     SEHR_LEICHT("Sehr leicht", 30, 50, 12, 83, 20),
     LEICHT("Leicht", 25, 60, 15, 73, 16),
     MITTEL("Mittel", 21, 65, 15, 57, 8),
@@ -14,7 +19,8 @@ enum Difficulty {
     final int forcedMissPercent;
 
     Difficulty(String label, int playerWaterGuaranteed, int playerWaterForgetPercent,
-               int computerWaterGuaranteed, int computerWaterForgetPercent, int forcedMissPercent) {
+               int computerWaterGuaranteed, int computerWaterForgetPercent, int forcedMissPercent)
+    {
         this.label = label;
         this.playerWaterGuaranteed = playerWaterGuaranteed;
         this.playerWaterForgetPercent = playerWaterForgetPercent;

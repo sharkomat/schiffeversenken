@@ -17,7 +17,9 @@ Die erste Fassung soll lokal im Browser laufen und eine vollständige Partie geg
 
 **Abnahme:** Eine Partie lässt sich im Browser starten, bis zum Sieg oder zur Niederlage spielen und neu starten. Bei jedem Start werden für beide Seiten gültige Startaufstellungen mit den fünf Schiffen der deutschen Flotte neu ausgelost. Ein erneuter Schuss auf ein getroffenes Schiffsfeld erhöht den Zähler für abgegebene Schüsse um eins. Die Trefferzahl und der Schiffsschaden bleiben gleich.
 
-**Lokal starten:** Mit Java 21 im Projektordner zuerst `mvn compile` und dann `java -cp target/classes de.kj.games.Main` ausführen. Alternativ `Main.main()` in IntelliJ starten. Die Seite ist unter [localhost:8080](http://127.0.0.1:8080/) erreichbar.
+**Lokal starten:** Mit Java 21 im Projektordner zuerst `mvn compile` und dann `java -cp target/classes de.kj.games.BattleshipServer` ausführen. Alternativ `BattleshipServer.main()` in IntelliJ starten. Die Seite ist unter [localhost:8080](http://127.0.0.1:8080/) erreichbar.
+
+**Tests ausführen.** `mvn test` startet die JUnit-Tests. Die JavaScript-Tests für Spielstart und Abspann laufen mit `node --test "src/test/js/*.test.cjs"` (getestet mit Node.js 24).
 
 ## Stufe 2 · Startfenster und eigene Schiffe platzieren
 
