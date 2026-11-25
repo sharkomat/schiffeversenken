@@ -9,7 +9,6 @@ import java.util.random.RandomGenerator;
 import static de.kj.games.Game.SIZE;
 
 final class ComputerTargeting {
-    private static final int GUARANTEED_WATER_FIELDS = 15;
     private final List<Position> positions = new ArrayList<>();
     private final int[] remaining = new int[SIZE + 1];
     private final BitSet hits = new BitSet(SIZE * SIZE);
@@ -20,7 +19,7 @@ final class ComputerTargeting {
 
     ComputerTargeting(List<Integer> lengths, Difficulty difficulty) {
         this.difficulty = difficulty;
-        waterHistory = new WaterShotHistory(GUARANTEED_WATER_FIELDS, difficulty.computerWaterForgetPercent);
+        waterHistory = new WaterShotHistory(difficulty.computerWaterGuaranteed, difficulty.computerWaterForgetPercent);
         if (difficulty != Difficulty.SCHWER) return;
         for (int length : lengths) remaining[length]++;
         for (int length : lengths.stream().distinct().toList()) {

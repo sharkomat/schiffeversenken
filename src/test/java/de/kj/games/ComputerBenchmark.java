@@ -25,9 +25,12 @@ public final class ComputerBenchmark {
 
         System.out.printf("Games per matchup: %d, seed: %d%n", games, seed);
         System.out.println("Both fleets: B2-B6, D9-G9, E1-G1, I4-I6, A9-A10");
-        compare(Difficulty.LEICHT, Difficulty.MITTEL, games, seed);
-        compare(Difficulty.LEICHT, Difficulty.SCHWER, games, seed);
-        compare(Difficulty.MITTEL, Difficulty.SCHWER, games, seed);
+        Difficulty[] levels = Difficulty.values();
+        for (int first = 0; first < levels.length; first++) {
+            for (int second = first + 1; second < levels.length; second++) {
+                compare(levels[first], levels[second], games, seed);
+            }
+        }
     }
 
     private static void compare(Difficulty first, Difficulty second, int games, long seed) {

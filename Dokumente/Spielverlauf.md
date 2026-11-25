@@ -59,23 +59,30 @@ Unter dem Zielraster zeigt das **eigene Raster** die Schiffspositionen. Die Sich
 
 Für die Anzeige im Zielraster und das Gedächtnis des Computers zählt jedes aktuell bekannte Wasserfeld einmal. Ist die garantierte Anzahl erreicht, kann bei jedem neu hinzukommenden Wasserfeld nach der jeweiligen Wahrscheinlichkeit eines der bisher bekannten Felder wegfallen. Dieses Feld wird gleichverteilt aus den bisher bekannten Wasserfeldern gewählt. Das neu beschossene Wasserfeld wird angezeigt oder gespeichert. Treffer und Wiederholungen auf bereits bekannten Wasserfeldern lösen kein Vergessen aus. Vergessene Wasserfelder gelten für den Computer wieder als unbeschossen. Das eigene Raster pulsiert bei Wasser blau und bei einem Schiffstreffer gelb-orange.
 
-### Leicht
+### sehr leicht
 
-- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **25 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **70 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
+- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **30 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **50 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
+- **Eigenes Raster** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld höchstens zwei waagerechte, senkrechte oder diagonale Schritte von einem eigenen Schiffsfeld entfernt liegt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenen Wasserschüssen der Außenrahmen.
+- **Computer** – Er merkt sich bis zu **12 Wasserfelder** zuverlässig. Darüber hinaus vergisst er mit **83 %** Wahrscheinlichkeit ein älteres bekanntes Wasserfeld. Treffer behält er dauerhaft im Gedächtnis.
+  Nach einem Treffer probiert er die direkten Nachbarfelder. Liegen zwei Treffer direkt nebeneinander, bevorzugt er freie Felder entlang ihrer Linie. Bei der freien Suche bevorzugt er ein Schachbrettmuster. Mit **20 %** Wahrscheinlichkeit löst das Spiel stattdessen einen erzwungenen Wasserschuss aus.
+
+### leicht
+
+- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **25 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **60 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
 - **Eigenes Raster** – Schiffstreffer erscheinen sofort. Ein Wasserschuss wird markiert, wenn sein Feld höchstens zwei waagerechte, senkrechte oder diagonale Schritte von einem eigenen Schiffsfeld entfernt liegt. Bei sichtbaren Schüssen pulsiert der Feldrahmen, bei verborgenen Wasserschüssen der Außenrahmen.
 - **Computer** – Er merkt sich bis zu **15 Wasserfelder** zuverlässig. Darüber hinaus vergisst er mit **73 %** Wahrscheinlichkeit ein älteres bekanntes Wasserfeld. Treffer behält er dauerhaft im Gedächtnis.
 Nach einem Treffer probiert er die direkten Nachbarfelder. Liegen zwei Treffer direkt nebeneinander, bevorzugt er freie Felder entlang ihrer Linie. Bei der freien Suche bevorzugt er ein Schachbrettmuster. Mit **16 %** Wahrscheinlichkeit löst das Spiel stattdessen einen erzwungenen Wasserschuss aus.
 
-### Mittel
+### mittel
 
 - **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **21 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **65 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
 - **Eigenes Raster** – Gleiche Anzeige wie auf „Leicht“.
 - **Computer** – Er merkt sich bis zu **15 Wasserfelder** zuverlässig. Darüber hinaus vergisst er mit **57 %** Wahrscheinlichkeit ein älteres bekanntes Wasserfeld. Treffer behält er dauerhaft im Gedächtnis.
 Nach einem Treffer probiert er die direkten Nachbarfelder. Liegen zwei Treffer direkt nebeneinander, bevorzugt er freie Felder entlang ihrer Linie. Bei der freien Suche bevorzugt er ein Schachbrettmuster. Mit **8 %** Wahrscheinlichkeit löst das Spiel stattdessen einen erzwungenen Wasserschuss aus.
 
-### Schwer
+### schwer
 
-- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **17 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **60 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
+- **Zielraster** – Alle Schiffstreffer bleiben sichtbar. Bis zu **17 Wasserfelder** bleiben zuverlässig markiert. Darüber hinaus verschwindet mit **70 %** Wahrscheinlichkeit eine ältere Wassermarkierung.
 - **Eigenes Raster** – Gleiche Anzeige wie auf „Leicht“.
 - **Computer** – Er merkt sich bis zu **15 Wasserfelder** zuverlässig. Darüber hinaus vergisst er mit **55 %** Wahrscheinlichkeit ein älteres bekanntes Wasserfeld. Treffer behält er dauerhaft im Gedächtnis.
 Er bewertet mögliche Schiffslagen anhand der bisherigen Treffer, Versenkungen, bekannten Wasserschüsse, möglichen Schiffslängen und Platzierungsregeln. Bei der freien Suche löst das Spiel mit **4 %** Wahrscheinlichkeit stattdessen einen erzwungenen Wasserschuss aus.
