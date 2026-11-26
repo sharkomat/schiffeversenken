@@ -9,9 +9,9 @@ import java.util.function.LongSupplier;
 /**
  * Startet den lokalen HTTP-Server für Schiffeversenken und registriert die Handler für Spiel-API und Browserdateien.
  */
-public final class BattleshipServer
+public final class Spielserver
 {
-    private BattleshipServer()
+    private Spielserver()
     {
     }
 
@@ -24,7 +24,7 @@ public final class BattleshipServer
     public static void main(String[] args) throws IOException
     {
         int port = args.length == 0 ? 8080 : Integer.parseInt(args[0]);
-        HttpServer server = createServer(port);
+        HttpServer server = erstelleServer(port);
         server.start();
         System.out.println("Schiffeversenken läuft unter http://127.0.0.1:" + server.getAddress().getPort());
     }
@@ -32,19 +32,19 @@ public final class BattleshipServer
     /**
      * Bindet den Server an die Loopback-Adresse und registriert die Handler. Port 0 lässt das System einen freien Port wählen.
      */
-    static HttpServer createServer(int port) throws IOException
+    static HttpServer erstelleServer(int port) throws IOException
     {
-        return createServer(port, System::nanoTime);
+        return erstelleServer(port, System::nanoTime);
     }
 
     /**
      * Registriert die Spiel-API mit einer vorgegebenen monotonen Zeitquelle.
      */
-    static HttpServer createServer(int port, LongSupplier nanoTime) throws IOException
+    static HttpServer erstelleServer(int port, LongSupplier nanoTime) throws IOException
     {
         HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", port), 0);
-        server.createContext("/api/", new GameApiHandler(nanoTime));
-        server.createContext("/", new WebResourceHandler());
+        server.createContext("/api/", new SpielApiHandler(nanoTime));
+        server.createContext("/", new WebRessourcenHandler());
         return server;
     }
 }

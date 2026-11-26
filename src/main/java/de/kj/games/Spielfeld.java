@@ -1,15 +1,12 @@
 package de.kj.games;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
-import de.kj.games.Game.Direction;
-import de.kj.games.Nation.ShipType;
+import de.kj.games.Spiel.Ausrichtung;
+import de.kj.games.Nation.Schiff;
 
 /**
  * Verwaltet die Schiffsaufstellung und Schussmarkierungen einer Spielseite.
@@ -20,42 +17,42 @@ final class Spielfeld
     static final int GROESSE = 10;
     private static final int FELDER = GROESSE * GROESSE;
 
-    private final Ship[] ships = new Ship[FELDER];
-    private final boolean[] fired = new boolean[FELDER];
-    private final List<Ship> sunk = new ArrayList<>();
-    private final List<ShipType> fleet;
-    private final Ship[] placed;
+    private final PlatziertesSchiff[] schiffe = new PlatziertesSchiff[FELDER];
+    private final boolean[] beschossen = new boolean[FELDER];
+    private final List<PlatziertesSchiff> versenkteSchiffe = new ArrayList<>();
+    private final List<Schiff> flotte;
+    private final PlatziertesSchiff[] platzierteSchiffe;
 
-    Spielfeld(List<ShipType> fleet)
+    Spielfeld(List<Schiff> flotte)
     {
-        this.fleet = fleet;
-        this.placed = new Ship[fleet.size()];
+        this.flotte = flotte;
+        this.platzierteSchiffe = new PlatziertesSchiff[flotte.size()];
     }
 
     /**
      * Probiert gültige Positionen für die noch fehlenden Schiffe in zufälliger Reihenfolge. Nimmt
      * Platzierungen zurück, wenn sich die Flotte damit nicht vervollständigen lässt.
      */
-    private boolean ergaenzeZufaellig(int ship)
+    private boolean ergaenzeZufaellig(int schiffsindex)
     {
-        while (ship < placed.length && placed[ship] != null) ship++;
-        if (ship == placed.length) return true;
+        while (schiffsindex < platzierteSchiffe.length && platzierteSchiffe[schiffsindex] != null) schiffsindex++;
+        if (schiffsindex == platzierteSchiffe.length) return true;
 
-        int length = fleet.get(ship).length();
-        List<ShipPlacement> available = new ArrayList<>();
-        for (Direction direction : Direction.values())
+        int laenge = flotte.get(schiffsindex).laenge();
+        List<Schiffsplatzierung> moeglichePlatzierungen = new ArrayList<>();
+        for (Ausrichtung ausrichtung : Ausrichtung.values())
         {
             IntStream.range(0, FELDER)
-                    .mapToObj(cell -> new ShipPlacement(cell, direction, length))
+                    .mapToObj(feld -> new Schiffsplatzierung(feld, ausrichtung, laenge))
                     .filter(this::istPlatzierungZulaessig)
-                    .forEach(available::add);
+                    .forEach(moeglichePlatzierungen::add);
         }
-        Collections.shuffle(available, ThreadLocalRandom.current());
-        for (ShipPlacement placement : available)
+        Collections.shuffle(moeglichePlatzierungen, ThreadLocalRandom.current());
+        for (Schiffsplatzierung platzierung : moeglichePlatzierungen)
         {
-            platziere(ship, placement.start(), placement.direction());
-            if (ergaenzeZufaellig(ship + 1)) return true;
-            entferne(ship);
+            platziereSchiff(schiffsindex, platzierung.start(), platzierung.ausrichtung());
+            if (ergaenzeZufaellig(schiffsindex + 1)) return true;
+            entferneSchiff(schiffsindex);
         }
         return false;
     }
@@ -64,44 +61,44 @@ final class Spielfeld
      * Prüft die Platzierung und trägt das Schiff sowohl in der Flottenliste als auch auf allen belegten
      * Feldern ein.
      */
-    boolean platziere(int index, int start, Direction direction)
+    boolean platziereSchiff(int index, int start, Ausrichtung ausrichtung)
     {
-        if (index < 0 || index >= placed.length || placed[index] != null) return false;
-        ShipType type = fleet.get(index);
-        ShipPlacement placement = new ShipPlacement(start, direction, type.length());
-        if (!istPlatzierungZulaessig(placement)) return false;
-        Ship ship = new Ship(type, placement);
-        for (int i = 0; i < type.length(); i++) ships[placement.cell(i)] = ship;
-        placed[index] = ship;
+        if (index < 0 || index >= platzierteSchiffe.length || platzierteSchiffe[index] != null) return false;
+        Schiff typ = flotte.get(index);
+        Schiffsplatzierung platzierung = new Schiffsplatzierung(start, ausrichtung, typ.laenge());
+        if (!istPlatzierungZulaessig(platzierung)) return false;
+        PlatziertesSchiff schiff = new PlatziertesSchiff(typ, platzierung);
+        for (int i = 0; i < typ.laenge(); i++) schiffe[platzierung.feld(i)] = schiff;
+        platzierteSchiffe[index] = schiff;
         return true;
     }
 
-    boolean entferne(int index)
+    boolean entferneSchiff(int index)
     {
-        if (index < 0 || index >= placed.length || placed[index] == null) return false;
-        Ship ship = placed[index];
-        for (int offset = 0; offset < ship.placement.length(); offset++)
+        if (index < 0 || index >= platzierteSchiffe.length || platzierteSchiffe[index] == null) return false;
+        PlatziertesSchiff schiff = platzierteSchiffe[index];
+        for (int versatz = 0; versatz < schiff.platzierung.laenge(); versatz++)
         {
-            ships[ship.placement.cell(offset)] = null;
+            schiffe[schiff.platzierung.feld(versatz)] = null;
         }
-        placed[index] = null;
+        platzierteSchiffe[index] = null;
         return true;
     }
 
     int anzahlPlatzierterSchiffe()
     {
-        return (int) Arrays.stream(placed).filter(ship -> ship != null).count();
+        return (int) Arrays.stream(platzierteSchiffe).filter(Objects::nonNull).count();
     }
 
     List<Schiffsposition> platzierteFlotte()
     {
-        return Arrays.stream(placed).filter(ship -> ship != null).map(Ship::alsPlatzierung).toList();
+        return Arrays.stream(platzierteSchiffe).filter(Objects::nonNull).map(PlatziertesSchiff::alsPlatzierung).toList();
     }
 
     List<Schiffsposition> verbleibendeFlotte()
     {
-        return Arrays.stream(placed).filter(ship -> ship != null && !sunk.contains(ship))
-                .map(Ship::alsPlatzierung).toList();
+        return Arrays.stream(platzierteSchiffe).filter(schiff -> schiff != null && !versenkteSchiffe.contains(schiff))
+                .map(PlatziertesSchiff::alsPlatzierung).toList();
     }
 
     /**
@@ -110,13 +107,13 @@ final class Spielfeld
      */
     List<Aufstellungsoption> schiffeFuerAufstellung()
     {
-        return IntStream.range(0, fleet.size()).mapToObj(index ->
+        return IntStream.range(0, flotte.size()).mapToObj(index ->
         {
-            ShipType type = fleet.get(index);
-            boolean isPlaced = placed[index] != null;
-            return new Aufstellungsoption(type, isPlaced,
-                    isPlaced ? "" : gueltigeStartfelder(Direction.HORIZONTAL, type.length()),
-                    isPlaced ? "" : gueltigeStartfelder(Direction.VERTICAL, type.length()));
+            Schiff typ = flotte.get(index);
+            boolean istPlatziert = platzierteSchiffe[index] != null;
+            return new Aufstellungsoption(typ, istPlatziert,
+                    istPlatziert ? "" : gueltigeStartfelder(Ausrichtung.HORIZONTAL, typ.laenge()),
+                    istPlatziert ? "" : gueltigeStartfelder(Ausrichtung.VERTICAL, typ.laenge()));
         }).toList();
     }
 
@@ -124,34 +121,34 @@ final class Spielfeld
      * Kodiert für die gegebene Ausrichtung und Länge jedes Spielfeld als gültiges ({@code 1}) oder
      * ungültiges ({@code 0}) Startfeld.
      */
-    private String gueltigeStartfelder(Direction direction, int length)
+    private String gueltigeStartfelder(Ausrichtung ausrichtung, int laenge)
     {
-        StringBuilder starts = new StringBuilder(FELDER);
-        for (int cell = 0; cell < FELDER; cell++)
+        StringBuilder startfelder = new StringBuilder(FELDER);
+        for (int feld = 0; feld < FELDER; feld++)
         {
-            starts.append(istPlatzierungZulaessig(new ShipPlacement(cell, direction, length)) ? '1' : '0');
+            startfelder.append(istPlatzierungZulaessig(new Schiffsplatzierung(feld, ausrichtung, laenge)) ? '1' : '0');
         }
-        return starts.toString();
+        return startfelder.toString();
     }
 
-    private boolean istPlatzierungZulaessig(ShipPlacement placement)
+    private boolean istPlatzierungZulaessig(Schiffsplatzierung platzierung)
     {
-        return placement.fits() && Arrays.stream(placed)
-                .allMatch(ship -> ship == null || placement.compatibleWith(ship.placement));
+        return platzierung.passtAufSpielfeld() && Arrays.stream(platzierteSchiffe)
+                .allMatch(schiff -> schiff == null || platzierung.istVertraeglichMit(schiff.platzierung));
     }
 
     /**
      * Prüft, ob innerhalb eines Abstands von höchstens zwei Zeilen und zwei Spalten ein Schiffsfeld liegt.
      */
-    boolean hatSchiffInDerNaehe(int cell)
+    boolean istSchiffInDerNaehe(int feld)
     {
-        int row = cell / GROESSE;
-        int col = cell % GROESSE;
-        for (int neighborRow = Math.max(0, row - 2); neighborRow <= Math.min(GROESSE - 1, row + 2); neighborRow++)
+        int zeile = feld / GROESSE;
+        int spalte = feld % GROESSE;
+        for (int nachbarzeile = Math.max(0, zeile - 2); nachbarzeile <= Math.min(GROESSE - 1, zeile + 2); nachbarzeile++)
         {
-            for (int neighborCol = Math.max(0, col - 2); neighborCol <= Math.min(GROESSE - 1, col + 2); neighborCol++)
+            for (int nachbarspalte = Math.max(0, spalte - 2); nachbarspalte <= Math.min(GROESSE - 1, spalte + 2); nachbarspalte++)
             {
-                if (ships[neighborRow * GROESSE + neighborCol] != null) return true;
+                if (schiffe[nachbarzeile * GROESSE + nachbarspalte] != null) return true;
             }
         }
         return false;
@@ -161,41 +158,41 @@ final class Spielfeld
      * Kodiert Treffer, sichtbare Wasserschüsse und aufgedeckte Schiffsfelder für den Browser. Alle anderen
      * Felder erscheinen als unbekannt.
      */
-    String sichtbareFelder(boolean revealShips, IntPredicate showWater)
+    String sichtbareFelder(boolean schiffeAufdecken, IntPredicate wasserAnzeigen)
     {
         StringBuilder cells = new StringBuilder(FELDER);
         for (int i = 0; i < FELDER; i++)
         {
-            if (fired[i])
+            if (beschossen[i])
             {
-                cells.append(ships[i] != null ? 'h' : showWater.test(i) ? 'm' : '.');
+                cells.append(schiffe[i] != null ? 'h' : wasserAnzeigen.test(i) ? 'm' : '.');
             }
             else
             {
-                cells.append(revealShips && ships[i] != null ? 's' : '.');
+                cells.append(schiffeAufdecken && schiffe[i] != null ? 's' : '.');
             }
         }
         return cells.toString();
     }
 
-    boolean stelleZufaelligAuf()
+    boolean ergaenzeZufaellig()
     {
         return ergaenzeZufaellig(0);
     }
 
     boolean istWasser(int feld)
     {
-        return ships[feld] == null;
+        return schiffe[feld] == null;
     }
 
     int anzahlVersenkterSchiffe()
     {
-        return sunk.size();
+        return versenkteSchiffe.size();
     }
 
     List<Schiffsposition> versenkteFlotte()
     {
-        return sunk.stream().map(Ship::alsPlatzierung).toList();
+        return versenkteSchiffe.stream().map(PlatziertesSchiff::alsPlatzierung).toList();
     }
 
     /**
@@ -204,15 +201,15 @@ final class Spielfeld
      */
     Schusswirkung beschiessen(int feld)
     {
-        Ship ship = ships[feld];
-        boolean ersterSchuss = !fired[feld];
-        fired[feld] = true;
-        if (ship == null) return new Schusswirkung(Ergebnis.WATER, null);
+        PlatziertesSchiff schiff = schiffe[feld];
+        boolean ersterSchuss = !beschossen[feld];
+        beschossen[feld] = true;
+        if (schiff == null) return new Schusswirkung(Ergebnis.WATER, null);
         if (!ersterSchuss) return new Schusswirkung(Ergebnis.REPEAT, null);
-        if (++ship.hits == ship.type.length())
+        if (++schiff.treffer == schiff.schiff.laenge())
         {
-            sunk.add(ship);
-            return new Schusswirkung(Ergebnis.SUNK, ship.alsPlatzierung());
+            versenkteSchiffe.add(schiff);
+            return new Schusswirkung(Ergebnis.SUNK, schiff.alsPlatzierung());
         }
         return new Schusswirkung(Ergebnis.HIT, null);
     }
@@ -238,35 +235,35 @@ final class Spielfeld
     /**
      * Beschreibt den Typ und die Lage eines platzierten Schiffs.
      */
-    record Schiffsposition(ShipType typ, ShipPlacement platzierung)
+    record Schiffsposition(Schiff typ, Schiffsplatzierung platzierung)
     {
     }
 
     /**
      * Enthält den Aufstellungsstatus eines Schiffs und die zulässigen Startfelder je Ausrichtung.
      */
-    record Aufstellungsoption(ShipType typ, boolean platziert, String horizontal, String vertikal)
+    record Aufstellungsoption(Schiff typ, boolean platziert, String horizontal, String vertikal)
     {
     }
 
     /**
      * Verbindet den Typ eines platzierten Schiffs mit seiner Position und der Zahl seiner Treffer.
      */
-    private static final class Ship
+    private static final class PlatziertesSchiff
     {
-        private final ShipType type;
-        private final ShipPlacement placement;
-        private int hits;
+        private final Schiff schiff;
+        private final Schiffsplatzierung platzierung;
+        private int treffer;
 
-        private Ship(ShipType type, ShipPlacement placement)
+        private PlatziertesSchiff(Schiff typ, Schiffsplatzierung platzierung)
         {
-            this.type = type;
-            this.placement = placement;
+            this.schiff = typ;
+            this.platzierung = platzierung;
         }
 
         private Schiffsposition alsPlatzierung()
         {
-            return new Schiffsposition(type, placement);
+            return new Schiffsposition(schiff, platzierung);
         }
     }
 }

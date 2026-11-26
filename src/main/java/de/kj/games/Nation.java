@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static de.kj.games.Nation.Type.*;
+import static de.kj.games.Nation.Schiffskategorie.*;
 
 /**
  * Definiert die spielbaren Nationen mit Anzeigename, Ländercode und Flotte.
@@ -13,92 +13,92 @@ import static de.kj.games.Nation.Type.*;
 enum Nation
 {
     DEUTSCHLAND("Deutschland", "DE",
-            SCHLACHTSCHIFF.ship("Bismarck-Klasse", 5),
-            SCHLACHTSCHIFF.ship("Scharnhorst-Klasse", 4),
-            FREGATTE.ship("Baden-Württemberg-Klasse", 3),
-            FREGATTE.ship("Sachsen-Klasse", 3),
-            U_BOOT.ship("Klasse 212A", 2)),
+            SCHLACHTSCHIFF.schiff("Bismarck-Klasse", 5),
+            SCHLACHTSCHIFF.schiff("Scharnhorst-Klasse", 4),
+            FREGATTE.schiff("Baden-Württemberg-Klasse", 3),
+            FREGATTE.schiff("Sachsen-Klasse", 3),
+            U_BOOT.schiff("Klasse 212A", 2)),
     RUSSLAND("Russland", "RU",
-            KREUZER.ship("Admiral-Kusnezow-Klasse", 5, "Schwerer flugzeugtragender Kreuzer"),
-            KREUZER.ship("Slawa-Klasse", 4),
-            ZERSTOERER.ship("Udaloy-Klasse", 3),
-            FREGATTE.ship("Admiral-Grigorowitsch-Klasse", 3),
-            U_BOOT.ship("Improved-Kilo-Klasse", 2)),
+            KREUZER.schiff("Admiral-Kusnezow-Klasse", 5, "Schwerer flugzeugtragender Kreuzer"),
+            KREUZER.schiff("Slawa-Klasse", 4),
+            ZERSTOERER.schiff("Udaloy-Klasse", 3),
+            FREGATTE.schiff("Admiral-Grigorowitsch-Klasse", 3),
+            U_BOOT.schiff("Improved-Kilo-Klasse", 2)),
     USA("USA", "US",
-            FLUGZEUGTRAEGER.ship("Gerald-R.-Ford-Klasse", 5),
-            SCHLACHTSCHIFF.ship("South-Dakota-Klasse", 4),
-            KREUZER.ship("Atlanta-Klasse", 3, "Leichter Kreuzer"),
-            ZERSTOERER.ship("Fletcher-Klasse", 3),
-            U_BOOT.ship("Gato-Klasse", 2)),
+            FLUGZEUGTRAEGER.schiff("Gerald-R.-Ford-Klasse", 5),
+            SCHLACHTSCHIFF.schiff("South-Dakota-Klasse", 4),
+            KREUZER.schiff("Atlanta-Klasse", 3, "Leichter Kreuzer"),
+            ZERSTOERER.schiff("Fletcher-Klasse", 3),
+            U_BOOT.schiff("Gato-Klasse", 2)),
     JAPAN("Japan", "JP",
-            HUBSCHRAUBERTRAEGER.ship("Izumo-Klasse", 5),
-            HUBSCHRAUBERTRAEGER.ship("Hyūga-Klasse", 4),
-            ZERSTOERER.ship("Maya-Klasse", 3, "Lenkwaffenzerstörer"),
-            FREGATTE.ship("Mogami-Klasse", 3),
-            U_BOOT.ship("Taigei-Klasse", 2)),
+            HUBSCHRAUBERTRAEGER.schiff("Izumo-Klasse", 5),
+            HUBSCHRAUBERTRAEGER.schiff("Hyūga-Klasse", 4),
+            ZERSTOERER.schiff("Maya-Klasse", 3, "Lenkwaffenzerstörer"),
+            FREGATTE.schiff("Mogami-Klasse", 3),
+            U_BOOT.schiff("Taigei-Klasse", 2)),
     FRANKREICH("Frankreich", "FR",
-            FLUGZEUGTRAEGER.ship("Charles de Gaulle", 5),
-            HUBSCHRAUBERTRAEGER.ship("Mistral-Klasse", 4, "Amphibischer Hubschrauberträger"),
-            FREGATTE.ship("Horizon-Klasse", 3, "Luftverteidigungsfregatte"),
-            FREGATTE.ship("Aquitaine-Klasse", 3, "Mehrzweckfregatte"),
-            U_BOOT.ship("Suffren-Klasse", 2)),
+            FLUGZEUGTRAEGER.schiff("Charles de Gaulle", 5),
+            HUBSCHRAUBERTRAEGER.schiff("Mistral-Klasse", 4, "Amphibischer Hubschrauberträger"),
+            FREGATTE.schiff("Horizon-Klasse", 3, "Luftverteidigungsfregatte"),
+            FREGATTE.schiff("Aquitaine-Klasse", 3, "Mehrzweckfregatte"),
+            U_BOOT.schiff("Suffren-Klasse", 2)),
     VEREINIGTES_KOENIGREICH("Vereinigtes Königreich", "GB",
-            FLUGZEUGTRAEGER.ship("Queen-Elizabeth-Klasse", 5),
-            FLUGZEUGTRAEGER.ship("Invincible-Klasse", 4, "Leichter Flugzeugträger"),
-            ZERSTOERER.ship("Daring-Klasse", 3),
-            FREGATTE.ship("Duke-Klasse", 3),
-            U_BOOT.ship("Astute-Klasse", 2)),
+            FLUGZEUGTRAEGER.schiff("Queen-Elizabeth-Klasse", 5),
+            FLUGZEUGTRAEGER.schiff("Invincible-Klasse", 4, "Leichter Flugzeugträger"),
+            ZERSTOERER.schiff("Daring-Klasse", 3),
+            FREGATTE.schiff("Duke-Klasse", 3),
+            U_BOOT.schiff("Astute-Klasse", 2)),
     CHINA("China", "CN",
-            FLUGZEUGTRAEGER.ship("Fujian (Typ 003)", 5),
-            DOCKLANDUNGSSCHIFF.ship("Typ 071", 4, "Amphibisches Docklandungsschiff"),
-            ZERSTOERER.ship("Typ 052D", 3, "Lenkwaffenzerstörer"),
-            FREGATTE.ship("Typ 054A", 3),
-            KORVETTE.ship("Typ 056A", 2));
+            FLUGZEUGTRAEGER.schiff("Fujian (Typ 003)", 5),
+            DOCKLANDUNGSSCHIFF.schiff("Typ 071", 4, "Amphibisches Docklandungsschiff"),
+            ZERSTOERER.schiff("Typ 052D", 3, "Lenkwaffenzerstörer"),
+            FREGATTE.schiff("Typ 054A", 3),
+            KORVETTE.schiff("Typ 056A", 2));
 
-    final String label;
-    final String countryCode;
-    final List<ShipType> fleet;
+    final String bezeichnung;
+    final String laendercode;
+    final List<Schiff> flotte;
 
-    Nation(String label, String countryCode, ShipType... fleet)
+    Nation(String bezeichnung, String laendercode, Schiff... flotte)
     {
-        this.label = label;
-        this.countryCode = countryCode;
-        this.fleet = List.of(fleet);
+        this.bezeichnung = bezeichnung;
+        this.laendercode = laendercode;
+        this.flotte = List.of(flotte);
     }
 
     /**
      * Erzeugt die kommaseparierten JSON-Objekte mit ID und Anzeigename für die Nationenauswahl.
      */
-    static String optionsJson()
+    static String nationenAlsJson()
     {
         return Arrays.stream(values())
-                .map(nation -> "{\"id\":\"%s\",\"label\":\"%s\"}".formatted(nation.name(), nation.label))
+                .map(nation -> "{\"id\":\"%s\",\"label\":\"%s\"}".formatted(nation.name(), nation.bezeichnung))
                 .collect(Collectors.joining(","));
     }
 
-    static Nation random()
+    static Nation zufaelligeNation()
     {
-        Nation[] nations = values();
-        return nations[ThreadLocalRandom.current().nextInt(nations.length)];
+        Nation[] nationen = values();
+        return nationen[ThreadLocalRandom.current().nextInt(nationen.length)];
     }
 
     /**
      * Beschreibt einen Eintrag im Flottenkatalog mit Anzeigename, Schiffsklasse, Länge und Kategorie.
      */
-    record ShipType(String name, String shipClass, int length, Type type)
+    record Schiff(String name, String schiffsklasse, int laenge, Schiffskategorie typ)
     {
         String json()
         {
             return """
                     {"name":"%s","shipClass":"%s","length":%d,"image":"/ships/%s.svg"}
-                    """.formatted(name, shipClass, length, type.image).stripTrailing();
+                    """.formatted(name, schiffsklasse, laenge, typ.bild).stripTrailing();
         }
     }
 
     /**
      * Definiert Schiffskategorien mit ihrem Standardnamen und der zugehörigen Grafik.
      */
-    enum Type
+    enum Schiffskategorie
     {
         SCHLACHTSCHIFF("Schlachtschiff", "Schlachtschiff"),
         FREGATTE("Fregatte", "Fregatte"),
@@ -110,23 +110,23 @@ enum Nation
         DOCKLANDUNGSSCHIFF("Docklandungsschiff", "Docklandungsschiff"),
         KORVETTE("Korvette", "Korvette");
 
-        final String label;
-        final String image;
+        final String bezeichnung;
+        final String bild;
 
-        Type(String label, String image)
+        Schiffskategorie(String bezeichnung, String bild)
         {
-            this.label = label;
-            this.image = image;
+            this.bezeichnung = bezeichnung;
+            this.bild = bild;
         }
 
-        ShipType ship(String shipClass, int length)
+        Schiff schiff(String schiffsklasse, int laenge)
         {
-            return ship(shipClass, length, label);
+            return schiff(schiffsklasse, laenge, bezeichnung);
         }
 
-        ShipType ship(String shipClass, int length, String name)
+        Schiff schiff(String schiffsklasse, int laenge, String name)
         {
-            return new ShipType(name, shipClass, length, this);
+            return new Schiff(name, schiffsklasse, laenge, this);
         }
     }
 }

@@ -2,7 +2,7 @@ package de.kj.games;
 
 import java.util.concurrent.TimeUnit;
 
-import de.kj.games.Game.Seat;
+import de.kj.games.Spiel.Spielseite;
 
 /**
  * Verwaltet die aktive Spielseite, die Zugnummer und die Fristen ab Beginn der Aufstellung.
@@ -16,7 +16,7 @@ final class Zugsteuerung
     private static final long NANOS_PRO_MILLISEKUNDE = TimeUnit.MILLISECONDS.toNanos(1);
 
     private final long schussintervall;
-    private Seat aktiveSeite = Seat.HOST;
+    private Spielseite aktiveSeite = Spielseite.HOST;
     private long zugnummer;
     private long frist;
     private long gefechtBegonnenUm;
@@ -27,7 +27,7 @@ final class Zugsteuerung
         frist = jetzt + AUFSTELLUNGSZEIT;
     }
 
-    Seat getAktiveSeite()
+    Spielseite getAktiveSeite()
     {
         return aktiveSeite;
     }
@@ -61,7 +61,7 @@ final class Zugsteuerung
     {
         if (!fristAbgelaufen(jetzt)) return;
         long abgelaufen = 1 + (jetzt - frist) / ZUGZEIT;
-        if (abgelaufen % 2 == 1) aktiveSeite = aktiveSeite.other();
+        if (abgelaufen % 2 == 1) aktiveSeite = aktiveSeite.andereSeite();
         zugnummer += abgelaufen;
         frist += abgelaufen * ZUGZEIT;
     }
@@ -69,7 +69,7 @@ final class Zugsteuerung
     /**
      * Übernimmt die nächste Spielseite, erhöht die Zugnummer und setzt die Frist für den nächsten Schuss.
      */
-    void aktualisiereNachSchuss(Seat naechsteSeite, long jetzt)
+    void aktualisiereNachSchuss(Spielseite naechsteSeite, long jetzt)
     {
         aktiveSeite = naechsteSeite;
         zugnummer++;

@@ -10,7 +10,7 @@ final class Json
     {
     }
 
-    static String quote(String text)
+    static String inAnfuehrungszeichen(String text)
     {
         return "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
